@@ -15,8 +15,14 @@
   },
   "dependencies": {
     "@repo/db": "workspace:*",
+    "@repo/uservalidation": "workspace:*",
+    "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.2",
+    "@types/jsonwebtoken": "^9.0.10",
+    "bcrypt": "^6.0.0",
     "express": "^5.1.0",
-    "prisma": "^6.8.2"
+    "jsonwebtoken": "^9.0.2",
+    "prisma": "^6.8.2",
+    "zod": "^4.1.3"
   }
 }

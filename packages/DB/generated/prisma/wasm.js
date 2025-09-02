@@ -120,6 +120,13 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
+exports.Prisma.UserScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  password: 'password',
+  email: 'email'
+};
+
 exports.Prisma.WebsiteScalarFieldEnum = {
   id: 'id',
   url: 'url',
@@ -154,6 +161,7 @@ exports.webstatus = exports.$Enums.webstatus = {
 };
 
 exports.Prisma.ModelName = {
+  User: 'User',
   Website: 'Website',
   Region: 'Region',
   WebsiteTick: 'WebsiteTick'

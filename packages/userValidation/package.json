@@ -1,0 +1,19 @@
+{
+  "name": "@repo/uservalidation",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "exports": {
+    "./ValidInput": "./index.ts"
+  },
+  "version": "1.0.0",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "zod": "^3.25.74"
+  }
+}

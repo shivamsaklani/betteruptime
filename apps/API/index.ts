@@ -1,5 +1,5 @@
 import express from "express";
-import { Prisma } from "@repo/db/client";
+import API from "./Routes";
 const app = express();
 app.use(express.json());
 
@@ -7,19 +7,8 @@ app.get("/",(req,res)=>{
   res.send("Running");
 });
 
-app.post("/website",(req,res)=>{
-  const {url}=req.body;
-  const response = async ()=>{
-    await Prisma.website.create({
-      data:{
-        url:url,
-        timeAdded:new Date()
-      }
+app.use("/api/v1", API);
 
-    })
-  };
-  response();
-  res.status(200).send("Added data");
-})
-
-app.listen(3001);
+app.listen(3001, () => {
+  console.log("Server is running on port 3000");
+});
