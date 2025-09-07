@@ -85,7 +85,7 @@ user.post("/signin",async (req:Request, res:Response) => {
     console.log(JWT_SECRET);
     const token= jwt.sign({
       username:userData?.email,
-      email:userData?.id
+      id:userData?.id
     },JWT_SECRET as string,{
       expiresIn:"1h"
     });
@@ -97,21 +97,6 @@ user.post("/signin",async (req:Request, res:Response) => {
      return;
   }    
   
-});
-
-user.post("/website",Authorize,(req:Request,res:Response)=>{
-  const {url}=req.body;
-  const response = async ()=>{
-    await Prisma.website.create({
-      data:{
-        url:url,
-        timeAdded:new Date()
-      }
-
-    })
-  };
-  response();
-  res.status(200).send("Added data");
 });
 
 export default user;

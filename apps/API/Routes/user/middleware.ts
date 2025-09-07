@@ -5,7 +5,6 @@ const SECRET_KEY = process.env.JWT_TOKEN;
 
 export const Authorize = (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization;
-  console.log(SECRET_KEY);
 
   if (!authHeader) {
     return res.status(401).json({ error: "No token provided" });
@@ -26,6 +25,7 @@ export const Authorize = (req: Request, res: Response, next: NextFunction) => {
 
     // Attach user info to request
     req.userid= user as JwtPayload;
+    console.log(req.userid);
 
     next();
   });
