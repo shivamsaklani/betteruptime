@@ -130,6 +130,7 @@ exports.Prisma.UserScalarFieldEnum = {
 exports.Prisma.WebsiteScalarFieldEnum = {
   id: 'id',
   url: 'url',
+  user_id: 'user_id',
   timeAdded: 'timeAdded'
 };
 
@@ -140,9 +141,11 @@ exports.Prisma.RegionScalarFieldEnum = {
 
 exports.Prisma.WebsiteTickScalarFieldEnum = {
   id: 'id',
+  response_time_ms: 'response_time_ms',
   status: 'status',
   region_id: 'region_id',
-  website_id: 'website_id'
+  website_id: 'website_id',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -153,6 +156,11 @@ exports.Prisma.SortOrder = {
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
+};
+
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
 };
 exports.webstatus = exports.$Enums.webstatus = {
   up: 'up',

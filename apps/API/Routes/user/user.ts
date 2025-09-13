@@ -2,7 +2,6 @@ import { Prisma } from "@repo/db/client";
 import type { Request, Response } from "express"; 
 import bcrypt, { hash } from "bcrypt";
 import { userSchema } from "./zodschema";
-import { Authorize } from "./middleware"; // only the verified user be able to make request
 import jwt from "jsonwebtoken";
 const express = require("express");
 const user = express.Router();

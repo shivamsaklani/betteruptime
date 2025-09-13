@@ -1156,6 +1156,37 @@ export namespace Prisma {
 
 
   /**
+   * Count Type UserCountOutputType
+   */
+
+  export type UserCountOutputType = {
+    websites: number
+  }
+
+  export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    websites?: boolean | UserCountOutputTypeCountWebsitesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCountOutputType
+     */
+    select?: UserCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountWebsitesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WebsiteWhereInput
+  }
+
+
+  /**
    * Count Type WebsiteCountOutputType
    */
 
@@ -1377,6 +1408,8 @@ export namespace Prisma {
     name?: boolean
     password?: boolean
     email?: boolean
+    websites?: boolean | User$websitesArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1401,10 +1434,18 @@ export namespace Prisma {
   }
 
   export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "password" | "email", ExtArgs["result"]["user"]>
+  export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    websites?: boolean | User$websitesArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type UserIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
-    objects: {}
+    objects: {
+      websites: Prisma.$WebsitePayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
@@ -1804,6 +1845,7 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    websites<T extends User$websitesArgs<ExtArgs> = {}>(args?: Subset<T, User$websitesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WebsitePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1854,6 +1896,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where: UserWhereUniqueInput
@@ -1872,6 +1918,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where: UserWhereUniqueInput
@@ -1889,6 +1939,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * Filter, which User to fetch.
      */
@@ -1938,6 +1992,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where?: UserWhereInput
@@ -1986,6 +2044,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which Users to fetch.
      */
     where?: UserWhereInput
@@ -2028,6 +2090,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * The data needed to create a User.
      */
@@ -2076,6 +2142,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * The data needed to update a User.
      */
@@ -2143,6 +2213,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * The filter to search for the User to update in case it exists.
      */
     where: UserWhereUniqueInput
@@ -2169,6 +2243,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter which User to delete.
      */
     where: UserWhereUniqueInput
@@ -2189,6 +2267,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.websites
+   */
+  export type User$websitesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Website
+     */
+    select?: WebsiteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Website
+     */
+    omit?: WebsiteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebsiteInclude<ExtArgs> | null
+    where?: WebsiteWhereInput
+    orderBy?: WebsiteOrderByWithRelationInput | WebsiteOrderByWithRelationInput[]
+    cursor?: WebsiteWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WebsiteScalarFieldEnum | WebsiteScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2200,6 +2302,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
   }
 
 
@@ -2216,18 +2322,21 @@ export namespace Prisma {
   export type WebsiteMinAggregateOutputType = {
     id: string | null
     url: string | null
+    user_id: string | null
     timeAdded: Date | null
   }
 
   export type WebsiteMaxAggregateOutputType = {
     id: string | null
     url: string | null
+    user_id: string | null
     timeAdded: Date | null
   }
 
   export type WebsiteCountAggregateOutputType = {
     id: number
     url: number
+    user_id: number
     timeAdded: number
     _all: number
   }
@@ -2236,18 +2345,21 @@ export namespace Prisma {
   export type WebsiteMinAggregateInputType = {
     id?: true
     url?: true
+    user_id?: true
     timeAdded?: true
   }
 
   export type WebsiteMaxAggregateInputType = {
     id?: true
     url?: true
+    user_id?: true
     timeAdded?: true
   }
 
   export type WebsiteCountAggregateInputType = {
     id?: true
     url?: true
+    user_id?: true
     timeAdded?: true
     _all?: true
   }
@@ -2327,6 +2439,7 @@ export namespace Prisma {
   export type WebsiteGroupByOutputType = {
     id: string
     url: string
+    user_id: string | null
     timeAdded: Date
     _count: WebsiteCountAggregateOutputType | null
     _min: WebsiteMinAggregateOutputType | null
@@ -2350,45 +2463,59 @@ export namespace Prisma {
   export type WebsiteSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     url?: boolean
+    user_id?: boolean
     timeAdded?: boolean
     ticks?: boolean | Website$ticksArgs<ExtArgs>
+    user?: boolean | Website$userArgs<ExtArgs>
     _count?: boolean | WebsiteCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["website"]>
 
   export type WebsiteSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     url?: boolean
+    user_id?: boolean
     timeAdded?: boolean
+    user?: boolean | Website$userArgs<ExtArgs>
   }, ExtArgs["result"]["website"]>
 
   export type WebsiteSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     url?: boolean
+    user_id?: boolean
     timeAdded?: boolean
+    user?: boolean | Website$userArgs<ExtArgs>
   }, ExtArgs["result"]["website"]>
 
   export type WebsiteSelectScalar = {
     id?: boolean
     url?: boolean
+    user_id?: boolean
     timeAdded?: boolean
   }
 
-  export type WebsiteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "url" | "timeAdded", ExtArgs["result"]["website"]>
+  export type WebsiteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "url" | "user_id" | "timeAdded", ExtArgs["result"]["website"]>
   export type WebsiteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     ticks?: boolean | Website$ticksArgs<ExtArgs>
+    user?: boolean | Website$userArgs<ExtArgs>
     _count?: boolean | WebsiteCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type WebsiteIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type WebsiteIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type WebsiteIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | Website$userArgs<ExtArgs>
+  }
+  export type WebsiteIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | Website$userArgs<ExtArgs>
+  }
 
   export type $WebsitePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Website"
     objects: {
       ticks: Prisma.$WebsiteTickPayload<ExtArgs>[]
+      user: Prisma.$UserPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       url: string
+      user_id: string | null
       timeAdded: Date
     }, ExtArgs["result"]["website"]>
     composites: {}
@@ -2785,6 +2912,7 @@ export namespace Prisma {
   export interface Prisma__WebsiteClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     ticks<T extends Website$ticksArgs<ExtArgs> = {}>(args?: Subset<T, Website$ticksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WebsiteTickPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    user<T extends Website$userArgs<ExtArgs> = {}>(args?: Subset<T, Website$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2816,6 +2944,7 @@ export namespace Prisma {
   interface WebsiteFieldRefs {
     readonly id: FieldRef<"Website", 'String'>
     readonly url: FieldRef<"Website", 'String'>
+    readonly user_id: FieldRef<"Website", 'String'>
     readonly timeAdded: FieldRef<"Website", 'DateTime'>
   }
     
@@ -3066,6 +3195,10 @@ export namespace Prisma {
      */
     data: WebsiteCreateManyInput | WebsiteCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebsiteIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -3136,6 +3269,10 @@ export namespace Prisma {
      * Limit how many Websites to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebsiteIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -3226,6 +3363,25 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: WebsiteTickScalarFieldEnum | WebsiteTickScalarFieldEnum[]
+  }
+
+  /**
+   * Website.user
+   */
+  export type Website$userArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
   }
 
   /**
@@ -4284,52 +4440,82 @@ export namespace Prisma {
 
   export type AggregateWebsiteTick = {
     _count: WebsiteTickCountAggregateOutputType | null
+    _avg: WebsiteTickAvgAggregateOutputType | null
+    _sum: WebsiteTickSumAggregateOutputType | null
     _min: WebsiteTickMinAggregateOutputType | null
     _max: WebsiteTickMaxAggregateOutputType | null
   }
 
+  export type WebsiteTickAvgAggregateOutputType = {
+    response_time_ms: number | null
+  }
+
+  export type WebsiteTickSumAggregateOutputType = {
+    response_time_ms: number | null
+  }
+
   export type WebsiteTickMinAggregateOutputType = {
     id: string | null
+    response_time_ms: number | null
     status: $Enums.webstatus | null
     region_id: string | null
     website_id: string | null
+    createdAt: Date | null
   }
 
   export type WebsiteTickMaxAggregateOutputType = {
     id: string | null
+    response_time_ms: number | null
     status: $Enums.webstatus | null
     region_id: string | null
     website_id: string | null
+    createdAt: Date | null
   }
 
   export type WebsiteTickCountAggregateOutputType = {
     id: number
+    response_time_ms: number
     status: number
     region_id: number
     website_id: number
+    createdAt: number
     _all: number
   }
 
 
+  export type WebsiteTickAvgAggregateInputType = {
+    response_time_ms?: true
+  }
+
+  export type WebsiteTickSumAggregateInputType = {
+    response_time_ms?: true
+  }
+
   export type WebsiteTickMinAggregateInputType = {
     id?: true
+    response_time_ms?: true
     status?: true
     region_id?: true
     website_id?: true
+    createdAt?: true
   }
 
   export type WebsiteTickMaxAggregateInputType = {
     id?: true
+    response_time_ms?: true
     status?: true
     region_id?: true
     website_id?: true
+    createdAt?: true
   }
 
   export type WebsiteTickCountAggregateInputType = {
     id?: true
+    response_time_ms?: true
     status?: true
     region_id?: true
     website_id?: true
+    createdAt?: true
     _all?: true
   }
 
@@ -4371,6 +4557,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: WebsiteTickAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: WebsiteTickSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: WebsiteTickMinAggregateInputType
@@ -4401,16 +4599,22 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: WebsiteTickCountAggregateInputType | true
+    _avg?: WebsiteTickAvgAggregateInputType
+    _sum?: WebsiteTickSumAggregateInputType
     _min?: WebsiteTickMinAggregateInputType
     _max?: WebsiteTickMaxAggregateInputType
   }
 
   export type WebsiteTickGroupByOutputType = {
     id: string
+    response_time_ms: number
     status: $Enums.webstatus
     region_id: string
     website_id: string
+    createdAt: Date
     _count: WebsiteTickCountAggregateOutputType | null
+    _avg: WebsiteTickAvgAggregateOutputType | null
+    _sum: WebsiteTickSumAggregateOutputType | null
     _min: WebsiteTickMinAggregateOutputType | null
     _max: WebsiteTickMaxAggregateOutputType | null
   }
@@ -4431,39 +4635,47 @@ export namespace Prisma {
 
   export type WebsiteTickSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    response_time_ms?: boolean
     status?: boolean
     region_id?: boolean
     website_id?: boolean
+    createdAt?: boolean
     region?: boolean | RegionDefaultArgs<ExtArgs>
     website?: boolean | WebsiteDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["websiteTick"]>
 
   export type WebsiteTickSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    response_time_ms?: boolean
     status?: boolean
     region_id?: boolean
     website_id?: boolean
+    createdAt?: boolean
     region?: boolean | RegionDefaultArgs<ExtArgs>
     website?: boolean | WebsiteDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["websiteTick"]>
 
   export type WebsiteTickSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    response_time_ms?: boolean
     status?: boolean
     region_id?: boolean
     website_id?: boolean
+    createdAt?: boolean
     region?: boolean | RegionDefaultArgs<ExtArgs>
     website?: boolean | WebsiteDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["websiteTick"]>
 
   export type WebsiteTickSelectScalar = {
     id?: boolean
+    response_time_ms?: boolean
     status?: boolean
     region_id?: boolean
     website_id?: boolean
+    createdAt?: boolean
   }
 
-  export type WebsiteTickOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "status" | "region_id" | "website_id", ExtArgs["result"]["websiteTick"]>
+  export type WebsiteTickOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "response_time_ms" | "status" | "region_id" | "website_id" | "createdAt", ExtArgs["result"]["websiteTick"]>
   export type WebsiteTickInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     region?: boolean | RegionDefaultArgs<ExtArgs>
     website?: boolean | WebsiteDefaultArgs<ExtArgs>
@@ -4485,9 +4697,11 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      response_time_ms: number
       status: $Enums.webstatus
       region_id: string
       website_id: string
+      createdAt: Date
     }, ExtArgs["result"]["websiteTick"]>
     composites: {}
   }
@@ -4914,9 +5128,11 @@ export namespace Prisma {
    */
   interface WebsiteTickFieldRefs {
     readonly id: FieldRef<"WebsiteTick", 'String'>
+    readonly response_time_ms: FieldRef<"WebsiteTick", 'Int'>
     readonly status: FieldRef<"WebsiteTick", 'webstatus'>
     readonly region_id: FieldRef<"WebsiteTick", 'String'>
     readonly website_id: FieldRef<"WebsiteTick", 'String'>
+    readonly createdAt: FieldRef<"WebsiteTick", 'DateTime'>
   }
     
 
@@ -5358,6 +5574,7 @@ export namespace Prisma {
   export const WebsiteScalarFieldEnum: {
     id: 'id',
     url: 'url',
+    user_id: 'user_id',
     timeAdded: 'timeAdded'
   };
 
@@ -5374,9 +5591,11 @@ export namespace Prisma {
 
   export const WebsiteTickScalarFieldEnum: {
     id: 'id',
+    response_time_ms: 'response_time_ms',
     status: 'status',
     region_id: 'region_id',
-    website_id: 'website_id'
+    website_id: 'website_id',
+    createdAt: 'createdAt'
   };
 
   export type WebsiteTickScalarFieldEnum = (typeof WebsiteTickScalarFieldEnum)[keyof typeof WebsiteTickScalarFieldEnum]
@@ -5396,6 +5615,14 @@ export namespace Prisma {
   };
 
   export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+  export const NullsOrder: {
+    first: 'first',
+    last: 'last'
+  };
+
+  export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
   /**
@@ -5432,6 +5659,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Int'
+   */
+  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int[]'
+   */
+  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
    * Reference to a field of type 'webstatus'
    */
   export type EnumwebstatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'webstatus'>
@@ -5446,16 +5687,16 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Int'
+   * Reference to a field of type 'Float'
    */
-  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
     
 
 
   /**
-   * Reference to a field of type 'Int[]'
+   * Reference to a field of type 'Float[]'
    */
-  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
   /**
    * Deep Input Types
@@ -5470,6 +5711,7 @@ export namespace Prisma {
     name?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
     email?: StringFilter<"User"> | string
+    websites?: WebsiteListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -5477,6 +5719,7 @@ export namespace Prisma {
     name?: SortOrder
     password?: SortOrder
     email?: SortOrder
+    websites?: WebsiteOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -5487,6 +5730,7 @@ export namespace Prisma {
     NOT?: UserWhereInput | UserWhereInput[]
     name?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
+    websites?: WebsiteListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -5515,15 +5759,19 @@ export namespace Prisma {
     NOT?: WebsiteWhereInput | WebsiteWhereInput[]
     id?: StringFilter<"Website"> | string
     url?: StringFilter<"Website"> | string
+    user_id?: StringNullableFilter<"Website"> | string | null
     timeAdded?: DateTimeFilter<"Website"> | Date | string
     ticks?: WebsiteTickListRelationFilter
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }
 
   export type WebsiteOrderByWithRelationInput = {
     id?: SortOrder
     url?: SortOrder
+    user_id?: SortOrderInput | SortOrder
     timeAdded?: SortOrder
     ticks?: WebsiteTickOrderByRelationAggregateInput
+    user?: UserOrderByWithRelationInput
   }
 
   export type WebsiteWhereUniqueInput = Prisma.AtLeast<{
@@ -5532,13 +5780,16 @@ export namespace Prisma {
     OR?: WebsiteWhereInput[]
     NOT?: WebsiteWhereInput | WebsiteWhereInput[]
     url?: StringFilter<"Website"> | string
+    user_id?: StringNullableFilter<"Website"> | string | null
     timeAdded?: DateTimeFilter<"Website"> | Date | string
     ticks?: WebsiteTickListRelationFilter
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }, "id">
 
   export type WebsiteOrderByWithAggregationInput = {
     id?: SortOrder
     url?: SortOrder
+    user_id?: SortOrderInput | SortOrder
     timeAdded?: SortOrder
     _count?: WebsiteCountOrderByAggregateInput
     _max?: WebsiteMaxOrderByAggregateInput
@@ -5551,6 +5802,7 @@ export namespace Prisma {
     NOT?: WebsiteScalarWhereWithAggregatesInput | WebsiteScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Website"> | string
     url?: StringWithAggregatesFilter<"Website"> | string
+    user_id?: StringNullableWithAggregatesFilter<"Website"> | string | null
     timeAdded?: DateTimeWithAggregatesFilter<"Website"> | Date | string
   }
 
@@ -5599,18 +5851,22 @@ export namespace Prisma {
     OR?: WebsiteTickWhereInput[]
     NOT?: WebsiteTickWhereInput | WebsiteTickWhereInput[]
     id?: StringFilter<"WebsiteTick"> | string
+    response_time_ms?: IntFilter<"WebsiteTick"> | number
     status?: EnumwebstatusFilter<"WebsiteTick"> | $Enums.webstatus
     region_id?: StringFilter<"WebsiteTick"> | string
     website_id?: StringFilter<"WebsiteTick"> | string
+    createdAt?: DateTimeFilter<"WebsiteTick"> | Date | string
     region?: XOR<RegionScalarRelationFilter, RegionWhereInput>
     website?: XOR<WebsiteScalarRelationFilter, WebsiteWhereInput>
   }
 
   export type WebsiteTickOrderByWithRelationInput = {
     id?: SortOrder
+    response_time_ms?: SortOrder
     status?: SortOrder
     region_id?: SortOrder
     website_id?: SortOrder
+    createdAt?: SortOrder
     region?: RegionOrderByWithRelationInput
     website?: WebsiteOrderByWithRelationInput
   }
@@ -5620,21 +5876,27 @@ export namespace Prisma {
     AND?: WebsiteTickWhereInput | WebsiteTickWhereInput[]
     OR?: WebsiteTickWhereInput[]
     NOT?: WebsiteTickWhereInput | WebsiteTickWhereInput[]
+    response_time_ms?: IntFilter<"WebsiteTick"> | number
     status?: EnumwebstatusFilter<"WebsiteTick"> | $Enums.webstatus
     region_id?: StringFilter<"WebsiteTick"> | string
     website_id?: StringFilter<"WebsiteTick"> | string
+    createdAt?: DateTimeFilter<"WebsiteTick"> | Date | string
     region?: XOR<RegionScalarRelationFilter, RegionWhereInput>
     website?: XOR<WebsiteScalarRelationFilter, WebsiteWhereInput>
   }, "id">
 
   export type WebsiteTickOrderByWithAggregationInput = {
     id?: SortOrder
+    response_time_ms?: SortOrder
     status?: SortOrder
     region_id?: SortOrder
     website_id?: SortOrder
+    createdAt?: SortOrder
     _count?: WebsiteTickCountOrderByAggregateInput
+    _avg?: WebsiteTickAvgOrderByAggregateInput
     _max?: WebsiteTickMaxOrderByAggregateInput
     _min?: WebsiteTickMinOrderByAggregateInput
+    _sum?: WebsiteTickSumOrderByAggregateInput
   }
 
   export type WebsiteTickScalarWhereWithAggregatesInput = {
@@ -5642,9 +5904,11 @@ export namespace Prisma {
     OR?: WebsiteTickScalarWhereWithAggregatesInput[]
     NOT?: WebsiteTickScalarWhereWithAggregatesInput | WebsiteTickScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"WebsiteTick"> | string
+    response_time_ms?: IntWithAggregatesFilter<"WebsiteTick"> | number
     status?: EnumwebstatusWithAggregatesFilter<"WebsiteTick"> | $Enums.webstatus
     region_id?: StringWithAggregatesFilter<"WebsiteTick"> | string
     website_id?: StringWithAggregatesFilter<"WebsiteTick"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"WebsiteTick"> | Date | string
   }
 
   export type UserCreateInput = {
@@ -5652,6 +5916,7 @@ export namespace Prisma {
     name: string
     password: string
     email: string
+    websites?: WebsiteCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -5659,6 +5924,7 @@ export namespace Prisma {
     name: string
     password: string
     email: string
+    websites?: WebsiteUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -5666,6 +5932,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    websites?: WebsiteUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -5673,6 +5940,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    websites?: WebsiteUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -5699,14 +5967,16 @@ export namespace Prisma {
   export type WebsiteCreateInput = {
     id?: string
     url: string
-    timeAdded: Date | string
+    timeAdded?: Date | string
     ticks?: WebsiteTickCreateNestedManyWithoutWebsiteInput
+    user?: UserCreateNestedOneWithoutWebsitesInput
   }
 
   export type WebsiteUncheckedCreateInput = {
     id?: string
     url: string
-    timeAdded: Date | string
+    user_id?: string | null
+    timeAdded?: Date | string
     ticks?: WebsiteTickUncheckedCreateNestedManyWithoutWebsiteInput
   }
 
@@ -5715,11 +5985,13 @@ export namespace Prisma {
     url?: StringFieldUpdateOperationsInput | string
     timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
     ticks?: WebsiteTickUpdateManyWithoutWebsiteNestedInput
+    user?: UserUpdateOneWithoutWebsitesNestedInput
   }
 
   export type WebsiteUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
+    user_id?: NullableStringFieldUpdateOperationsInput | string | null
     timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
     ticks?: WebsiteTickUncheckedUpdateManyWithoutWebsiteNestedInput
   }
@@ -5727,7 +5999,8 @@ export namespace Prisma {
   export type WebsiteCreateManyInput = {
     id?: string
     url: string
-    timeAdded: Date | string
+    user_id?: string | null
+    timeAdded?: Date | string
   }
 
   export type WebsiteUpdateManyMutationInput = {
@@ -5739,6 +6012,7 @@ export namespace Prisma {
   export type WebsiteUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
+    user_id?: NullableStringFieldUpdateOperationsInput | string | null
     timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -5783,49 +6057,63 @@ export namespace Prisma {
 
   export type WebsiteTickCreateInput = {
     id?: string
+    response_time_ms: number
     status: $Enums.webstatus
+    createdAt?: Date | string
     region: RegionCreateNestedOneWithoutTicksInput
     website: WebsiteCreateNestedOneWithoutTicksInput
   }
 
   export type WebsiteTickUncheckedCreateInput = {
     id?: string
+    response_time_ms: number
     status: $Enums.webstatus
     region_id: string
     website_id: string
+    createdAt?: Date | string
   }
 
   export type WebsiteTickUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    response_time_ms?: IntFieldUpdateOperationsInput | number
     status?: EnumwebstatusFieldUpdateOperationsInput | $Enums.webstatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     region?: RegionUpdateOneRequiredWithoutTicksNestedInput
     website?: WebsiteUpdateOneRequiredWithoutTicksNestedInput
   }
 
   export type WebsiteTickUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    response_time_ms?: IntFieldUpdateOperationsInput | number
     status?: EnumwebstatusFieldUpdateOperationsInput | $Enums.webstatus
     region_id?: StringFieldUpdateOperationsInput | string
     website_id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type WebsiteTickCreateManyInput = {
     id?: string
+    response_time_ms: number
     status: $Enums.webstatus
     region_id: string
     website_id: string
+    createdAt?: Date | string
   }
 
   export type WebsiteTickUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    response_time_ms?: IntFieldUpdateOperationsInput | number
     status?: EnumwebstatusFieldUpdateOperationsInput | $Enums.webstatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type WebsiteTickUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    response_time_ms?: IntFieldUpdateOperationsInput | number
     status?: EnumwebstatusFieldUpdateOperationsInput | $Enums.webstatus
     region_id?: StringFieldUpdateOperationsInput | string
     website_id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -5841,6 +6129,16 @@ export namespace Prisma {
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     mode?: QueryMode
     not?: NestedStringFilter<$PrismaModel> | string
+  }
+
+  export type WebsiteListRelationFilter = {
+    every?: WebsiteWhereInput
+    some?: WebsiteWhereInput
+    none?: WebsiteWhereInput
+  }
+
+  export type WebsiteOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type UserCountOrderByAggregateInput = {
@@ -5882,6 +6180,21 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -5899,6 +6212,16 @@ export namespace Prisma {
     none?: WebsiteTickWhereInput
   }
 
+  export type UserNullableScalarRelationFilter = {
+    is?: UserWhereInput | null
+    isNot?: UserWhereInput | null
+  }
+
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
+  }
+
   export type WebsiteTickOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -5906,19 +6229,40 @@ export namespace Prisma {
   export type WebsiteCountOrderByAggregateInput = {
     id?: SortOrder
     url?: SortOrder
+    user_id?: SortOrder
     timeAdded?: SortOrder
   }
 
   export type WebsiteMaxOrderByAggregateInput = {
     id?: SortOrder
     url?: SortOrder
+    user_id?: SortOrder
     timeAdded?: SortOrder
   }
 
   export type WebsiteMinOrderByAggregateInput = {
     id?: SortOrder
     url?: SortOrder
+    user_id?: SortOrder
     timeAdded?: SortOrder
+  }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -5950,6 +6294,17 @@ export namespace Prisma {
     name?: SortOrder
   }
 
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
   export type EnumwebstatusFilter<$PrismaModel = never> = {
     equals?: $Enums.webstatus | EnumwebstatusFieldRefInput<$PrismaModel>
     in?: $Enums.webstatus[] | ListEnumwebstatusFieldRefInput<$PrismaModel>
@@ -5969,23 +6324,53 @@ export namespace Prisma {
 
   export type WebsiteTickCountOrderByAggregateInput = {
     id?: SortOrder
+    response_time_ms?: SortOrder
     status?: SortOrder
     region_id?: SortOrder
     website_id?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type WebsiteTickAvgOrderByAggregateInput = {
+    response_time_ms?: SortOrder
   }
 
   export type WebsiteTickMaxOrderByAggregateInput = {
     id?: SortOrder
+    response_time_ms?: SortOrder
     status?: SortOrder
     region_id?: SortOrder
     website_id?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type WebsiteTickMinOrderByAggregateInput = {
     id?: SortOrder
+    response_time_ms?: SortOrder
     status?: SortOrder
     region_id?: SortOrder
     website_id?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type WebsiteTickSumOrderByAggregateInput = {
+    response_time_ms?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type EnumwebstatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -5998,8 +6383,50 @@ export namespace Prisma {
     _max?: NestedEnumwebstatusFilter<$PrismaModel>
   }
 
+  export type WebsiteCreateNestedManyWithoutUserInput = {
+    create?: XOR<WebsiteCreateWithoutUserInput, WebsiteUncheckedCreateWithoutUserInput> | WebsiteCreateWithoutUserInput[] | WebsiteUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: WebsiteCreateOrConnectWithoutUserInput | WebsiteCreateOrConnectWithoutUserInput[]
+    createMany?: WebsiteCreateManyUserInputEnvelope
+    connect?: WebsiteWhereUniqueInput | WebsiteWhereUniqueInput[]
+  }
+
+  export type WebsiteUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<WebsiteCreateWithoutUserInput, WebsiteUncheckedCreateWithoutUserInput> | WebsiteCreateWithoutUserInput[] | WebsiteUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: WebsiteCreateOrConnectWithoutUserInput | WebsiteCreateOrConnectWithoutUserInput[]
+    createMany?: WebsiteCreateManyUserInputEnvelope
+    connect?: WebsiteWhereUniqueInput | WebsiteWhereUniqueInput[]
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
+  }
+
+  export type WebsiteUpdateManyWithoutUserNestedInput = {
+    create?: XOR<WebsiteCreateWithoutUserInput, WebsiteUncheckedCreateWithoutUserInput> | WebsiteCreateWithoutUserInput[] | WebsiteUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: WebsiteCreateOrConnectWithoutUserInput | WebsiteCreateOrConnectWithoutUserInput[]
+    upsert?: WebsiteUpsertWithWhereUniqueWithoutUserInput | WebsiteUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: WebsiteCreateManyUserInputEnvelope
+    set?: WebsiteWhereUniqueInput | WebsiteWhereUniqueInput[]
+    disconnect?: WebsiteWhereUniqueInput | WebsiteWhereUniqueInput[]
+    delete?: WebsiteWhereUniqueInput | WebsiteWhereUniqueInput[]
+    connect?: WebsiteWhereUniqueInput | WebsiteWhereUniqueInput[]
+    update?: WebsiteUpdateWithWhereUniqueWithoutUserInput | WebsiteUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: WebsiteUpdateManyWithWhereWithoutUserInput | WebsiteUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: WebsiteScalarWhereInput | WebsiteScalarWhereInput[]
+  }
+
+  export type WebsiteUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<WebsiteCreateWithoutUserInput, WebsiteUncheckedCreateWithoutUserInput> | WebsiteCreateWithoutUserInput[] | WebsiteUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: WebsiteCreateOrConnectWithoutUserInput | WebsiteCreateOrConnectWithoutUserInput[]
+    upsert?: WebsiteUpsertWithWhereUniqueWithoutUserInput | WebsiteUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: WebsiteCreateManyUserInputEnvelope
+    set?: WebsiteWhereUniqueInput | WebsiteWhereUniqueInput[]
+    disconnect?: WebsiteWhereUniqueInput | WebsiteWhereUniqueInput[]
+    delete?: WebsiteWhereUniqueInput | WebsiteWhereUniqueInput[]
+    connect?: WebsiteWhereUniqueInput | WebsiteWhereUniqueInput[]
+    update?: WebsiteUpdateWithWhereUniqueWithoutUserInput | WebsiteUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: WebsiteUpdateManyWithWhereWithoutUserInput | WebsiteUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: WebsiteScalarWhereInput | WebsiteScalarWhereInput[]
   }
 
   export type WebsiteTickCreateNestedManyWithoutWebsiteInput = {
@@ -6007,6 +6434,12 @@ export namespace Prisma {
     connectOrCreate?: WebsiteTickCreateOrConnectWithoutWebsiteInput | WebsiteTickCreateOrConnectWithoutWebsiteInput[]
     createMany?: WebsiteTickCreateManyWebsiteInputEnvelope
     connect?: WebsiteTickWhereUniqueInput | WebsiteTickWhereUniqueInput[]
+  }
+
+  export type UserCreateNestedOneWithoutWebsitesInput = {
+    create?: XOR<UserCreateWithoutWebsitesInput, UserUncheckedCreateWithoutWebsitesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutWebsitesInput
+    connect?: UserWhereUniqueInput
   }
 
   export type WebsiteTickUncheckedCreateNestedManyWithoutWebsiteInput = {
@@ -6032,6 +6465,20 @@ export namespace Prisma {
     update?: WebsiteTickUpdateWithWhereUniqueWithoutWebsiteInput | WebsiteTickUpdateWithWhereUniqueWithoutWebsiteInput[]
     updateMany?: WebsiteTickUpdateManyWithWhereWithoutWebsiteInput | WebsiteTickUpdateManyWithWhereWithoutWebsiteInput[]
     deleteMany?: WebsiteTickScalarWhereInput | WebsiteTickScalarWhereInput[]
+  }
+
+  export type UserUpdateOneWithoutWebsitesNestedInput = {
+    create?: XOR<UserCreateWithoutWebsitesInput, UserUncheckedCreateWithoutWebsitesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutWebsitesInput
+    upsert?: UserUpsertWithoutWebsitesInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutWebsitesInput, UserUpdateWithoutWebsitesInput>, UserUncheckedUpdateWithoutWebsitesInput>
+  }
+
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
   }
 
   export type WebsiteTickUncheckedUpdateManyWithoutWebsiteNestedInput = {
@@ -6102,6 +6549,14 @@ export namespace Prisma {
     connect?: WebsiteWhereUniqueInput
   }
 
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type EnumwebstatusFieldUpdateOperationsInput = {
     set?: $Enums.webstatus
   }
@@ -6164,6 +6619,20 @@ export namespace Prisma {
     not?: NestedIntFilter<$PrismaModel> | number
   }
 
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type NestedDateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -6173,6 +6642,34 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -6196,6 +6693,33 @@ export namespace Prisma {
     not?: NestedEnumwebstatusFilter<$PrismaModel> | $Enums.webstatus
   }
 
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
   export type NestedEnumwebstatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.webstatus | EnumwebstatusFieldRefInput<$PrismaModel>
     in?: $Enums.webstatus[] | ListEnumwebstatusFieldRefInput<$PrismaModel>
@@ -6206,16 +6730,70 @@ export namespace Prisma {
     _max?: NestedEnumwebstatusFilter<$PrismaModel>
   }
 
+  export type WebsiteCreateWithoutUserInput = {
+    id?: string
+    url: string
+    timeAdded?: Date | string
+    ticks?: WebsiteTickCreateNestedManyWithoutWebsiteInput
+  }
+
+  export type WebsiteUncheckedCreateWithoutUserInput = {
+    id?: string
+    url: string
+    timeAdded?: Date | string
+    ticks?: WebsiteTickUncheckedCreateNestedManyWithoutWebsiteInput
+  }
+
+  export type WebsiteCreateOrConnectWithoutUserInput = {
+    where: WebsiteWhereUniqueInput
+    create: XOR<WebsiteCreateWithoutUserInput, WebsiteUncheckedCreateWithoutUserInput>
+  }
+
+  export type WebsiteCreateManyUserInputEnvelope = {
+    data: WebsiteCreateManyUserInput | WebsiteCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type WebsiteUpsertWithWhereUniqueWithoutUserInput = {
+    where: WebsiteWhereUniqueInput
+    update: XOR<WebsiteUpdateWithoutUserInput, WebsiteUncheckedUpdateWithoutUserInput>
+    create: XOR<WebsiteCreateWithoutUserInput, WebsiteUncheckedCreateWithoutUserInput>
+  }
+
+  export type WebsiteUpdateWithWhereUniqueWithoutUserInput = {
+    where: WebsiteWhereUniqueInput
+    data: XOR<WebsiteUpdateWithoutUserInput, WebsiteUncheckedUpdateWithoutUserInput>
+  }
+
+  export type WebsiteUpdateManyWithWhereWithoutUserInput = {
+    where: WebsiteScalarWhereInput
+    data: XOR<WebsiteUpdateManyMutationInput, WebsiteUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type WebsiteScalarWhereInput = {
+    AND?: WebsiteScalarWhereInput | WebsiteScalarWhereInput[]
+    OR?: WebsiteScalarWhereInput[]
+    NOT?: WebsiteScalarWhereInput | WebsiteScalarWhereInput[]
+    id?: StringFilter<"Website"> | string
+    url?: StringFilter<"Website"> | string
+    user_id?: StringNullableFilter<"Website"> | string | null
+    timeAdded?: DateTimeFilter<"Website"> | Date | string
+  }
+
   export type WebsiteTickCreateWithoutWebsiteInput = {
     id?: string
+    response_time_ms: number
     status: $Enums.webstatus
+    createdAt?: Date | string
     region: RegionCreateNestedOneWithoutTicksInput
   }
 
   export type WebsiteTickUncheckedCreateWithoutWebsiteInput = {
     id?: string
+    response_time_ms: number
     status: $Enums.webstatus
     region_id: string
+    createdAt?: Date | string
   }
 
   export type WebsiteTickCreateOrConnectWithoutWebsiteInput = {
@@ -6226,6 +6804,25 @@ export namespace Prisma {
   export type WebsiteTickCreateManyWebsiteInputEnvelope = {
     data: WebsiteTickCreateManyWebsiteInput | WebsiteTickCreateManyWebsiteInput[]
     skipDuplicates?: boolean
+  }
+
+  export type UserCreateWithoutWebsitesInput = {
+    id?: string
+    name: string
+    password: string
+    email: string
+  }
+
+  export type UserUncheckedCreateWithoutWebsitesInput = {
+    id?: string
+    name: string
+    password: string
+    email: string
+  }
+
+  export type UserCreateOrConnectWithoutWebsitesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutWebsitesInput, UserUncheckedCreateWithoutWebsitesInput>
   }
 
   export type WebsiteTickUpsertWithWhereUniqueWithoutWebsiteInput = {
@@ -6249,21 +6846,52 @@ export namespace Prisma {
     OR?: WebsiteTickScalarWhereInput[]
     NOT?: WebsiteTickScalarWhereInput | WebsiteTickScalarWhereInput[]
     id?: StringFilter<"WebsiteTick"> | string
+    response_time_ms?: IntFilter<"WebsiteTick"> | number
     status?: EnumwebstatusFilter<"WebsiteTick"> | $Enums.webstatus
     region_id?: StringFilter<"WebsiteTick"> | string
     website_id?: StringFilter<"WebsiteTick"> | string
+    createdAt?: DateTimeFilter<"WebsiteTick"> | Date | string
+  }
+
+  export type UserUpsertWithoutWebsitesInput = {
+    update: XOR<UserUpdateWithoutWebsitesInput, UserUncheckedUpdateWithoutWebsitesInput>
+    create: XOR<UserCreateWithoutWebsitesInput, UserUncheckedCreateWithoutWebsitesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutWebsitesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutWebsitesInput, UserUncheckedUpdateWithoutWebsitesInput>
+  }
+
+  export type UserUpdateWithoutWebsitesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type UserUncheckedUpdateWithoutWebsitesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
   }
 
   export type WebsiteTickCreateWithoutRegionInput = {
     id?: string
+    response_time_ms: number
     status: $Enums.webstatus
+    createdAt?: Date | string
     website: WebsiteCreateNestedOneWithoutTicksInput
   }
 
   export type WebsiteTickUncheckedCreateWithoutRegionInput = {
     id?: string
+    response_time_ms: number
     status: $Enums.webstatus
     website_id: string
+    createdAt?: Date | string
   }
 
   export type WebsiteTickCreateOrConnectWithoutRegionInput = {
@@ -6310,13 +6938,15 @@ export namespace Prisma {
   export type WebsiteCreateWithoutTicksInput = {
     id?: string
     url: string
-    timeAdded: Date | string
+    timeAdded?: Date | string
+    user?: UserCreateNestedOneWithoutWebsitesInput
   }
 
   export type WebsiteUncheckedCreateWithoutTicksInput = {
     id?: string
     url: string
-    timeAdded: Date | string
+    user_id?: string | null
+    timeAdded?: Date | string
   }
 
   export type WebsiteCreateOrConnectWithoutTicksInput = {
@@ -6360,9 +6990,37 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneWithoutWebsitesNestedInput
   }
 
   export type WebsiteUncheckedUpdateWithoutTicksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    user_id?: NullableStringFieldUpdateOperationsInput | string | null
+    timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WebsiteCreateManyUserInput = {
+    id?: string
+    url: string
+    timeAdded?: Date | string
+  }
+
+  export type WebsiteUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
+    ticks?: WebsiteTickUpdateManyWithoutWebsiteNestedInput
+  }
+
+  export type WebsiteUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
+    ticks?: WebsiteTickUncheckedUpdateManyWithoutWebsiteNestedInput
+  }
+
+  export type WebsiteUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -6370,50 +7028,66 @@ export namespace Prisma {
 
   export type WebsiteTickCreateManyWebsiteInput = {
     id?: string
+    response_time_ms: number
     status: $Enums.webstatus
     region_id: string
+    createdAt?: Date | string
   }
 
   export type WebsiteTickUpdateWithoutWebsiteInput = {
     id?: StringFieldUpdateOperationsInput | string
+    response_time_ms?: IntFieldUpdateOperationsInput | number
     status?: EnumwebstatusFieldUpdateOperationsInput | $Enums.webstatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     region?: RegionUpdateOneRequiredWithoutTicksNestedInput
   }
 
   export type WebsiteTickUncheckedUpdateWithoutWebsiteInput = {
     id?: StringFieldUpdateOperationsInput | string
+    response_time_ms?: IntFieldUpdateOperationsInput | number
     status?: EnumwebstatusFieldUpdateOperationsInput | $Enums.webstatus
     region_id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type WebsiteTickUncheckedUpdateManyWithoutWebsiteInput = {
     id?: StringFieldUpdateOperationsInput | string
+    response_time_ms?: IntFieldUpdateOperationsInput | number
     status?: EnumwebstatusFieldUpdateOperationsInput | $Enums.webstatus
     region_id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type WebsiteTickCreateManyRegionInput = {
     id?: string
+    response_time_ms: number
     status: $Enums.webstatus
     website_id: string
+    createdAt?: Date | string
   }
 
   export type WebsiteTickUpdateWithoutRegionInput = {
     id?: StringFieldUpdateOperationsInput | string
+    response_time_ms?: IntFieldUpdateOperationsInput | number
     status?: EnumwebstatusFieldUpdateOperationsInput | $Enums.webstatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     website?: WebsiteUpdateOneRequiredWithoutTicksNestedInput
   }
 
   export type WebsiteTickUncheckedUpdateWithoutRegionInput = {
     id?: StringFieldUpdateOperationsInput | string
+    response_time_ms?: IntFieldUpdateOperationsInput | number
     status?: EnumwebstatusFieldUpdateOperationsInput | $Enums.webstatus
     website_id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type WebsiteTickUncheckedUpdateManyWithoutRegionInput = {
     id?: StringFieldUpdateOperationsInput | string
+    response_time_ms?: IntFieldUpdateOperationsInput | number
     status?: EnumwebstatusFieldUpdateOperationsInput | $Enums.webstatus
     website_id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

@@ -15,17 +15,20 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(uuid())
+  id       String    @id @default(uuid())
   name     String
   password String
-  email    String @unique
+  email    String    @unique
+  websites Website[]
 }
 
 model Website {
   id        String        @id @default(uuid())
   url       String
-  timeAdded DateTime
+  user_id   String?
+  timeAdded DateTime      @default(now())
   ticks     WebsiteTick[]
+  user      User?         @relation(fields: [user_id], references: [id])
 }
 
 model Region {
@@ -35,12 +38,14 @@ model Region {
 }
 
 model WebsiteTick {
-  id         String    @id @default(uuid())
-  status     webstatus
-  region     Region    @relation(fields: [region_id], references: [id])
-  website    Website   @relation(fields: [website_id], references: [id])
-  region_id  String
-  website_id String
+  id               String    @id @default(uuid())
+  response_time_ms Int
+  status           webstatus
+  region           Region    @relation(fields: [region_id], references: [id])
+  website          Website   @relation(fields: [website_id], references: [id])
+  region_id        String
+  website_id       String
+  createdAt        DateTime  @default(now())
 }
 
 enum webstatus {

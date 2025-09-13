@@ -25,8 +25,6 @@ export const Authorize = (req: Request, res: Response, next: NextFunction) => {
 
     // Attach user info to request
     req.userid= user as JwtPayload;
-    console.log(req.userid);
-
     next();
   });
 };
