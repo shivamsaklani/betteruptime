@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import { Authorize } from "../user/middleware";
 import { Prisma } from "@repo/db/client";
+import { DelRegion} from "@repo/redisstreams/redisclient";
 const express = require("express");
 const application = express.Router();
 
@@ -25,8 +26,6 @@ application.post("/createwebsite",Authorize ,async (req: Request, res: Response)
     return;
   }
 }); // EndPoint for Creating a Website
-
-
 application.post("/deletewebsite",Authorize ,async (req: Request, res: Response) => {
   const id = req.userid?.id;
   const {webid}=req.body;
@@ -66,17 +65,17 @@ application.post("/createregion",Authorize,async (req:Request,res:Response)=>{
   } catch (error) {
       res.status(500).send("Try Again. We are facing Traffic");
     return;
-    
   }
 }); //EndPoint for Adding new Region
-application.post("/delregion",Authorize,async (req:Request,res:Response)=>{
-  const {id}= req.body;
+application.delete("/delregion",Authorize,async (req:Request,res:Response)=>{
+  const {id,region}= req.body;
   try {
     await Prisma.region.delete({
       where:{
         id:id,
       }
     });
+    DelRegion(region);
     res.status(200).send(`Region Deleted`);
     return;
   } catch (error) {
@@ -85,7 +84,6 @@ application.post("/delregion",Authorize,async (req:Request,res:Response)=>{
     
   }
 }); //EndPoint for Deleting Region
-
 application.get("/:websiteid",Authorize,async (req:Request,res:Response)=>{
   const user_id = req.userid?.id;
   try {

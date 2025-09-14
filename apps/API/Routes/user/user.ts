@@ -81,7 +81,6 @@ user.post("/signin",async (req:Request, res:Response) => {
         name:trustedData.data.username
       }
     });
-    console.log(JWT_SECRET);
     const token= jwt.sign({
       username:userData?.email,
       id:userData?.id

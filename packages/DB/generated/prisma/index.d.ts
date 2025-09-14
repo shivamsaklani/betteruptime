@@ -5872,10 +5872,11 @@ export namespace Prisma {
   }
 
   export type WebsiteTickWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
+    id_createdAt?: WebsiteTickIdCreatedAtCompoundUniqueInput
     AND?: WebsiteTickWhereInput | WebsiteTickWhereInput[]
     OR?: WebsiteTickWhereInput[]
     NOT?: WebsiteTickWhereInput | WebsiteTickWhereInput[]
+    id?: StringFilter<"WebsiteTick"> | string
     response_time_ms?: IntFilter<"WebsiteTick"> | number
     status?: EnumwebstatusFilter<"WebsiteTick"> | $Enums.webstatus
     region_id?: StringFilter<"WebsiteTick"> | string
@@ -5883,7 +5884,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"WebsiteTick"> | Date | string
     region?: XOR<RegionScalarRelationFilter, RegionWhereInput>
     website?: XOR<WebsiteScalarRelationFilter, WebsiteWhereInput>
-  }, "id">
+  }, "id_createdAt">
 
   export type WebsiteTickOrderByWithAggregationInput = {
     id?: SortOrder
@@ -6320,6 +6321,11 @@ export namespace Prisma {
   export type WebsiteScalarRelationFilter = {
     is?: WebsiteWhereInput
     isNot?: WebsiteWhereInput
+  }
+
+  export type WebsiteTickIdCreatedAtCompoundUniqueInput = {
+    id: string
+    createdAt: Date | string
   }
 
   export type WebsiteTickCountOrderByAggregateInput = {

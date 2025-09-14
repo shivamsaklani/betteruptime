@@ -38,7 +38,7 @@ model Region {
 }
 
 model WebsiteTick {
-  id               String    @id @default(uuid())
+  id               String    @default(uuid())
   response_time_ms Int
   status           webstatus
   region           Region    @relation(fields: [region_id], references: [id])
@@ -46,6 +46,9 @@ model WebsiteTick {
   region_id        String
   website_id       String
   createdAt        DateTime  @default(now())
+
+  @@id([id, createdAt])
+  @@index([createdAt])
 }
 
 enum webstatus {

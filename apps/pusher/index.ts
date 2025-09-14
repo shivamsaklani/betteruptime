@@ -12,4 +12,4 @@ async function main(){
 
 setInterval(()=>{
  main();
-},60_000);
+},5000);

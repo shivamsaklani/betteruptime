@@ -18,7 +18,9 @@ model User {
   name String
   password String
   email String @unique
-  websites Website[]
+  websites Website[] // user should have individual websites
+  region Region[]  // should have region associated with them
+  ticks    WebsiteTick[]  // should have website ticks
 }
 model Website{
   id    String @id @default(uuid())
@@ -31,17 +33,23 @@ model Website{
 model Region{
   id String @id @default(uuid())
   name String
+  user_id String?
+  user User? @relation(fields: [user_id],references: [id])
   ticks WebsiteTick[]
 }
 model WebsiteTick{
-  id String @id @default(uuid())
+  id String  @default(uuid())
   response_time_ms Int
   status  webstatus
   region  Region   @relation(fields: [region_id],references: [id])
   website Website  @relation(fields: [website_id],references: [id])
   region_id String
   website_id String
+  user_id String?
+  user     User?    @relation(fields: [user_id], references: [id])
   createdAt DateTime @default(now())
+   @@id([id, createdAt])
+   @@index([createdAt])
 }
 
 

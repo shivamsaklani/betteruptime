@@ -17,6 +17,7 @@
     "@repo/db": "workspace:*",
     "@repo/uservalidation": "workspace:*",
     "@types/bcrypt": "^6.0.0",
+    "@repo/redisstreams":"*",
     "@types/express": "^5.0.2",
     "@types/jsonwebtoken": "^9.0.10",
     "bcrypt": "^6.0.0",
