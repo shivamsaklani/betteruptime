@@ -4,10 +4,10 @@ This Turborepo starter is maintained by the Turborepo core team.
 
 ## Using this example
 
-Run the following command:
+Install dependencies using Bun:
 
 ```sh
-npx create-turbo@latest
+bun install
 ```
 
 ## What's inside?
@@ -34,20 +34,18 @@ This Turborepo has some additional tools already setup for you:
 
 ### Build
 
-To build all apps and packages, run the following command:
+To build all apps and packages:
 
 ```
-cd my-turborepo
-pnpm build
+bun run build
 ```
 
 ### Develop
 
-To develop all apps and packages, run the following command:
+To develop all apps and packages:
 
 ```
-cd my-turborepo
-pnpm dev
+bun run dev
 ```
 
 ### Remote Caching
