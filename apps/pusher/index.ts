@@ -1,6 +1,6 @@
 import { PushBulk} from "@repo/redisstreams/redisclient";
 import { Prisma } from "@repo/db/client";
-async function main(){
+async function Pusher(){
   const websites = await Prisma.website.findMany({
     select:{
       url:true,
@@ -11,5 +11,5 @@ async function main(){
 }
 
 setInterval(()=>{
- main();
-},5000);
+ Pusher();
+},30_000);

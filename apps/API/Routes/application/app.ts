@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import { Authorize } from "../user/middleware";
 import { Prisma } from "@repo/db/client";
-import { DelRegion} from "@repo/redisstreams/redisclient";
+import {CreateRegion, DelRegion} from "@repo/redisstreams/redisclient";
 const express = require("express");
 const application = express.Router();
 
@@ -60,6 +60,7 @@ application.post("/createregion",Authorize,async (req:Request,res:Response)=>{
         name:region
       }
     });
+    CreateRegion(region);
     res.status(200).send(`Region created:${region}`);
     return;
   } catch (error) {

@@ -60,7 +60,7 @@ async function consumeRegion(region: string, region_id: string, workerId: string
   }
 }
 
-async function main() {
+async function Worker() {
   setInterval(async () => {
   try {
       let regions = await Prisma.region.findMany({
@@ -78,7 +78,6 @@ async function main() {
   
       for (const r of regions) {
         if (!activeConsumers.has(r.id)) { // tracks new regions entry
-          await CreateRegion(r.name);
           const workerId = `${r.name}-worker-${Date.now()}`;
           activeConsumers.set(r.id, true);
           await consumeRegion(r.name, r.id, workerId); 
@@ -90,4 +89,4 @@ async function main() {
   }, 5000); // every 5 seconds check for new regions
 }
 
-main().catch(console.error);
+Worker().catch(console.error);
