@@ -62,7 +62,6 @@ try {
 }
 export async function ReadGroup(groupName:string,workerId:string):Promise<ResponseType[] > {
   if(!groupName){
-    console.log("No Group name");
     return [];
   }
   

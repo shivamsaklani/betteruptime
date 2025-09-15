@@ -72,7 +72,9 @@ async function Worker() {
           data: { name: "asia" },
           select: { id: true, name: true },
         });
+        CreateRegion("asia");
         regions = [defaultRegion];
+        activeConsumers.set("asia",true);
       }
 
   
@@ -86,7 +88,7 @@ async function Worker() {
   } catch (error) {
     console.log("Consumer not running",error);
   }
-  }, 5000); // every 5 seconds check for new regions
+  }, 60_000); // every 60 seconds check for new regions
 }
 
 Worker().catch(console.error);
