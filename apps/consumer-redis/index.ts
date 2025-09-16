@@ -79,9 +79,11 @@ async function Worker() {
 
   
       for (const r of regions) {
+        
         if (!activeConsumers.has(r.id)) { // tracks new regions entry
           const workerId = `${r.name}-worker-${Date.now()}`;
           activeConsumers.set(r.id, true);
+           await CreateRegion(r.name);
           await consumeRegion(r.name, r.id, workerId); 
         }
       }

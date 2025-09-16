@@ -19,7 +19,8 @@ model User {
   name     String
   password String
   email    String    @unique
-  websites Website[]
+  websites Website[] // user should have individual websites
+  region   Region[] // should have region associated with them
 }
 
 model Website {
@@ -32,9 +33,11 @@ model Website {
 }
 
 model Region {
-  id    String        @id @default(uuid())
-  name  String
-  ticks WebsiteTick[]
+  id      String        @id @default(uuid())
+  name    String
+  user_id String?
+  user    User?         @relation(fields: [user_id], references: [id])
+  ticks   WebsiteTick[]
 }
 
 model WebsiteTick {

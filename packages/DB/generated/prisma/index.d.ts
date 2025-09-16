@@ -1161,10 +1161,12 @@ export namespace Prisma {
 
   export type UserCountOutputType = {
     websites: number
+    region: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     websites?: boolean | UserCountOutputTypeCountWebsitesArgs
+    region?: boolean | UserCountOutputTypeCountRegionArgs
   }
 
   // Custom InputTypes
@@ -1183,6 +1185,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountWebsitesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: WebsiteWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountRegionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RegionWhereInput
   }
 
 
@@ -1409,6 +1418,7 @@ export namespace Prisma {
     password?: boolean
     email?: boolean
     websites?: boolean | User$websitesArgs<ExtArgs>
+    region?: boolean | User$regionArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -1436,6 +1446,7 @@ export namespace Prisma {
   export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "password" | "email", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     websites?: boolean | User$websitesArgs<ExtArgs>
+    region?: boolean | User$regionArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1445,6 +1456,7 @@ export namespace Prisma {
     name: "User"
     objects: {
       websites: Prisma.$WebsitePayload<ExtArgs>[]
+      region: Prisma.$RegionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -1846,6 +1858,7 @@ export namespace Prisma {
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     websites<T extends User$websitesArgs<ExtArgs> = {}>(args?: Subset<T, User$websitesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WebsitePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    region<T extends User$regionArgs<ExtArgs> = {}>(args?: Subset<T, User$regionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RegionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2288,6 +2301,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: WebsiteScalarFieldEnum | WebsiteScalarFieldEnum[]
+  }
+
+  /**
+   * User.region
+   */
+  export type User$regionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Region
+     */
+    select?: RegionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Region
+     */
+    omit?: RegionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RegionInclude<ExtArgs> | null
+    where?: RegionWhereInput
+    orderBy?: RegionOrderByWithRelationInput | RegionOrderByWithRelationInput[]
+    cursor?: RegionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RegionScalarFieldEnum | RegionScalarFieldEnum[]
   }
 
   /**
@@ -3416,16 +3453,19 @@ export namespace Prisma {
   export type RegionMinAggregateOutputType = {
     id: string | null
     name: string | null
+    user_id: string | null
   }
 
   export type RegionMaxAggregateOutputType = {
     id: string | null
     name: string | null
+    user_id: string | null
   }
 
   export type RegionCountAggregateOutputType = {
     id: number
     name: number
+    user_id: number
     _all: number
   }
 
@@ -3433,16 +3473,19 @@ export namespace Prisma {
   export type RegionMinAggregateInputType = {
     id?: true
     name?: true
+    user_id?: true
   }
 
   export type RegionMaxAggregateInputType = {
     id?: true
     name?: true
+    user_id?: true
   }
 
   export type RegionCountAggregateInputType = {
     id?: true
     name?: true
+    user_id?: true
     _all?: true
   }
 
@@ -3521,6 +3564,7 @@ export namespace Prisma {
   export type RegionGroupByOutputType = {
     id: string
     name: string
+    user_id: string | null
     _count: RegionCountAggregateOutputType | null
     _min: RegionMinAggregateOutputType | null
     _max: RegionMaxAggregateOutputType | null
@@ -3543,6 +3587,8 @@ export namespace Prisma {
   export type RegionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    user_id?: boolean
+    user?: boolean | Region$userArgs<ExtArgs>
     ticks?: boolean | Region$ticksArgs<ExtArgs>
     _count?: boolean | RegionCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["region"]>
@@ -3550,34 +3596,46 @@ export namespace Prisma {
   export type RegionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    user_id?: boolean
+    user?: boolean | Region$userArgs<ExtArgs>
   }, ExtArgs["result"]["region"]>
 
   export type RegionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    user_id?: boolean
+    user?: boolean | Region$userArgs<ExtArgs>
   }, ExtArgs["result"]["region"]>
 
   export type RegionSelectScalar = {
     id?: boolean
     name?: boolean
+    user_id?: boolean
   }
 
-  export type RegionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name", ExtArgs["result"]["region"]>
+  export type RegionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "user_id", ExtArgs["result"]["region"]>
   export type RegionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | Region$userArgs<ExtArgs>
     ticks?: boolean | Region$ticksArgs<ExtArgs>
     _count?: boolean | RegionCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type RegionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type RegionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type RegionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | Region$userArgs<ExtArgs>
+  }
+  export type RegionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | Region$userArgs<ExtArgs>
+  }
 
   export type $RegionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Region"
     objects: {
+      user: Prisma.$UserPayload<ExtArgs> | null
       ticks: Prisma.$WebsiteTickPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
+      user_id: string | null
     }, ExtArgs["result"]["region"]>
     composites: {}
   }
@@ -3972,6 +4030,7 @@ export namespace Prisma {
    */
   export interface Prisma__RegionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends Region$userArgs<ExtArgs> = {}>(args?: Subset<T, Region$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     ticks<T extends Region$ticksArgs<ExtArgs> = {}>(args?: Subset<T, Region$ticksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WebsiteTickPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -4004,6 +4063,7 @@ export namespace Prisma {
   interface RegionFieldRefs {
     readonly id: FieldRef<"Region", 'String'>
     readonly name: FieldRef<"Region", 'String'>
+    readonly user_id: FieldRef<"Region", 'String'>
   }
     
 
@@ -4253,6 +4313,10 @@ export namespace Prisma {
      */
     data: RegionCreateManyInput | RegionCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RegionIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -4323,6 +4387,10 @@ export namespace Prisma {
      * Limit how many Regions to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RegionIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -4389,6 +4457,25 @@ export namespace Prisma {
      * Limit how many Regions to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Region.user
+   */
+  export type Region$userArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
   }
 
   /**
@@ -5583,7 +5670,8 @@ export namespace Prisma {
 
   export const RegionScalarFieldEnum: {
     id: 'id',
-    name: 'name'
+    name: 'name',
+    user_id: 'user_id'
   };
 
   export type RegionScalarFieldEnum = (typeof RegionScalarFieldEnum)[keyof typeof RegionScalarFieldEnum]
@@ -5712,6 +5800,7 @@ export namespace Prisma {
     password?: StringFilter<"User"> | string
     email?: StringFilter<"User"> | string
     websites?: WebsiteListRelationFilter
+    region?: RegionListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -5720,6 +5809,7 @@ export namespace Prisma {
     password?: SortOrder
     email?: SortOrder
     websites?: WebsiteOrderByRelationAggregateInput
+    region?: RegionOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -5731,6 +5821,7 @@ export namespace Prisma {
     name?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
     websites?: WebsiteListRelationFilter
+    region?: RegionListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -5812,12 +5903,16 @@ export namespace Prisma {
     NOT?: RegionWhereInput | RegionWhereInput[]
     id?: StringFilter<"Region"> | string
     name?: StringFilter<"Region"> | string
+    user_id?: StringNullableFilter<"Region"> | string | null
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     ticks?: WebsiteTickListRelationFilter
   }
 
   export type RegionOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
+    user_id?: SortOrderInput | SortOrder
+    user?: UserOrderByWithRelationInput
     ticks?: WebsiteTickOrderByRelationAggregateInput
   }
 
@@ -5827,12 +5922,15 @@ export namespace Prisma {
     OR?: RegionWhereInput[]
     NOT?: RegionWhereInput | RegionWhereInput[]
     name?: StringFilter<"Region"> | string
+    user_id?: StringNullableFilter<"Region"> | string | null
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     ticks?: WebsiteTickListRelationFilter
   }, "id">
 
   export type RegionOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
+    user_id?: SortOrderInput | SortOrder
     _count?: RegionCountOrderByAggregateInput
     _max?: RegionMaxOrderByAggregateInput
     _min?: RegionMinOrderByAggregateInput
@@ -5844,6 +5942,7 @@ export namespace Prisma {
     NOT?: RegionScalarWhereWithAggregatesInput | RegionScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Region"> | string
     name?: StringWithAggregatesFilter<"Region"> | string
+    user_id?: StringNullableWithAggregatesFilter<"Region"> | string | null
   }
 
   export type WebsiteTickWhereInput = {
@@ -5918,6 +6017,7 @@ export namespace Prisma {
     password: string
     email: string
     websites?: WebsiteCreateNestedManyWithoutUserInput
+    region?: RegionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -5926,6 +6026,7 @@ export namespace Prisma {
     password: string
     email: string
     websites?: WebsiteUncheckedCreateNestedManyWithoutUserInput
+    region?: RegionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -5934,6 +6035,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     websites?: WebsiteUpdateManyWithoutUserNestedInput
+    region?: RegionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -5942,6 +6044,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     websites?: WebsiteUncheckedUpdateManyWithoutUserNestedInput
+    region?: RegionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -6020,30 +6123,35 @@ export namespace Prisma {
   export type RegionCreateInput = {
     id?: string
     name: string
+    user?: UserCreateNestedOneWithoutRegionInput
     ticks?: WebsiteTickCreateNestedManyWithoutRegionInput
   }
 
   export type RegionUncheckedCreateInput = {
     id?: string
     name: string
+    user_id?: string | null
     ticks?: WebsiteTickUncheckedCreateNestedManyWithoutRegionInput
   }
 
   export type RegionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    user?: UserUpdateOneWithoutRegionNestedInput
     ticks?: WebsiteTickUpdateManyWithoutRegionNestedInput
   }
 
   export type RegionUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    user_id?: NullableStringFieldUpdateOperationsInput | string | null
     ticks?: WebsiteTickUncheckedUpdateManyWithoutRegionNestedInput
   }
 
   export type RegionCreateManyInput = {
     id?: string
     name: string
+    user_id?: string | null
   }
 
   export type RegionUpdateManyMutationInput = {
@@ -6054,6 +6162,7 @@ export namespace Prisma {
   export type RegionUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    user_id?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type WebsiteTickCreateInput = {
@@ -6138,7 +6247,17 @@ export namespace Prisma {
     none?: WebsiteWhereInput
   }
 
+  export type RegionListRelationFilter = {
+    every?: RegionWhereInput
+    some?: RegionWhereInput
+    none?: RegionWhereInput
+  }
+
   export type WebsiteOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type RegionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -6283,16 +6402,19 @@ export namespace Prisma {
   export type RegionCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    user_id?: SortOrder
   }
 
   export type RegionMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    user_id?: SortOrder
   }
 
   export type RegionMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    user_id?: SortOrder
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -6396,11 +6518,25 @@ export namespace Prisma {
     connect?: WebsiteWhereUniqueInput | WebsiteWhereUniqueInput[]
   }
 
+  export type RegionCreateNestedManyWithoutUserInput = {
+    create?: XOR<RegionCreateWithoutUserInput, RegionUncheckedCreateWithoutUserInput> | RegionCreateWithoutUserInput[] | RegionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: RegionCreateOrConnectWithoutUserInput | RegionCreateOrConnectWithoutUserInput[]
+    createMany?: RegionCreateManyUserInputEnvelope
+    connect?: RegionWhereUniqueInput | RegionWhereUniqueInput[]
+  }
+
   export type WebsiteUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<WebsiteCreateWithoutUserInput, WebsiteUncheckedCreateWithoutUserInput> | WebsiteCreateWithoutUserInput[] | WebsiteUncheckedCreateWithoutUserInput[]
     connectOrCreate?: WebsiteCreateOrConnectWithoutUserInput | WebsiteCreateOrConnectWithoutUserInput[]
     createMany?: WebsiteCreateManyUserInputEnvelope
     connect?: WebsiteWhereUniqueInput | WebsiteWhereUniqueInput[]
+  }
+
+  export type RegionUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<RegionCreateWithoutUserInput, RegionUncheckedCreateWithoutUserInput> | RegionCreateWithoutUserInput[] | RegionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: RegionCreateOrConnectWithoutUserInput | RegionCreateOrConnectWithoutUserInput[]
+    createMany?: RegionCreateManyUserInputEnvelope
+    connect?: RegionWhereUniqueInput | RegionWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -6421,6 +6557,20 @@ export namespace Prisma {
     deleteMany?: WebsiteScalarWhereInput | WebsiteScalarWhereInput[]
   }
 
+  export type RegionUpdateManyWithoutUserNestedInput = {
+    create?: XOR<RegionCreateWithoutUserInput, RegionUncheckedCreateWithoutUserInput> | RegionCreateWithoutUserInput[] | RegionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: RegionCreateOrConnectWithoutUserInput | RegionCreateOrConnectWithoutUserInput[]
+    upsert?: RegionUpsertWithWhereUniqueWithoutUserInput | RegionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: RegionCreateManyUserInputEnvelope
+    set?: RegionWhereUniqueInput | RegionWhereUniqueInput[]
+    disconnect?: RegionWhereUniqueInput | RegionWhereUniqueInput[]
+    delete?: RegionWhereUniqueInput | RegionWhereUniqueInput[]
+    connect?: RegionWhereUniqueInput | RegionWhereUniqueInput[]
+    update?: RegionUpdateWithWhereUniqueWithoutUserInput | RegionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: RegionUpdateManyWithWhereWithoutUserInput | RegionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: RegionScalarWhereInput | RegionScalarWhereInput[]
+  }
+
   export type WebsiteUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<WebsiteCreateWithoutUserInput, WebsiteUncheckedCreateWithoutUserInput> | WebsiteCreateWithoutUserInput[] | WebsiteUncheckedCreateWithoutUserInput[]
     connectOrCreate?: WebsiteCreateOrConnectWithoutUserInput | WebsiteCreateOrConnectWithoutUserInput[]
@@ -6433,6 +6583,20 @@ export namespace Prisma {
     update?: WebsiteUpdateWithWhereUniqueWithoutUserInput | WebsiteUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: WebsiteUpdateManyWithWhereWithoutUserInput | WebsiteUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: WebsiteScalarWhereInput | WebsiteScalarWhereInput[]
+  }
+
+  export type RegionUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<RegionCreateWithoutUserInput, RegionUncheckedCreateWithoutUserInput> | RegionCreateWithoutUserInput[] | RegionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: RegionCreateOrConnectWithoutUserInput | RegionCreateOrConnectWithoutUserInput[]
+    upsert?: RegionUpsertWithWhereUniqueWithoutUserInput | RegionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: RegionCreateManyUserInputEnvelope
+    set?: RegionWhereUniqueInput | RegionWhereUniqueInput[]
+    disconnect?: RegionWhereUniqueInput | RegionWhereUniqueInput[]
+    delete?: RegionWhereUniqueInput | RegionWhereUniqueInput[]
+    connect?: RegionWhereUniqueInput | RegionWhereUniqueInput[]
+    update?: RegionUpdateWithWhereUniqueWithoutUserInput | RegionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: RegionUpdateManyWithWhereWithoutUserInput | RegionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: RegionScalarWhereInput | RegionScalarWhereInput[]
   }
 
   export type WebsiteTickCreateNestedManyWithoutWebsiteInput = {
@@ -6501,6 +6665,12 @@ export namespace Prisma {
     deleteMany?: WebsiteTickScalarWhereInput | WebsiteTickScalarWhereInput[]
   }
 
+  export type UserCreateNestedOneWithoutRegionInput = {
+    create?: XOR<UserCreateWithoutRegionInput, UserUncheckedCreateWithoutRegionInput>
+    connectOrCreate?: UserCreateOrConnectWithoutRegionInput
+    connect?: UserWhereUniqueInput
+  }
+
   export type WebsiteTickCreateNestedManyWithoutRegionInput = {
     create?: XOR<WebsiteTickCreateWithoutRegionInput, WebsiteTickUncheckedCreateWithoutRegionInput> | WebsiteTickCreateWithoutRegionInput[] | WebsiteTickUncheckedCreateWithoutRegionInput[]
     connectOrCreate?: WebsiteTickCreateOrConnectWithoutRegionInput | WebsiteTickCreateOrConnectWithoutRegionInput[]
@@ -6513,6 +6683,16 @@ export namespace Prisma {
     connectOrCreate?: WebsiteTickCreateOrConnectWithoutRegionInput | WebsiteTickCreateOrConnectWithoutRegionInput[]
     createMany?: WebsiteTickCreateManyRegionInputEnvelope
     connect?: WebsiteTickWhereUniqueInput | WebsiteTickWhereUniqueInput[]
+  }
+
+  export type UserUpdateOneWithoutRegionNestedInput = {
+    create?: XOR<UserCreateWithoutRegionInput, UserUncheckedCreateWithoutRegionInput>
+    connectOrCreate?: UserCreateOrConnectWithoutRegionInput
+    upsert?: UserUpsertWithoutRegionInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutRegionInput, UserUpdateWithoutRegionInput>, UserUncheckedUpdateWithoutRegionInput>
   }
 
   export type WebsiteTickUpdateManyWithoutRegionNestedInput = {
@@ -6760,6 +6940,28 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type RegionCreateWithoutUserInput = {
+    id?: string
+    name: string
+    ticks?: WebsiteTickCreateNestedManyWithoutRegionInput
+  }
+
+  export type RegionUncheckedCreateWithoutUserInput = {
+    id?: string
+    name: string
+    ticks?: WebsiteTickUncheckedCreateNestedManyWithoutRegionInput
+  }
+
+  export type RegionCreateOrConnectWithoutUserInput = {
+    where: RegionWhereUniqueInput
+    create: XOR<RegionCreateWithoutUserInput, RegionUncheckedCreateWithoutUserInput>
+  }
+
+  export type RegionCreateManyUserInputEnvelope = {
+    data: RegionCreateManyUserInput | RegionCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type WebsiteUpsertWithWhereUniqueWithoutUserInput = {
     where: WebsiteWhereUniqueInput
     update: XOR<WebsiteUpdateWithoutUserInput, WebsiteUncheckedUpdateWithoutUserInput>
@@ -6784,6 +6986,31 @@ export namespace Prisma {
     url?: StringFilter<"Website"> | string
     user_id?: StringNullableFilter<"Website"> | string | null
     timeAdded?: DateTimeFilter<"Website"> | Date | string
+  }
+
+  export type RegionUpsertWithWhereUniqueWithoutUserInput = {
+    where: RegionWhereUniqueInput
+    update: XOR<RegionUpdateWithoutUserInput, RegionUncheckedUpdateWithoutUserInput>
+    create: XOR<RegionCreateWithoutUserInput, RegionUncheckedCreateWithoutUserInput>
+  }
+
+  export type RegionUpdateWithWhereUniqueWithoutUserInput = {
+    where: RegionWhereUniqueInput
+    data: XOR<RegionUpdateWithoutUserInput, RegionUncheckedUpdateWithoutUserInput>
+  }
+
+  export type RegionUpdateManyWithWhereWithoutUserInput = {
+    where: RegionScalarWhereInput
+    data: XOR<RegionUpdateManyMutationInput, RegionUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type RegionScalarWhereInput = {
+    AND?: RegionScalarWhereInput | RegionScalarWhereInput[]
+    OR?: RegionScalarWhereInput[]
+    NOT?: RegionScalarWhereInput | RegionScalarWhereInput[]
+    id?: StringFilter<"Region"> | string
+    name?: StringFilter<"Region"> | string
+    user_id?: StringNullableFilter<"Region"> | string | null
   }
 
   export type WebsiteTickCreateWithoutWebsiteInput = {
@@ -6817,6 +7044,7 @@ export namespace Prisma {
     name: string
     password: string
     email: string
+    region?: RegionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutWebsitesInput = {
@@ -6824,6 +7052,7 @@ export namespace Prisma {
     name: string
     password: string
     email: string
+    region?: RegionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutWebsitesInput = {
@@ -6875,6 +7104,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    region?: RegionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutWebsitesInput = {
@@ -6882,6 +7112,28 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    region?: RegionUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserCreateWithoutRegionInput = {
+    id?: string
+    name: string
+    password: string
+    email: string
+    websites?: WebsiteCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutRegionInput = {
+    id?: string
+    name: string
+    password: string
+    email: string
+    websites?: WebsiteUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutRegionInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutRegionInput, UserUncheckedCreateWithoutRegionInput>
   }
 
   export type WebsiteTickCreateWithoutRegionInput = {
@@ -6910,6 +7162,33 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type UserUpsertWithoutRegionInput = {
+    update: XOR<UserUpdateWithoutRegionInput, UserUncheckedUpdateWithoutRegionInput>
+    create: XOR<UserCreateWithoutRegionInput, UserUncheckedCreateWithoutRegionInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutRegionInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutRegionInput, UserUncheckedUpdateWithoutRegionInput>
+  }
+
+  export type UserUpdateWithoutRegionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    websites?: WebsiteUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutRegionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    websites?: WebsiteUncheckedUpdateManyWithoutUserNestedInput
+  }
+
   export type WebsiteTickUpsertWithWhereUniqueWithoutRegionInput = {
     where: WebsiteTickWhereUniqueInput
     update: XOR<WebsiteTickUpdateWithoutRegionInput, WebsiteTickUncheckedUpdateWithoutRegionInput>
@@ -6929,11 +7208,13 @@ export namespace Prisma {
   export type RegionCreateWithoutTicksInput = {
     id?: string
     name: string
+    user?: UserCreateNestedOneWithoutRegionInput
   }
 
   export type RegionUncheckedCreateWithoutTicksInput = {
     id?: string
     name: string
+    user_id?: string | null
   }
 
   export type RegionCreateOrConnectWithoutTicksInput = {
@@ -6974,11 +7255,13 @@ export namespace Prisma {
   export type RegionUpdateWithoutTicksInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    user?: UserUpdateOneWithoutRegionNestedInput
   }
 
   export type RegionUncheckedUpdateWithoutTicksInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    user_id?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type WebsiteUpsertWithoutTicksInput = {
@@ -7012,6 +7295,11 @@ export namespace Prisma {
     timeAdded?: Date | string
   }
 
+  export type RegionCreateManyUserInput = {
+    id?: string
+    name: string
+  }
+
   export type WebsiteUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
@@ -7030,6 +7318,23 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RegionUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    ticks?: WebsiteTickUpdateManyWithoutRegionNestedInput
+  }
+
+  export type RegionUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    ticks?: WebsiteTickUncheckedUpdateManyWithoutRegionNestedInput
+  }
+
+  export type RegionUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
   }
 
   export type WebsiteTickCreateManyWebsiteInput = {

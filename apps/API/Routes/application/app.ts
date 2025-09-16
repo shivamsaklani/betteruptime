@@ -54,10 +54,12 @@ application.post("/deletewebsite",Authorize ,async (req: Request, res: Response)
 
 application.post("/createregion",Authorize,async (req:Request,res:Response)=>{
   const {region}= req.body;
+  const userId=req.userid?.id;
   try {
     await Prisma.region.create({
       data:{
-        name:region
+        name:region,
+        user_id:userId
       }
     });
     CreateRegion(region);

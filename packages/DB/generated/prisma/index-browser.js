@@ -136,7 +136,8 @@ exports.Prisma.WebsiteScalarFieldEnum = {
 
 exports.Prisma.RegionScalarFieldEnum = {
   id: 'id',
-  name: 'name'
+  name: 'name',
+  user_id: 'user_id'
 };
 
 exports.Prisma.WebsiteTickScalarFieldEnum = {

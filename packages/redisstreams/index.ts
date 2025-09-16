@@ -34,6 +34,8 @@ export async function PushBulk(website:websiteType[]) {
 }// pushes all the websites from database to the queue
 export async function CreateRegion(region:string) {
   try {
+    const exist= await redisclient.exists(region); //check if the region is in the stream or not 
+  if(!exist){
     await redisclient.xGroupCreate(
       Stream_Name,
       region,
@@ -42,6 +44,7 @@ export async function CreateRegion(region:string) {
         MKSTREAM: true // auto create stream if it doesn't exist
       }
     );
+  }
   } catch (error) {
     console.log("Error Creating Group",error);
   }  
