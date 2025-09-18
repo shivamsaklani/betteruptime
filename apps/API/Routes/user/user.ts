@@ -39,7 +39,7 @@ user.post("/signup", async (req:Request, res:Response) => {
     });
 
     if (existingUser) {
-      return res.status(400).send("User with this email or username already exists");
+      return res.status(409).send("User with this email or username already exists");
     }
 
 // create new user
@@ -48,19 +48,20 @@ user.post("/signup", async (req:Request, res:Response) => {
      hashedpassword=await bcrypt.hash(trustedData.data.password,salt);
     }
      const createuser = async ()=>{
-   await Prisma.user.create({
+  const {id} =await Prisma.user.create({
     data:{
       name:trustedData.data.username,
       password: hashedpassword,
       email:trustedData.data.email
     }
-   })
-  }
-  createuser();
-  if(res.status(200)){
-    res.send("User Create Successfully");
+   });
+    if(res.status(200)){
+    res.status(200).json({id});
     return;
   }
+  }
+  createuser();
+ 
   } catch (error) {
     res.status(500).send("Sorry we are facing some issues"+error);
     return;
