@@ -68,7 +68,7 @@ export const webstatus: typeof $Enums.webstatus
  */
 export class PrismaClient<
   ClientOptions extends Prisma.PrismaClientOptions = Prisma.PrismaClientOptions,
-  U = 'log' extends keyof ClientOptions ? ClientOptions['log'] extends Array<Prisma.LogLevel | Prisma.LogDefinition> ? Prisma.GetEvents<ClientOptions['log']> : never : never,
+  const U = 'log' extends keyof ClientOptions ? ClientOptions['log'] extends Array<Prisma.LogLevel | Prisma.LogDefinition> ? Prisma.GetEvents<ClientOptions['log']> : never : never,
   ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs
 > {
   [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['other'] }
@@ -100,13 +100,6 @@ export class PrismaClient<
    * Disconnect from the database
    */
   $disconnect(): $Utils.JsPromise<void>;
-
-  /**
-   * Add a middleware
-   * @deprecated since 4.16.0. For new code, prefer client extensions instead.
-   * @see https://pris.ly/d/extensions
-   */
-  $use(cb: Prisma.Middleware): void
 
 /**
    * Executes a prepared raw query and returns the number of affected rows.
@@ -274,8 +267,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.8.2
-   * Query Engine version: 2060c79ba17c6bb9f5823312b6f6b7f4a845738e
+   * Prisma Client JS version: 6.16.2
+   * Query Engine version: 1c57fdcd7e44b29b9313256c76699e91c3ac3c43
    */
   export type PrismaVersion = {
     client: string
@@ -1021,16 +1014,24 @@ export namespace Prisma {
     /**
      * @example
      * ```
-     * // Defaults to stdout
+     * // Shorthand for `emit: 'stdout'`
      * log: ['query', 'info', 'warn', 'error']
      * 
-     * // Emit as events
+     * // Emit as events only
      * log: [
-     *   { emit: 'stdout', level: 'query' },
-     *   { emit: 'stdout', level: 'info' },
-     *   { emit: 'stdout', level: 'warn' }
-     *   { emit: 'stdout', level: 'error' }
+     *   { emit: 'event', level: 'query' },
+     *   { emit: 'event', level: 'info' },
+     *   { emit: 'event', level: 'warn' }
+     *   { emit: 'event', level: 'error' }
      * ]
+     * 
+     * / Emit as events and log to stdout
+     * og: [
+     *  { emit: 'stdout', level: 'query' },
+     *  { emit: 'stdout', level: 'info' },
+     *  { emit: 'stdout', level: 'warn' }
+     *  { emit: 'stdout', level: 'error' }
+     * 
      * ```
      * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/logging#the-log-option).
      */
@@ -1045,6 +1046,10 @@ export namespace Prisma {
       timeout?: number
       isolationLevel?: Prisma.TransactionIsolationLevel
     }
+    /**
+     * Instance of a Driver Adapter, e.g., like one provided by `@prisma/adapter-planetscale`
+     */
+    adapter?: runtime.SqlDriverAdapterFactory | null
     /**
      * Global configuration for omitting model fields by default.
      * 
@@ -1075,10 +1080,15 @@ export namespace Prisma {
     emit: 'stdout' | 'event'
   }
 
-  export type GetLogType<T extends LogLevel | LogDefinition> = T extends LogDefinition ? T['emit'] extends 'event' ? T['level'] : never : never
-  export type GetEvents<T extends any> = T extends Array<LogLevel | LogDefinition> ?
-    GetLogType<T[0]> | GetLogType<T[1]> | GetLogType<T[2]> | GetLogType<T[3]>
-    : never
+  export type CheckIsLogLevel<T> = T extends LogLevel ? T : never;
+
+  export type GetLogType<T> = CheckIsLogLevel<
+    T extends LogDefinition ? T['level'] : T
+  >;
+
+  export type GetEvents<T extends any[]> = T extends Array<LogLevel | LogDefinition>
+    ? GetLogType<T[number]>
+    : never;
 
   export type QueryEvent = {
     timestamp: Date
@@ -1118,25 +1128,6 @@ export namespace Prisma {
     | 'runCommandRaw'
     | 'findRaw'
     | 'groupBy'
-
-  /**
-   * These options are being passed into the middleware as "params"
-   */
-  export type MiddlewareParams = {
-    model?: ModelName
-    action: PrismaAction
-    args: any
-    dataPath: string[]
-    runInTransaction: boolean
-  }
-
-  /**
-   * The `T` type makes sure, that the `return proceed` is not forgotten in the middleware implementation
-   */
-  export type Middleware<T = any> = (
-    params: MiddlewareParams,
-    next: (params: MiddlewareParams) => $Utils.JsPromise<T>,
-  ) => $Utils.JsPromise<T>
 
   // tested in getLogLevel.test.ts
   export function getLogLevel(log: Array<LogLevel | LogDefinition>): LogLevel | undefined;
@@ -2358,6 +2349,7 @@ export namespace Prisma {
 
   export type WebsiteMinAggregateOutputType = {
     id: string | null
+    name: string | null
     url: string | null
     user_id: string | null
     timeAdded: Date | null
@@ -2365,6 +2357,7 @@ export namespace Prisma {
 
   export type WebsiteMaxAggregateOutputType = {
     id: string | null
+    name: string | null
     url: string | null
     user_id: string | null
     timeAdded: Date | null
@@ -2372,6 +2365,7 @@ export namespace Prisma {
 
   export type WebsiteCountAggregateOutputType = {
     id: number
+    name: number
     url: number
     user_id: number
     timeAdded: number
@@ -2381,6 +2375,7 @@ export namespace Prisma {
 
   export type WebsiteMinAggregateInputType = {
     id?: true
+    name?: true
     url?: true
     user_id?: true
     timeAdded?: true
@@ -2388,6 +2383,7 @@ export namespace Prisma {
 
   export type WebsiteMaxAggregateInputType = {
     id?: true
+    name?: true
     url?: true
     user_id?: true
     timeAdded?: true
@@ -2395,6 +2391,7 @@ export namespace Prisma {
 
   export type WebsiteCountAggregateInputType = {
     id?: true
+    name?: true
     url?: true
     user_id?: true
     timeAdded?: true
@@ -2475,6 +2472,7 @@ export namespace Prisma {
 
   export type WebsiteGroupByOutputType = {
     id: string
+    name: string
     url: string
     user_id: string | null
     timeAdded: Date
@@ -2499,6 +2497,7 @@ export namespace Prisma {
 
   export type WebsiteSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    name?: boolean
     url?: boolean
     user_id?: boolean
     timeAdded?: boolean
@@ -2509,6 +2508,7 @@ export namespace Prisma {
 
   export type WebsiteSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    name?: boolean
     url?: boolean
     user_id?: boolean
     timeAdded?: boolean
@@ -2517,6 +2517,7 @@ export namespace Prisma {
 
   export type WebsiteSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    name?: boolean
     url?: boolean
     user_id?: boolean
     timeAdded?: boolean
@@ -2525,12 +2526,13 @@ export namespace Prisma {
 
   export type WebsiteSelectScalar = {
     id?: boolean
+    name?: boolean
     url?: boolean
     user_id?: boolean
     timeAdded?: boolean
   }
 
-  export type WebsiteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "url" | "user_id" | "timeAdded", ExtArgs["result"]["website"]>
+  export type WebsiteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "url" | "user_id" | "timeAdded", ExtArgs["result"]["website"]>
   export type WebsiteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     ticks?: boolean | Website$ticksArgs<ExtArgs>
     user?: boolean | Website$userArgs<ExtArgs>
@@ -2551,6 +2553,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      name: string
       url: string
       user_id: string | null
       timeAdded: Date
@@ -2980,6 +2983,7 @@ export namespace Prisma {
    */
   interface WebsiteFieldRefs {
     readonly id: FieldRef<"Website", 'String'>
+    readonly name: FieldRef<"Website", 'String'>
     readonly url: FieldRef<"Website", 'String'>
     readonly user_id: FieldRef<"Website", 'String'>
     readonly timeAdded: FieldRef<"Website", 'DateTime'>
@@ -5660,6 +5664,7 @@ export namespace Prisma {
 
   export const WebsiteScalarFieldEnum: {
     id: 'id',
+    name: 'name',
     url: 'url',
     user_id: 'user_id',
     timeAdded: 'timeAdded'
@@ -5849,6 +5854,7 @@ export namespace Prisma {
     OR?: WebsiteWhereInput[]
     NOT?: WebsiteWhereInput | WebsiteWhereInput[]
     id?: StringFilter<"Website"> | string
+    name?: StringFilter<"Website"> | string
     url?: StringFilter<"Website"> | string
     user_id?: StringNullableFilter<"Website"> | string | null
     timeAdded?: DateTimeFilter<"Website"> | Date | string
@@ -5858,6 +5864,7 @@ export namespace Prisma {
 
   export type WebsiteOrderByWithRelationInput = {
     id?: SortOrder
+    name?: SortOrder
     url?: SortOrder
     user_id?: SortOrderInput | SortOrder
     timeAdded?: SortOrder
@@ -5870,6 +5877,7 @@ export namespace Prisma {
     AND?: WebsiteWhereInput | WebsiteWhereInput[]
     OR?: WebsiteWhereInput[]
     NOT?: WebsiteWhereInput | WebsiteWhereInput[]
+    name?: StringFilter<"Website"> | string
     url?: StringFilter<"Website"> | string
     user_id?: StringNullableFilter<"Website"> | string | null
     timeAdded?: DateTimeFilter<"Website"> | Date | string
@@ -5879,6 +5887,7 @@ export namespace Prisma {
 
   export type WebsiteOrderByWithAggregationInput = {
     id?: SortOrder
+    name?: SortOrder
     url?: SortOrder
     user_id?: SortOrderInput | SortOrder
     timeAdded?: SortOrder
@@ -5892,6 +5901,7 @@ export namespace Prisma {
     OR?: WebsiteScalarWhereWithAggregatesInput[]
     NOT?: WebsiteScalarWhereWithAggregatesInput | WebsiteScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Website"> | string
+    name?: StringWithAggregatesFilter<"Website"> | string
     url?: StringWithAggregatesFilter<"Website"> | string
     user_id?: StringNullableWithAggregatesFilter<"Website"> | string | null
     timeAdded?: DateTimeWithAggregatesFilter<"Website"> | Date | string
@@ -6070,6 +6080,7 @@ export namespace Prisma {
 
   export type WebsiteCreateInput = {
     id?: string
+    name: string
     url: string
     timeAdded?: Date | string
     ticks?: WebsiteTickCreateNestedManyWithoutWebsiteInput
@@ -6078,6 +6089,7 @@ export namespace Prisma {
 
   export type WebsiteUncheckedCreateInput = {
     id?: string
+    name: string
     url: string
     user_id?: string | null
     timeAdded?: Date | string
@@ -6086,6 +6098,7 @@ export namespace Prisma {
 
   export type WebsiteUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
     ticks?: WebsiteTickUpdateManyWithoutWebsiteNestedInput
@@ -6094,6 +6107,7 @@ export namespace Prisma {
 
   export type WebsiteUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -6102,6 +6116,7 @@ export namespace Prisma {
 
   export type WebsiteCreateManyInput = {
     id?: string
+    name: string
     url: string
     user_id?: string | null
     timeAdded?: Date | string
@@ -6109,12 +6124,14 @@ export namespace Prisma {
 
   export type WebsiteUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type WebsiteUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -6348,6 +6365,7 @@ export namespace Prisma {
 
   export type WebsiteCountOrderByAggregateInput = {
     id?: SortOrder
+    name?: SortOrder
     url?: SortOrder
     user_id?: SortOrder
     timeAdded?: SortOrder
@@ -6355,6 +6373,7 @@ export namespace Prisma {
 
   export type WebsiteMaxOrderByAggregateInput = {
     id?: SortOrder
+    name?: SortOrder
     url?: SortOrder
     user_id?: SortOrder
     timeAdded?: SortOrder
@@ -6362,6 +6381,7 @@ export namespace Prisma {
 
   export type WebsiteMinOrderByAggregateInput = {
     id?: SortOrder
+    name?: SortOrder
     url?: SortOrder
     user_id?: SortOrder
     timeAdded?: SortOrder
@@ -6918,6 +6938,7 @@ export namespace Prisma {
 
   export type WebsiteCreateWithoutUserInput = {
     id?: string
+    name: string
     url: string
     timeAdded?: Date | string
     ticks?: WebsiteTickCreateNestedManyWithoutWebsiteInput
@@ -6925,6 +6946,7 @@ export namespace Prisma {
 
   export type WebsiteUncheckedCreateWithoutUserInput = {
     id?: string
+    name: string
     url: string
     timeAdded?: Date | string
     ticks?: WebsiteTickUncheckedCreateNestedManyWithoutWebsiteInput
@@ -6983,6 +7005,7 @@ export namespace Prisma {
     OR?: WebsiteScalarWhereInput[]
     NOT?: WebsiteScalarWhereInput | WebsiteScalarWhereInput[]
     id?: StringFilter<"Website"> | string
+    name?: StringFilter<"Website"> | string
     url?: StringFilter<"Website"> | string
     user_id?: StringNullableFilter<"Website"> | string | null
     timeAdded?: DateTimeFilter<"Website"> | Date | string
@@ -7224,6 +7247,7 @@ export namespace Prisma {
 
   export type WebsiteCreateWithoutTicksInput = {
     id?: string
+    name: string
     url: string
     timeAdded?: Date | string
     user?: UserCreateNestedOneWithoutWebsitesInput
@@ -7231,6 +7255,7 @@ export namespace Prisma {
 
   export type WebsiteUncheckedCreateWithoutTicksInput = {
     id?: string
+    name: string
     url: string
     user_id?: string | null
     timeAdded?: Date | string
@@ -7277,6 +7302,7 @@ export namespace Prisma {
 
   export type WebsiteUpdateWithoutTicksInput = {
     id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneWithoutWebsitesNestedInput
@@ -7284,6 +7310,7 @@ export namespace Prisma {
 
   export type WebsiteUncheckedUpdateWithoutTicksInput = {
     id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -7291,6 +7318,7 @@ export namespace Prisma {
 
   export type WebsiteCreateManyUserInput = {
     id?: string
+    name: string
     url: string
     timeAdded?: Date | string
   }
@@ -7302,6 +7330,7 @@ export namespace Prisma {
 
   export type WebsiteUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
     ticks?: WebsiteTickUpdateManyWithoutWebsiteNestedInput
@@ -7309,6 +7338,7 @@ export namespace Prisma {
 
   export type WebsiteUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
     ticks?: WebsiteTickUncheckedUpdateManyWithoutWebsiteNestedInput
@@ -7316,6 +7346,7 @@ export namespace Prisma {
 
   export type WebsiteUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
   }

@@ -1,6 +1,6 @@
-import { createClient } from "redis";
+import { createClient, type RedisClientType } from "redis";
 import type { ResponseType, websiteType } from "./types";
-const redisclient = await createClient({
+export const redisclient: RedisClientType  = await createClient({
     url:process.env.Redis_url|| "redis://localhost:6379"
 });
 redisclient.on("error", (err) => {
