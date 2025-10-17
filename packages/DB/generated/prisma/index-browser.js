@@ -135,6 +135,14 @@ exports.Prisma.WebsiteScalarFieldEnum = {
   timeAdded: 'timeAdded'
 };
 
+exports.Prisma.WebEventsScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  level: 'level',
+  website_id: 'website_id',
+  duration: 'duration'
+};
+
 exports.Prisma.RegionScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -164,15 +172,23 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.eventlevel = exports.$Enums.eventlevel = {
+  low: 'low',
+  mid: 'mid',
+  high: 'high',
+  threat: 'threat'
+};
+
 exports.webstatus = exports.$Enums.webstatus = {
   up: 'up',
   down: 'down',
-  unkown: 'unkown'
+  degraded: 'degraded'
 };
 
 exports.Prisma.ModelName = {
   User: 'User',
   Website: 'Website',
+  WebEvents: 'WebEvents',
   Region: 'Region',
   WebsiteTick: 'WebsiteTick'
 };

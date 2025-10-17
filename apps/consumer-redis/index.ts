@@ -23,10 +23,13 @@ async function consumeRegion(region: string, region_id: string, workerId: string
             await axios.get(url).then(
               async () => {
                 const endTime = Date.now();
+                const responseTime = endTime - startTime;
+                const status: "up" | "degraded" = responseTime > 5000? "degraded" : "up"; // 2 ms= threshold
+
                 await Prisma.websiteTick.create({
                   data: {
-                    status: "up",
-                    response_time_ms: endTime - startTime,
+                    status: status,
+                    response_time_ms: responseTime,
                     region_id: region_id,
                     website_id: websiteId,
                   },

@@ -30,7 +30,17 @@ model Website {
   user_id   String?
   timeAdded DateTime      @default(now())
   ticks     WebsiteTick[]
+  event_id  WebEvents[]
   user      User?         @relation(fields: [user_id], references: [id])
+}
+
+model WebEvents {
+  id         String     @id @default(uuid())
+  name       String
+  level      eventlevel
+  website_id String
+  duration   DateTime   @default(now())
+  website    Website    @relation(fields: [website_id], references: [id])
 }
 
 model Region {
@@ -58,5 +68,12 @@ model WebsiteTick {
 enum webstatus {
   up
   down
-  unkown
+  degraded
+}
+
+enum eventlevel {
+  low
+  mid
+  high
+  threat
 }

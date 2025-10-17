@@ -24,6 +24,11 @@ export type User = $Result.DefaultSelection<Prisma.$UserPayload>
  */
 export type Website = $Result.DefaultSelection<Prisma.$WebsitePayload>
 /**
+ * Model WebEvents
+ * 
+ */
+export type WebEvents = $Result.DefaultSelection<Prisma.$WebEventsPayload>
+/**
  * Model Region
  * 
  */
@@ -41,16 +46,30 @@ export namespace $Enums {
   export const webstatus: {
   up: 'up',
   down: 'down',
-  unkown: 'unkown'
+  degraded: 'degraded'
 };
 
 export type webstatus = (typeof webstatus)[keyof typeof webstatus]
+
+
+export const eventlevel: {
+  low: 'low',
+  mid: 'mid',
+  high: 'high',
+  threat: 'threat'
+};
+
+export type eventlevel = (typeof eventlevel)[keyof typeof eventlevel]
 
 }
 
 export type webstatus = $Enums.webstatus
 
 export const webstatus: typeof $Enums.webstatus
+
+export type eventlevel = $Enums.eventlevel
+
+export const eventlevel: typeof $Enums.eventlevel
 
 /**
  * ##  Prisma Client ʲˢ
@@ -189,6 +208,16 @@ export class PrismaClient<
     * ```
     */
   get website(): Prisma.WebsiteDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.webEvents`: Exposes CRUD operations for the **WebEvents** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more WebEvents
+    * const webEvents = await prisma.webEvents.findMany()
+    * ```
+    */
+  get webEvents(): Prisma.WebEventsDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.region`: Exposes CRUD operations for the **Region** model.
@@ -651,6 +680,7 @@ export namespace Prisma {
   export const ModelName: {
     User: 'User',
     Website: 'Website',
+    WebEvents: 'WebEvents',
     Region: 'Region',
     WebsiteTick: 'WebsiteTick'
   };
@@ -671,7 +701,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "website" | "region" | "websiteTick"
+      modelProps: "user" | "website" | "webEvents" | "region" | "websiteTick"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -820,6 +850,80 @@ export namespace Prisma {
           count: {
             args: Prisma.WebsiteCountArgs<ExtArgs>
             result: $Utils.Optional<WebsiteCountAggregateOutputType> | number
+          }
+        }
+      }
+      WebEvents: {
+        payload: Prisma.$WebEventsPayload<ExtArgs>
+        fields: Prisma.WebEventsFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.WebEventsFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebEventsPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.WebEventsFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebEventsPayload>
+          }
+          findFirst: {
+            args: Prisma.WebEventsFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebEventsPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.WebEventsFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebEventsPayload>
+          }
+          findMany: {
+            args: Prisma.WebEventsFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebEventsPayload>[]
+          }
+          create: {
+            args: Prisma.WebEventsCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebEventsPayload>
+          }
+          createMany: {
+            args: Prisma.WebEventsCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.WebEventsCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebEventsPayload>[]
+          }
+          delete: {
+            args: Prisma.WebEventsDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebEventsPayload>
+          }
+          update: {
+            args: Prisma.WebEventsUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebEventsPayload>
+          }
+          deleteMany: {
+            args: Prisma.WebEventsDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.WebEventsUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.WebEventsUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebEventsPayload>[]
+          }
+          upsert: {
+            args: Prisma.WebEventsUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebEventsPayload>
+          }
+          aggregate: {
+            args: Prisma.WebEventsAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateWebEvents>
+          }
+          groupBy: {
+            args: Prisma.WebEventsGroupByArgs<ExtArgs>
+            result: $Utils.Optional<WebEventsGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.WebEventsCountArgs<ExtArgs>
+            result: $Utils.Optional<WebEventsCountAggregateOutputType> | number
           }
         }
       }
@@ -1069,6 +1173,7 @@ export namespace Prisma {
   export type GlobalOmitConfig = {
     user?: UserOmit
     website?: WebsiteOmit
+    webEvents?: WebEventsOmit
     region?: RegionOmit
     websiteTick?: WebsiteTickOmit
   }
@@ -1192,10 +1297,12 @@ export namespace Prisma {
 
   export type WebsiteCountOutputType = {
     ticks: number
+    event_id: number
   }
 
   export type WebsiteCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     ticks?: boolean | WebsiteCountOutputTypeCountTicksArgs
+    event_id?: boolean | WebsiteCountOutputTypeCountEvent_idArgs
   }
 
   // Custom InputTypes
@@ -1214,6 +1321,13 @@ export namespace Prisma {
    */
   export type WebsiteCountOutputTypeCountTicksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: WebsiteTickWhereInput
+  }
+
+  /**
+   * WebsiteCountOutputType without action
+   */
+  export type WebsiteCountOutputTypeCountEvent_idArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WebEventsWhereInput
   }
 
 
@@ -2502,6 +2616,7 @@ export namespace Prisma {
     user_id?: boolean
     timeAdded?: boolean
     ticks?: boolean | Website$ticksArgs<ExtArgs>
+    event_id?: boolean | Website$event_idArgs<ExtArgs>
     user?: boolean | Website$userArgs<ExtArgs>
     _count?: boolean | WebsiteCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["website"]>
@@ -2535,6 +2650,7 @@ export namespace Prisma {
   export type WebsiteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "url" | "user_id" | "timeAdded", ExtArgs["result"]["website"]>
   export type WebsiteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     ticks?: boolean | Website$ticksArgs<ExtArgs>
+    event_id?: boolean | Website$event_idArgs<ExtArgs>
     user?: boolean | Website$userArgs<ExtArgs>
     _count?: boolean | WebsiteCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -2549,6 +2665,7 @@ export namespace Prisma {
     name: "Website"
     objects: {
       ticks: Prisma.$WebsiteTickPayload<ExtArgs>[]
+      event_id: Prisma.$WebEventsPayload<ExtArgs>[]
       user: Prisma.$UserPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -2952,6 +3069,7 @@ export namespace Prisma {
   export interface Prisma__WebsiteClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     ticks<T extends Website$ticksArgs<ExtArgs> = {}>(args?: Subset<T, Website$ticksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WebsiteTickPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    event_id<T extends Website$event_idArgs<ExtArgs> = {}>(args?: Subset<T, Website$event_idArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WebEventsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     user<T extends Website$userArgs<ExtArgs> = {}>(args?: Subset<T, Website$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -3407,6 +3525,30 @@ export namespace Prisma {
   }
 
   /**
+   * Website.event_id
+   */
+  export type Website$event_idArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebEvents
+     */
+    select?: WebEventsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebEvents
+     */
+    omit?: WebEventsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebEventsInclude<ExtArgs> | null
+    where?: WebEventsWhereInput
+    orderBy?: WebEventsOrderByWithRelationInput | WebEventsOrderByWithRelationInput[]
+    cursor?: WebEventsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WebEventsScalarFieldEnum | WebEventsScalarFieldEnum[]
+  }
+
+  /**
    * Website.user
    */
   export type Website$userArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3441,6 +3583,1064 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: WebsiteInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model WebEvents
+   */
+
+  export type AggregateWebEvents = {
+    _count: WebEventsCountAggregateOutputType | null
+    _min: WebEventsMinAggregateOutputType | null
+    _max: WebEventsMaxAggregateOutputType | null
+  }
+
+  export type WebEventsMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    level: $Enums.eventlevel | null
+    website_id: string | null
+    duration: Date | null
+  }
+
+  export type WebEventsMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    level: $Enums.eventlevel | null
+    website_id: string | null
+    duration: Date | null
+  }
+
+  export type WebEventsCountAggregateOutputType = {
+    id: number
+    name: number
+    level: number
+    website_id: number
+    duration: number
+    _all: number
+  }
+
+
+  export type WebEventsMinAggregateInputType = {
+    id?: true
+    name?: true
+    level?: true
+    website_id?: true
+    duration?: true
+  }
+
+  export type WebEventsMaxAggregateInputType = {
+    id?: true
+    name?: true
+    level?: true
+    website_id?: true
+    duration?: true
+  }
+
+  export type WebEventsCountAggregateInputType = {
+    id?: true
+    name?: true
+    level?: true
+    website_id?: true
+    duration?: true
+    _all?: true
+  }
+
+  export type WebEventsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WebEvents to aggregate.
+     */
+    where?: WebEventsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WebEvents to fetch.
+     */
+    orderBy?: WebEventsOrderByWithRelationInput | WebEventsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: WebEventsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WebEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WebEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned WebEvents
+    **/
+    _count?: true | WebEventsCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: WebEventsMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: WebEventsMaxAggregateInputType
+  }
+
+  export type GetWebEventsAggregateType<T extends WebEventsAggregateArgs> = {
+        [P in keyof T & keyof AggregateWebEvents]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateWebEvents[P]>
+      : GetScalarType<T[P], AggregateWebEvents[P]>
+  }
+
+
+
+
+  export type WebEventsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WebEventsWhereInput
+    orderBy?: WebEventsOrderByWithAggregationInput | WebEventsOrderByWithAggregationInput[]
+    by: WebEventsScalarFieldEnum[] | WebEventsScalarFieldEnum
+    having?: WebEventsScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: WebEventsCountAggregateInputType | true
+    _min?: WebEventsMinAggregateInputType
+    _max?: WebEventsMaxAggregateInputType
+  }
+
+  export type WebEventsGroupByOutputType = {
+    id: string
+    name: string
+    level: $Enums.eventlevel
+    website_id: string
+    duration: Date
+    _count: WebEventsCountAggregateOutputType | null
+    _min: WebEventsMinAggregateOutputType | null
+    _max: WebEventsMaxAggregateOutputType | null
+  }
+
+  type GetWebEventsGroupByPayload<T extends WebEventsGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<WebEventsGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof WebEventsGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], WebEventsGroupByOutputType[P]>
+            : GetScalarType<T[P], WebEventsGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type WebEventsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    level?: boolean
+    website_id?: boolean
+    duration?: boolean
+    website?: boolean | WebsiteDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["webEvents"]>
+
+  export type WebEventsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    level?: boolean
+    website_id?: boolean
+    duration?: boolean
+    website?: boolean | WebsiteDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["webEvents"]>
+
+  export type WebEventsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    level?: boolean
+    website_id?: boolean
+    duration?: boolean
+    website?: boolean | WebsiteDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["webEvents"]>
+
+  export type WebEventsSelectScalar = {
+    id?: boolean
+    name?: boolean
+    level?: boolean
+    website_id?: boolean
+    duration?: boolean
+  }
+
+  export type WebEventsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "level" | "website_id" | "duration", ExtArgs["result"]["webEvents"]>
+  export type WebEventsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    website?: boolean | WebsiteDefaultArgs<ExtArgs>
+  }
+  export type WebEventsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    website?: boolean | WebsiteDefaultArgs<ExtArgs>
+  }
+  export type WebEventsIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    website?: boolean | WebsiteDefaultArgs<ExtArgs>
+  }
+
+  export type $WebEventsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "WebEvents"
+    objects: {
+      website: Prisma.$WebsitePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      level: $Enums.eventlevel
+      website_id: string
+      duration: Date
+    }, ExtArgs["result"]["webEvents"]>
+    composites: {}
+  }
+
+  type WebEventsGetPayload<S extends boolean | null | undefined | WebEventsDefaultArgs> = $Result.GetResult<Prisma.$WebEventsPayload, S>
+
+  type WebEventsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<WebEventsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: WebEventsCountAggregateInputType | true
+    }
+
+  export interface WebEventsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['WebEvents'], meta: { name: 'WebEvents' } }
+    /**
+     * Find zero or one WebEvents that matches the filter.
+     * @param {WebEventsFindUniqueArgs} args - Arguments to find a WebEvents
+     * @example
+     * // Get one WebEvents
+     * const webEvents = await prisma.webEvents.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends WebEventsFindUniqueArgs>(args: SelectSubset<T, WebEventsFindUniqueArgs<ExtArgs>>): Prisma__WebEventsClient<$Result.GetResult<Prisma.$WebEventsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one WebEvents that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {WebEventsFindUniqueOrThrowArgs} args - Arguments to find a WebEvents
+     * @example
+     * // Get one WebEvents
+     * const webEvents = await prisma.webEvents.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends WebEventsFindUniqueOrThrowArgs>(args: SelectSubset<T, WebEventsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__WebEventsClient<$Result.GetResult<Prisma.$WebEventsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WebEvents that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WebEventsFindFirstArgs} args - Arguments to find a WebEvents
+     * @example
+     * // Get one WebEvents
+     * const webEvents = await prisma.webEvents.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends WebEventsFindFirstArgs>(args?: SelectSubset<T, WebEventsFindFirstArgs<ExtArgs>>): Prisma__WebEventsClient<$Result.GetResult<Prisma.$WebEventsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WebEvents that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WebEventsFindFirstOrThrowArgs} args - Arguments to find a WebEvents
+     * @example
+     * // Get one WebEvents
+     * const webEvents = await prisma.webEvents.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends WebEventsFindFirstOrThrowArgs>(args?: SelectSubset<T, WebEventsFindFirstOrThrowArgs<ExtArgs>>): Prisma__WebEventsClient<$Result.GetResult<Prisma.$WebEventsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more WebEvents that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WebEventsFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all WebEvents
+     * const webEvents = await prisma.webEvents.findMany()
+     * 
+     * // Get first 10 WebEvents
+     * const webEvents = await prisma.webEvents.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const webEventsWithIdOnly = await prisma.webEvents.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends WebEventsFindManyArgs>(args?: SelectSubset<T, WebEventsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WebEventsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a WebEvents.
+     * @param {WebEventsCreateArgs} args - Arguments to create a WebEvents.
+     * @example
+     * // Create one WebEvents
+     * const WebEvents = await prisma.webEvents.create({
+     *   data: {
+     *     // ... data to create a WebEvents
+     *   }
+     * })
+     * 
+     */
+    create<T extends WebEventsCreateArgs>(args: SelectSubset<T, WebEventsCreateArgs<ExtArgs>>): Prisma__WebEventsClient<$Result.GetResult<Prisma.$WebEventsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many WebEvents.
+     * @param {WebEventsCreateManyArgs} args - Arguments to create many WebEvents.
+     * @example
+     * // Create many WebEvents
+     * const webEvents = await prisma.webEvents.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends WebEventsCreateManyArgs>(args?: SelectSubset<T, WebEventsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many WebEvents and returns the data saved in the database.
+     * @param {WebEventsCreateManyAndReturnArgs} args - Arguments to create many WebEvents.
+     * @example
+     * // Create many WebEvents
+     * const webEvents = await prisma.webEvents.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many WebEvents and only return the `id`
+     * const webEventsWithIdOnly = await prisma.webEvents.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends WebEventsCreateManyAndReturnArgs>(args?: SelectSubset<T, WebEventsCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WebEventsPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a WebEvents.
+     * @param {WebEventsDeleteArgs} args - Arguments to delete one WebEvents.
+     * @example
+     * // Delete one WebEvents
+     * const WebEvents = await prisma.webEvents.delete({
+     *   where: {
+     *     // ... filter to delete one WebEvents
+     *   }
+     * })
+     * 
+     */
+    delete<T extends WebEventsDeleteArgs>(args: SelectSubset<T, WebEventsDeleteArgs<ExtArgs>>): Prisma__WebEventsClient<$Result.GetResult<Prisma.$WebEventsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one WebEvents.
+     * @param {WebEventsUpdateArgs} args - Arguments to update one WebEvents.
+     * @example
+     * // Update one WebEvents
+     * const webEvents = await prisma.webEvents.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends WebEventsUpdateArgs>(args: SelectSubset<T, WebEventsUpdateArgs<ExtArgs>>): Prisma__WebEventsClient<$Result.GetResult<Prisma.$WebEventsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more WebEvents.
+     * @param {WebEventsDeleteManyArgs} args - Arguments to filter WebEvents to delete.
+     * @example
+     * // Delete a few WebEvents
+     * const { count } = await prisma.webEvents.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends WebEventsDeleteManyArgs>(args?: SelectSubset<T, WebEventsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WebEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WebEventsUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many WebEvents
+     * const webEvents = await prisma.webEvents.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends WebEventsUpdateManyArgs>(args: SelectSubset<T, WebEventsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WebEvents and returns the data updated in the database.
+     * @param {WebEventsUpdateManyAndReturnArgs} args - Arguments to update many WebEvents.
+     * @example
+     * // Update many WebEvents
+     * const webEvents = await prisma.webEvents.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more WebEvents and only return the `id`
+     * const webEventsWithIdOnly = await prisma.webEvents.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends WebEventsUpdateManyAndReturnArgs>(args: SelectSubset<T, WebEventsUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WebEventsPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one WebEvents.
+     * @param {WebEventsUpsertArgs} args - Arguments to update or create a WebEvents.
+     * @example
+     * // Update or create a WebEvents
+     * const webEvents = await prisma.webEvents.upsert({
+     *   create: {
+     *     // ... data to create a WebEvents
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the WebEvents we want to update
+     *   }
+     * })
+     */
+    upsert<T extends WebEventsUpsertArgs>(args: SelectSubset<T, WebEventsUpsertArgs<ExtArgs>>): Prisma__WebEventsClient<$Result.GetResult<Prisma.$WebEventsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of WebEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WebEventsCountArgs} args - Arguments to filter WebEvents to count.
+     * @example
+     * // Count the number of WebEvents
+     * const count = await prisma.webEvents.count({
+     *   where: {
+     *     // ... the filter for the WebEvents we want to count
+     *   }
+     * })
+    **/
+    count<T extends WebEventsCountArgs>(
+      args?: Subset<T, WebEventsCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], WebEventsCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a WebEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WebEventsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends WebEventsAggregateArgs>(args: Subset<T, WebEventsAggregateArgs>): Prisma.PrismaPromise<GetWebEventsAggregateType<T>>
+
+    /**
+     * Group by WebEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WebEventsGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends WebEventsGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: WebEventsGroupByArgs['orderBy'] }
+        : { orderBy?: WebEventsGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, WebEventsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetWebEventsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the WebEvents model
+   */
+  readonly fields: WebEventsFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for WebEvents.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__WebEventsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    website<T extends WebsiteDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WebsiteDefaultArgs<ExtArgs>>): Prisma__WebsiteClient<$Result.GetResult<Prisma.$WebsitePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the WebEvents model
+   */
+  interface WebEventsFieldRefs {
+    readonly id: FieldRef<"WebEvents", 'String'>
+    readonly name: FieldRef<"WebEvents", 'String'>
+    readonly level: FieldRef<"WebEvents", 'eventlevel'>
+    readonly website_id: FieldRef<"WebEvents", 'String'>
+    readonly duration: FieldRef<"WebEvents", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * WebEvents findUnique
+   */
+  export type WebEventsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebEvents
+     */
+    select?: WebEventsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebEvents
+     */
+    omit?: WebEventsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebEventsInclude<ExtArgs> | null
+    /**
+     * Filter, which WebEvents to fetch.
+     */
+    where: WebEventsWhereUniqueInput
+  }
+
+  /**
+   * WebEvents findUniqueOrThrow
+   */
+  export type WebEventsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebEvents
+     */
+    select?: WebEventsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebEvents
+     */
+    omit?: WebEventsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebEventsInclude<ExtArgs> | null
+    /**
+     * Filter, which WebEvents to fetch.
+     */
+    where: WebEventsWhereUniqueInput
+  }
+
+  /**
+   * WebEvents findFirst
+   */
+  export type WebEventsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebEvents
+     */
+    select?: WebEventsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebEvents
+     */
+    omit?: WebEventsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebEventsInclude<ExtArgs> | null
+    /**
+     * Filter, which WebEvents to fetch.
+     */
+    where?: WebEventsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WebEvents to fetch.
+     */
+    orderBy?: WebEventsOrderByWithRelationInput | WebEventsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WebEvents.
+     */
+    cursor?: WebEventsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WebEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WebEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WebEvents.
+     */
+    distinct?: WebEventsScalarFieldEnum | WebEventsScalarFieldEnum[]
+  }
+
+  /**
+   * WebEvents findFirstOrThrow
+   */
+  export type WebEventsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebEvents
+     */
+    select?: WebEventsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebEvents
+     */
+    omit?: WebEventsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebEventsInclude<ExtArgs> | null
+    /**
+     * Filter, which WebEvents to fetch.
+     */
+    where?: WebEventsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WebEvents to fetch.
+     */
+    orderBy?: WebEventsOrderByWithRelationInput | WebEventsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WebEvents.
+     */
+    cursor?: WebEventsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WebEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WebEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WebEvents.
+     */
+    distinct?: WebEventsScalarFieldEnum | WebEventsScalarFieldEnum[]
+  }
+
+  /**
+   * WebEvents findMany
+   */
+  export type WebEventsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebEvents
+     */
+    select?: WebEventsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebEvents
+     */
+    omit?: WebEventsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebEventsInclude<ExtArgs> | null
+    /**
+     * Filter, which WebEvents to fetch.
+     */
+    where?: WebEventsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WebEvents to fetch.
+     */
+    orderBy?: WebEventsOrderByWithRelationInput | WebEventsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing WebEvents.
+     */
+    cursor?: WebEventsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WebEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WebEvents.
+     */
+    skip?: number
+    distinct?: WebEventsScalarFieldEnum | WebEventsScalarFieldEnum[]
+  }
+
+  /**
+   * WebEvents create
+   */
+  export type WebEventsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebEvents
+     */
+    select?: WebEventsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebEvents
+     */
+    omit?: WebEventsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebEventsInclude<ExtArgs> | null
+    /**
+     * The data needed to create a WebEvents.
+     */
+    data: XOR<WebEventsCreateInput, WebEventsUncheckedCreateInput>
+  }
+
+  /**
+   * WebEvents createMany
+   */
+  export type WebEventsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many WebEvents.
+     */
+    data: WebEventsCreateManyInput | WebEventsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * WebEvents createManyAndReturn
+   */
+  export type WebEventsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebEvents
+     */
+    select?: WebEventsSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebEvents
+     */
+    omit?: WebEventsOmit<ExtArgs> | null
+    /**
+     * The data used to create many WebEvents.
+     */
+    data: WebEventsCreateManyInput | WebEventsCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebEventsIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * WebEvents update
+   */
+  export type WebEventsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebEvents
+     */
+    select?: WebEventsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebEvents
+     */
+    omit?: WebEventsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebEventsInclude<ExtArgs> | null
+    /**
+     * The data needed to update a WebEvents.
+     */
+    data: XOR<WebEventsUpdateInput, WebEventsUncheckedUpdateInput>
+    /**
+     * Choose, which WebEvents to update.
+     */
+    where: WebEventsWhereUniqueInput
+  }
+
+  /**
+   * WebEvents updateMany
+   */
+  export type WebEventsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update WebEvents.
+     */
+    data: XOR<WebEventsUpdateManyMutationInput, WebEventsUncheckedUpdateManyInput>
+    /**
+     * Filter which WebEvents to update
+     */
+    where?: WebEventsWhereInput
+    /**
+     * Limit how many WebEvents to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * WebEvents updateManyAndReturn
+   */
+  export type WebEventsUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebEvents
+     */
+    select?: WebEventsSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebEvents
+     */
+    omit?: WebEventsOmit<ExtArgs> | null
+    /**
+     * The data used to update WebEvents.
+     */
+    data: XOR<WebEventsUpdateManyMutationInput, WebEventsUncheckedUpdateManyInput>
+    /**
+     * Filter which WebEvents to update
+     */
+    where?: WebEventsWhereInput
+    /**
+     * Limit how many WebEvents to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebEventsIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * WebEvents upsert
+   */
+  export type WebEventsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebEvents
+     */
+    select?: WebEventsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebEvents
+     */
+    omit?: WebEventsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebEventsInclude<ExtArgs> | null
+    /**
+     * The filter to search for the WebEvents to update in case it exists.
+     */
+    where: WebEventsWhereUniqueInput
+    /**
+     * In case the WebEvents found by the `where` argument doesn't exist, create a new WebEvents with this data.
+     */
+    create: XOR<WebEventsCreateInput, WebEventsUncheckedCreateInput>
+    /**
+     * In case the WebEvents was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<WebEventsUpdateInput, WebEventsUncheckedUpdateInput>
+  }
+
+  /**
+   * WebEvents delete
+   */
+  export type WebEventsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebEvents
+     */
+    select?: WebEventsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebEvents
+     */
+    omit?: WebEventsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebEventsInclude<ExtArgs> | null
+    /**
+     * Filter which WebEvents to delete.
+     */
+    where: WebEventsWhereUniqueInput
+  }
+
+  /**
+   * WebEvents deleteMany
+   */
+  export type WebEventsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WebEvents to delete
+     */
+    where?: WebEventsWhereInput
+    /**
+     * Limit how many WebEvents to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * WebEvents without action
+   */
+  export type WebEventsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebEvents
+     */
+    select?: WebEventsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebEvents
+     */
+    omit?: WebEventsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebEventsInclude<ExtArgs> | null
   }
 
 
@@ -5673,6 +6873,17 @@ export namespace Prisma {
   export type WebsiteScalarFieldEnum = (typeof WebsiteScalarFieldEnum)[keyof typeof WebsiteScalarFieldEnum]
 
 
+  export const WebEventsScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    level: 'level',
+    website_id: 'website_id',
+    duration: 'duration'
+  };
+
+  export type WebEventsScalarFieldEnum = (typeof WebEventsScalarFieldEnum)[keyof typeof WebEventsScalarFieldEnum]
+
+
   export const RegionScalarFieldEnum: {
     id: 'id',
     name: 'name',
@@ -5748,6 +6959,20 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime[]'
    */
   export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'eventlevel'
+   */
+  export type EnumeventlevelFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'eventlevel'>
+    
+
+
+  /**
+   * Reference to a field of type 'eventlevel[]'
+   */
+  export type ListEnumeventlevelFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'eventlevel[]'>
     
 
 
@@ -5859,6 +7084,7 @@ export namespace Prisma {
     user_id?: StringNullableFilter<"Website"> | string | null
     timeAdded?: DateTimeFilter<"Website"> | Date | string
     ticks?: WebsiteTickListRelationFilter
+    event_id?: WebEventsListRelationFilter
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }
 
@@ -5869,6 +7095,7 @@ export namespace Prisma {
     user_id?: SortOrderInput | SortOrder
     timeAdded?: SortOrder
     ticks?: WebsiteTickOrderByRelationAggregateInput
+    event_id?: WebEventsOrderByRelationAggregateInput
     user?: UserOrderByWithRelationInput
   }
 
@@ -5882,6 +7109,7 @@ export namespace Prisma {
     user_id?: StringNullableFilter<"Website"> | string | null
     timeAdded?: DateTimeFilter<"Website"> | Date | string
     ticks?: WebsiteTickListRelationFilter
+    event_id?: WebEventsListRelationFilter
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }, "id">
 
@@ -5905,6 +7133,61 @@ export namespace Prisma {
     url?: StringWithAggregatesFilter<"Website"> | string
     user_id?: StringNullableWithAggregatesFilter<"Website"> | string | null
     timeAdded?: DateTimeWithAggregatesFilter<"Website"> | Date | string
+  }
+
+  export type WebEventsWhereInput = {
+    AND?: WebEventsWhereInput | WebEventsWhereInput[]
+    OR?: WebEventsWhereInput[]
+    NOT?: WebEventsWhereInput | WebEventsWhereInput[]
+    id?: StringFilter<"WebEvents"> | string
+    name?: StringFilter<"WebEvents"> | string
+    level?: EnumeventlevelFilter<"WebEvents"> | $Enums.eventlevel
+    website_id?: StringFilter<"WebEvents"> | string
+    duration?: DateTimeFilter<"WebEvents"> | Date | string
+    website?: XOR<WebsiteScalarRelationFilter, WebsiteWhereInput>
+  }
+
+  export type WebEventsOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    level?: SortOrder
+    website_id?: SortOrder
+    duration?: SortOrder
+    website?: WebsiteOrderByWithRelationInput
+  }
+
+  export type WebEventsWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: WebEventsWhereInput | WebEventsWhereInput[]
+    OR?: WebEventsWhereInput[]
+    NOT?: WebEventsWhereInput | WebEventsWhereInput[]
+    name?: StringFilter<"WebEvents"> | string
+    level?: EnumeventlevelFilter<"WebEvents"> | $Enums.eventlevel
+    website_id?: StringFilter<"WebEvents"> | string
+    duration?: DateTimeFilter<"WebEvents"> | Date | string
+    website?: XOR<WebsiteScalarRelationFilter, WebsiteWhereInput>
+  }, "id">
+
+  export type WebEventsOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    level?: SortOrder
+    website_id?: SortOrder
+    duration?: SortOrder
+    _count?: WebEventsCountOrderByAggregateInput
+    _max?: WebEventsMaxOrderByAggregateInput
+    _min?: WebEventsMinOrderByAggregateInput
+  }
+
+  export type WebEventsScalarWhereWithAggregatesInput = {
+    AND?: WebEventsScalarWhereWithAggregatesInput | WebEventsScalarWhereWithAggregatesInput[]
+    OR?: WebEventsScalarWhereWithAggregatesInput[]
+    NOT?: WebEventsScalarWhereWithAggregatesInput | WebEventsScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"WebEvents"> | string
+    name?: StringWithAggregatesFilter<"WebEvents"> | string
+    level?: EnumeventlevelWithAggregatesFilter<"WebEvents"> | $Enums.eventlevel
+    website_id?: StringWithAggregatesFilter<"WebEvents"> | string
+    duration?: DateTimeWithAggregatesFilter<"WebEvents"> | Date | string
   }
 
   export type RegionWhereInput = {
@@ -6084,6 +7367,7 @@ export namespace Prisma {
     url: string
     timeAdded?: Date | string
     ticks?: WebsiteTickCreateNestedManyWithoutWebsiteInput
+    event_id?: WebEventsCreateNestedManyWithoutWebsiteInput
     user?: UserCreateNestedOneWithoutWebsitesInput
   }
 
@@ -6094,6 +7378,7 @@ export namespace Prisma {
     user_id?: string | null
     timeAdded?: Date | string
     ticks?: WebsiteTickUncheckedCreateNestedManyWithoutWebsiteInput
+    event_id?: WebEventsUncheckedCreateNestedManyWithoutWebsiteInput
   }
 
   export type WebsiteUpdateInput = {
@@ -6102,6 +7387,7 @@ export namespace Prisma {
     url?: StringFieldUpdateOperationsInput | string
     timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
     ticks?: WebsiteTickUpdateManyWithoutWebsiteNestedInput
+    event_id?: WebEventsUpdateManyWithoutWebsiteNestedInput
     user?: UserUpdateOneWithoutWebsitesNestedInput
   }
 
@@ -6112,6 +7398,7 @@ export namespace Prisma {
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
     ticks?: WebsiteTickUncheckedUpdateManyWithoutWebsiteNestedInput
+    event_id?: WebEventsUncheckedUpdateManyWithoutWebsiteNestedInput
   }
 
   export type WebsiteCreateManyInput = {
@@ -6135,6 +7422,61 @@ export namespace Prisma {
     url?: StringFieldUpdateOperationsInput | string
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WebEventsCreateInput = {
+    id?: string
+    name: string
+    level: $Enums.eventlevel
+    duration?: Date | string
+    website: WebsiteCreateNestedOneWithoutEvent_idInput
+  }
+
+  export type WebEventsUncheckedCreateInput = {
+    id?: string
+    name: string
+    level: $Enums.eventlevel
+    website_id: string
+    duration?: Date | string
+  }
+
+  export type WebEventsUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    level?: EnumeventlevelFieldUpdateOperationsInput | $Enums.eventlevel
+    duration?: DateTimeFieldUpdateOperationsInput | Date | string
+    website?: WebsiteUpdateOneRequiredWithoutEvent_idNestedInput
+  }
+
+  export type WebEventsUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    level?: EnumeventlevelFieldUpdateOperationsInput | $Enums.eventlevel
+    website_id?: StringFieldUpdateOperationsInput | string
+    duration?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WebEventsCreateManyInput = {
+    id?: string
+    name: string
+    level: $Enums.eventlevel
+    website_id: string
+    duration?: Date | string
+  }
+
+  export type WebEventsUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    level?: EnumeventlevelFieldUpdateOperationsInput | $Enums.eventlevel
+    duration?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WebEventsUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    level?: EnumeventlevelFieldUpdateOperationsInput | $Enums.eventlevel
+    website_id?: StringFieldUpdateOperationsInput | string
+    duration?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type RegionCreateInput = {
@@ -6349,6 +7691,12 @@ export namespace Prisma {
     none?: WebsiteTickWhereInput
   }
 
+  export type WebEventsListRelationFilter = {
+    every?: WebEventsWhereInput
+    some?: WebEventsWhereInput
+    none?: WebEventsWhereInput
+  }
+
   export type UserNullableScalarRelationFilter = {
     is?: UserWhereInput | null
     isNot?: UserWhereInput | null
@@ -6360,6 +7708,10 @@ export namespace Prisma {
   }
 
   export type WebsiteTickOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type WebEventsOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -6419,6 +7771,52 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type EnumeventlevelFilter<$PrismaModel = never> = {
+    equals?: $Enums.eventlevel | EnumeventlevelFieldRefInput<$PrismaModel>
+    in?: $Enums.eventlevel[] | ListEnumeventlevelFieldRefInput<$PrismaModel>
+    notIn?: $Enums.eventlevel[] | ListEnumeventlevelFieldRefInput<$PrismaModel>
+    not?: NestedEnumeventlevelFilter<$PrismaModel> | $Enums.eventlevel
+  }
+
+  export type WebsiteScalarRelationFilter = {
+    is?: WebsiteWhereInput
+    isNot?: WebsiteWhereInput
+  }
+
+  export type WebEventsCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    level?: SortOrder
+    website_id?: SortOrder
+    duration?: SortOrder
+  }
+
+  export type WebEventsMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    level?: SortOrder
+    website_id?: SortOrder
+    duration?: SortOrder
+  }
+
+  export type WebEventsMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    level?: SortOrder
+    website_id?: SortOrder
+    duration?: SortOrder
+  }
+
+  export type EnumeventlevelWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.eventlevel | EnumeventlevelFieldRefInput<$PrismaModel>
+    in?: $Enums.eventlevel[] | ListEnumeventlevelFieldRefInput<$PrismaModel>
+    notIn?: $Enums.eventlevel[] | ListEnumeventlevelFieldRefInput<$PrismaModel>
+    not?: NestedEnumeventlevelWithAggregatesFilter<$PrismaModel> | $Enums.eventlevel
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumeventlevelFilter<$PrismaModel>
+    _max?: NestedEnumeventlevelFilter<$PrismaModel>
+  }
+
   export type RegionCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -6458,11 +7856,6 @@ export namespace Prisma {
   export type RegionScalarRelationFilter = {
     is?: RegionWhereInput
     isNot?: RegionWhereInput
-  }
-
-  export type WebsiteScalarRelationFilter = {
-    is?: WebsiteWhereInput
-    isNot?: WebsiteWhereInput
   }
 
   export type WebsiteTickIdCreatedAtCompoundUniqueInput = {
@@ -6626,6 +8019,13 @@ export namespace Prisma {
     connect?: WebsiteTickWhereUniqueInput | WebsiteTickWhereUniqueInput[]
   }
 
+  export type WebEventsCreateNestedManyWithoutWebsiteInput = {
+    create?: XOR<WebEventsCreateWithoutWebsiteInput, WebEventsUncheckedCreateWithoutWebsiteInput> | WebEventsCreateWithoutWebsiteInput[] | WebEventsUncheckedCreateWithoutWebsiteInput[]
+    connectOrCreate?: WebEventsCreateOrConnectWithoutWebsiteInput | WebEventsCreateOrConnectWithoutWebsiteInput[]
+    createMany?: WebEventsCreateManyWebsiteInputEnvelope
+    connect?: WebEventsWhereUniqueInput | WebEventsWhereUniqueInput[]
+  }
+
   export type UserCreateNestedOneWithoutWebsitesInput = {
     create?: XOR<UserCreateWithoutWebsitesInput, UserUncheckedCreateWithoutWebsitesInput>
     connectOrCreate?: UserCreateOrConnectWithoutWebsitesInput
@@ -6637,6 +8037,13 @@ export namespace Prisma {
     connectOrCreate?: WebsiteTickCreateOrConnectWithoutWebsiteInput | WebsiteTickCreateOrConnectWithoutWebsiteInput[]
     createMany?: WebsiteTickCreateManyWebsiteInputEnvelope
     connect?: WebsiteTickWhereUniqueInput | WebsiteTickWhereUniqueInput[]
+  }
+
+  export type WebEventsUncheckedCreateNestedManyWithoutWebsiteInput = {
+    create?: XOR<WebEventsCreateWithoutWebsiteInput, WebEventsUncheckedCreateWithoutWebsiteInput> | WebEventsCreateWithoutWebsiteInput[] | WebEventsUncheckedCreateWithoutWebsiteInput[]
+    connectOrCreate?: WebEventsCreateOrConnectWithoutWebsiteInput | WebEventsCreateOrConnectWithoutWebsiteInput[]
+    createMany?: WebEventsCreateManyWebsiteInputEnvelope
+    connect?: WebEventsWhereUniqueInput | WebEventsWhereUniqueInput[]
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
@@ -6655,6 +8062,20 @@ export namespace Prisma {
     update?: WebsiteTickUpdateWithWhereUniqueWithoutWebsiteInput | WebsiteTickUpdateWithWhereUniqueWithoutWebsiteInput[]
     updateMany?: WebsiteTickUpdateManyWithWhereWithoutWebsiteInput | WebsiteTickUpdateManyWithWhereWithoutWebsiteInput[]
     deleteMany?: WebsiteTickScalarWhereInput | WebsiteTickScalarWhereInput[]
+  }
+
+  export type WebEventsUpdateManyWithoutWebsiteNestedInput = {
+    create?: XOR<WebEventsCreateWithoutWebsiteInput, WebEventsUncheckedCreateWithoutWebsiteInput> | WebEventsCreateWithoutWebsiteInput[] | WebEventsUncheckedCreateWithoutWebsiteInput[]
+    connectOrCreate?: WebEventsCreateOrConnectWithoutWebsiteInput | WebEventsCreateOrConnectWithoutWebsiteInput[]
+    upsert?: WebEventsUpsertWithWhereUniqueWithoutWebsiteInput | WebEventsUpsertWithWhereUniqueWithoutWebsiteInput[]
+    createMany?: WebEventsCreateManyWebsiteInputEnvelope
+    set?: WebEventsWhereUniqueInput | WebEventsWhereUniqueInput[]
+    disconnect?: WebEventsWhereUniqueInput | WebEventsWhereUniqueInput[]
+    delete?: WebEventsWhereUniqueInput | WebEventsWhereUniqueInput[]
+    connect?: WebEventsWhereUniqueInput | WebEventsWhereUniqueInput[]
+    update?: WebEventsUpdateWithWhereUniqueWithoutWebsiteInput | WebEventsUpdateWithWhereUniqueWithoutWebsiteInput[]
+    updateMany?: WebEventsUpdateManyWithWhereWithoutWebsiteInput | WebEventsUpdateManyWithWhereWithoutWebsiteInput[]
+    deleteMany?: WebEventsScalarWhereInput | WebEventsScalarWhereInput[]
   }
 
   export type UserUpdateOneWithoutWebsitesNestedInput = {
@@ -6683,6 +8104,38 @@ export namespace Prisma {
     update?: WebsiteTickUpdateWithWhereUniqueWithoutWebsiteInput | WebsiteTickUpdateWithWhereUniqueWithoutWebsiteInput[]
     updateMany?: WebsiteTickUpdateManyWithWhereWithoutWebsiteInput | WebsiteTickUpdateManyWithWhereWithoutWebsiteInput[]
     deleteMany?: WebsiteTickScalarWhereInput | WebsiteTickScalarWhereInput[]
+  }
+
+  export type WebEventsUncheckedUpdateManyWithoutWebsiteNestedInput = {
+    create?: XOR<WebEventsCreateWithoutWebsiteInput, WebEventsUncheckedCreateWithoutWebsiteInput> | WebEventsCreateWithoutWebsiteInput[] | WebEventsUncheckedCreateWithoutWebsiteInput[]
+    connectOrCreate?: WebEventsCreateOrConnectWithoutWebsiteInput | WebEventsCreateOrConnectWithoutWebsiteInput[]
+    upsert?: WebEventsUpsertWithWhereUniqueWithoutWebsiteInput | WebEventsUpsertWithWhereUniqueWithoutWebsiteInput[]
+    createMany?: WebEventsCreateManyWebsiteInputEnvelope
+    set?: WebEventsWhereUniqueInput | WebEventsWhereUniqueInput[]
+    disconnect?: WebEventsWhereUniqueInput | WebEventsWhereUniqueInput[]
+    delete?: WebEventsWhereUniqueInput | WebEventsWhereUniqueInput[]
+    connect?: WebEventsWhereUniqueInput | WebEventsWhereUniqueInput[]
+    update?: WebEventsUpdateWithWhereUniqueWithoutWebsiteInput | WebEventsUpdateWithWhereUniqueWithoutWebsiteInput[]
+    updateMany?: WebEventsUpdateManyWithWhereWithoutWebsiteInput | WebEventsUpdateManyWithWhereWithoutWebsiteInput[]
+    deleteMany?: WebEventsScalarWhereInput | WebEventsScalarWhereInput[]
+  }
+
+  export type WebsiteCreateNestedOneWithoutEvent_idInput = {
+    create?: XOR<WebsiteCreateWithoutEvent_idInput, WebsiteUncheckedCreateWithoutEvent_idInput>
+    connectOrCreate?: WebsiteCreateOrConnectWithoutEvent_idInput
+    connect?: WebsiteWhereUniqueInput
+  }
+
+  export type EnumeventlevelFieldUpdateOperationsInput = {
+    set?: $Enums.eventlevel
+  }
+
+  export type WebsiteUpdateOneRequiredWithoutEvent_idNestedInput = {
+    create?: XOR<WebsiteCreateWithoutEvent_idInput, WebsiteUncheckedCreateWithoutEvent_idInput>
+    connectOrCreate?: WebsiteCreateOrConnectWithoutEvent_idInput
+    upsert?: WebsiteUpsertWithoutEvent_idInput
+    connect?: WebsiteWhereUniqueInput
+    update?: XOR<XOR<WebsiteUpdateToOneWithWhereWithoutEvent_idInput, WebsiteUpdateWithoutEvent_idInput>, WebsiteUncheckedUpdateWithoutEvent_idInput>
   }
 
   export type UserCreateNestedOneWithoutRegionInput = {
@@ -6892,6 +8345,23 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type NestedEnumeventlevelFilter<$PrismaModel = never> = {
+    equals?: $Enums.eventlevel | EnumeventlevelFieldRefInput<$PrismaModel>
+    in?: $Enums.eventlevel[] | ListEnumeventlevelFieldRefInput<$PrismaModel>
+    notIn?: $Enums.eventlevel[] | ListEnumeventlevelFieldRefInput<$PrismaModel>
+    not?: NestedEnumeventlevelFilter<$PrismaModel> | $Enums.eventlevel
+  }
+
+  export type NestedEnumeventlevelWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.eventlevel | EnumeventlevelFieldRefInput<$PrismaModel>
+    in?: $Enums.eventlevel[] | ListEnumeventlevelFieldRefInput<$PrismaModel>
+    notIn?: $Enums.eventlevel[] | ListEnumeventlevelFieldRefInput<$PrismaModel>
+    not?: NestedEnumeventlevelWithAggregatesFilter<$PrismaModel> | $Enums.eventlevel
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumeventlevelFilter<$PrismaModel>
+    _max?: NestedEnumeventlevelFilter<$PrismaModel>
+  }
+
   export type NestedEnumwebstatusFilter<$PrismaModel = never> = {
     equals?: $Enums.webstatus | EnumwebstatusFieldRefInput<$PrismaModel>
     in?: $Enums.webstatus[] | ListEnumwebstatusFieldRefInput<$PrismaModel>
@@ -6942,6 +8412,7 @@ export namespace Prisma {
     url: string
     timeAdded?: Date | string
     ticks?: WebsiteTickCreateNestedManyWithoutWebsiteInput
+    event_id?: WebEventsCreateNestedManyWithoutWebsiteInput
   }
 
   export type WebsiteUncheckedCreateWithoutUserInput = {
@@ -6950,6 +8421,7 @@ export namespace Prisma {
     url: string
     timeAdded?: Date | string
     ticks?: WebsiteTickUncheckedCreateNestedManyWithoutWebsiteInput
+    event_id?: WebEventsUncheckedCreateNestedManyWithoutWebsiteInput
   }
 
   export type WebsiteCreateOrConnectWithoutUserInput = {
@@ -7062,6 +8534,30 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type WebEventsCreateWithoutWebsiteInput = {
+    id?: string
+    name: string
+    level: $Enums.eventlevel
+    duration?: Date | string
+  }
+
+  export type WebEventsUncheckedCreateWithoutWebsiteInput = {
+    id?: string
+    name: string
+    level: $Enums.eventlevel
+    duration?: Date | string
+  }
+
+  export type WebEventsCreateOrConnectWithoutWebsiteInput = {
+    where: WebEventsWhereUniqueInput
+    create: XOR<WebEventsCreateWithoutWebsiteInput, WebEventsUncheckedCreateWithoutWebsiteInput>
+  }
+
+  export type WebEventsCreateManyWebsiteInputEnvelope = {
+    data: WebEventsCreateManyWebsiteInput | WebEventsCreateManyWebsiteInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserCreateWithoutWebsitesInput = {
     id?: string
     name: string
@@ -7111,6 +8607,33 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"WebsiteTick"> | Date | string
   }
 
+  export type WebEventsUpsertWithWhereUniqueWithoutWebsiteInput = {
+    where: WebEventsWhereUniqueInput
+    update: XOR<WebEventsUpdateWithoutWebsiteInput, WebEventsUncheckedUpdateWithoutWebsiteInput>
+    create: XOR<WebEventsCreateWithoutWebsiteInput, WebEventsUncheckedCreateWithoutWebsiteInput>
+  }
+
+  export type WebEventsUpdateWithWhereUniqueWithoutWebsiteInput = {
+    where: WebEventsWhereUniqueInput
+    data: XOR<WebEventsUpdateWithoutWebsiteInput, WebEventsUncheckedUpdateWithoutWebsiteInput>
+  }
+
+  export type WebEventsUpdateManyWithWhereWithoutWebsiteInput = {
+    where: WebEventsScalarWhereInput
+    data: XOR<WebEventsUpdateManyMutationInput, WebEventsUncheckedUpdateManyWithoutWebsiteInput>
+  }
+
+  export type WebEventsScalarWhereInput = {
+    AND?: WebEventsScalarWhereInput | WebEventsScalarWhereInput[]
+    OR?: WebEventsScalarWhereInput[]
+    NOT?: WebEventsScalarWhereInput | WebEventsScalarWhereInput[]
+    id?: StringFilter<"WebEvents"> | string
+    name?: StringFilter<"WebEvents"> | string
+    level?: EnumeventlevelFilter<"WebEvents"> | $Enums.eventlevel
+    website_id?: StringFilter<"WebEvents"> | string
+    duration?: DateTimeFilter<"WebEvents"> | Date | string
+  }
+
   export type UserUpsertWithoutWebsitesInput = {
     update: XOR<UserUpdateWithoutWebsitesInput, UserUncheckedUpdateWithoutWebsitesInput>
     create: XOR<UserCreateWithoutWebsitesInput, UserUncheckedCreateWithoutWebsitesInput>
@@ -7136,6 +8659,58 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     region?: RegionUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type WebsiteCreateWithoutEvent_idInput = {
+    id?: string
+    name: string
+    url: string
+    timeAdded?: Date | string
+    ticks?: WebsiteTickCreateNestedManyWithoutWebsiteInput
+    user?: UserCreateNestedOneWithoutWebsitesInput
+  }
+
+  export type WebsiteUncheckedCreateWithoutEvent_idInput = {
+    id?: string
+    name: string
+    url: string
+    user_id?: string | null
+    timeAdded?: Date | string
+    ticks?: WebsiteTickUncheckedCreateNestedManyWithoutWebsiteInput
+  }
+
+  export type WebsiteCreateOrConnectWithoutEvent_idInput = {
+    where: WebsiteWhereUniqueInput
+    create: XOR<WebsiteCreateWithoutEvent_idInput, WebsiteUncheckedCreateWithoutEvent_idInput>
+  }
+
+  export type WebsiteUpsertWithoutEvent_idInput = {
+    update: XOR<WebsiteUpdateWithoutEvent_idInput, WebsiteUncheckedUpdateWithoutEvent_idInput>
+    create: XOR<WebsiteCreateWithoutEvent_idInput, WebsiteUncheckedCreateWithoutEvent_idInput>
+    where?: WebsiteWhereInput
+  }
+
+  export type WebsiteUpdateToOneWithWhereWithoutEvent_idInput = {
+    where?: WebsiteWhereInput
+    data: XOR<WebsiteUpdateWithoutEvent_idInput, WebsiteUncheckedUpdateWithoutEvent_idInput>
+  }
+
+  export type WebsiteUpdateWithoutEvent_idInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
+    ticks?: WebsiteTickUpdateManyWithoutWebsiteNestedInput
+    user?: UserUpdateOneWithoutWebsitesNestedInput
+  }
+
+  export type WebsiteUncheckedUpdateWithoutEvent_idInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    user_id?: NullableStringFieldUpdateOperationsInput | string | null
+    timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
+    ticks?: WebsiteTickUncheckedUpdateManyWithoutWebsiteNestedInput
   }
 
   export type UserCreateWithoutRegionInput = {
@@ -7250,6 +8825,7 @@ export namespace Prisma {
     name: string
     url: string
     timeAdded?: Date | string
+    event_id?: WebEventsCreateNestedManyWithoutWebsiteInput
     user?: UserCreateNestedOneWithoutWebsitesInput
   }
 
@@ -7259,6 +8835,7 @@ export namespace Prisma {
     url: string
     user_id?: string | null
     timeAdded?: Date | string
+    event_id?: WebEventsUncheckedCreateNestedManyWithoutWebsiteInput
   }
 
   export type WebsiteCreateOrConnectWithoutTicksInput = {
@@ -7305,6 +8882,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
+    event_id?: WebEventsUpdateManyWithoutWebsiteNestedInput
     user?: UserUpdateOneWithoutWebsitesNestedInput
   }
 
@@ -7314,6 +8892,7 @@ export namespace Prisma {
     url?: StringFieldUpdateOperationsInput | string
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
+    event_id?: WebEventsUncheckedUpdateManyWithoutWebsiteNestedInput
   }
 
   export type WebsiteCreateManyUserInput = {
@@ -7334,6 +8913,7 @@ export namespace Prisma {
     url?: StringFieldUpdateOperationsInput | string
     timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
     ticks?: WebsiteTickUpdateManyWithoutWebsiteNestedInput
+    event_id?: WebEventsUpdateManyWithoutWebsiteNestedInput
   }
 
   export type WebsiteUncheckedUpdateWithoutUserInput = {
@@ -7342,6 +8922,7 @@ export namespace Prisma {
     url?: StringFieldUpdateOperationsInput | string
     timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
     ticks?: WebsiteTickUncheckedUpdateManyWithoutWebsiteNestedInput
+    event_id?: WebEventsUncheckedUpdateManyWithoutWebsiteNestedInput
   }
 
   export type WebsiteUncheckedUpdateManyWithoutUserInput = {
@@ -7376,6 +8957,13 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type WebEventsCreateManyWebsiteInput = {
+    id?: string
+    name: string
+    level: $Enums.eventlevel
+    duration?: Date | string
+  }
+
   export type WebsiteTickUpdateWithoutWebsiteInput = {
     id?: StringFieldUpdateOperationsInput | string
     response_time_ms?: IntFieldUpdateOperationsInput | number
@@ -7398,6 +8986,27 @@ export namespace Prisma {
     status?: EnumwebstatusFieldUpdateOperationsInput | $Enums.webstatus
     region_id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WebEventsUpdateWithoutWebsiteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    level?: EnumeventlevelFieldUpdateOperationsInput | $Enums.eventlevel
+    duration?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WebEventsUncheckedUpdateWithoutWebsiteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    level?: EnumeventlevelFieldUpdateOperationsInput | $Enums.eventlevel
+    duration?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WebEventsUncheckedUpdateManyWithoutWebsiteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    level?: EnumeventlevelFieldUpdateOperationsInput | $Enums.eventlevel
+    duration?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type WebsiteTickCreateManyRegionInput = {

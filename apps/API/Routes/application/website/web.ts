@@ -24,32 +24,41 @@ web.post("/createwebsite", Authorize, async (req: Request, res: Response) => {
         res.status(200).send(web.id);
         return;
     } catch (e) {
-        res.status(500).send("Please Try Again");
+        res.status(500).send("Please Try Again"+e);
         return;
     }
 }); // EndPoint for Creating a Website
-web.post("/deletewebsite", Authorize, async (req: Request, res: Response) => {
+web.delete("/deletewebsite/:id", Authorize, async (req: Request, res: Response) => {
     const id = req.userid?.id;
-    const { webid } = req.body;
+    const  webid  = req.params.id;
+    console.log(id);
+    console.log(webid);
     if (!id) {
-        res.send("No user found");
+        res.status(401).send("No user found");
         return;
     }
     try {
+        await Prisma.websiteTick.deleteMany({
+  where: {
+    website_id: webid,
+  },
+});
         const response = await Prisma.website.delete({
             where: {
                 id: webid,
                 user_id: id
             }
         });
+        console.log(response.name);
         if (!response) {
-            res.send("No Website found");
+            res.status(404).send("No Website found");
             return;
         }
-        res.send("Website Deleted");
+        res.status(200).send("Website Deleted");
         return;
     } catch (e) {
-        res.send("Please Try Again");
+        res.status(500).send("Please Try Again");
+        console.log(e);
         return;
     }
 }); //EndPoint for Deleting a Website
@@ -118,9 +127,10 @@ web.get("/:websiteid", Authorize, async (req: Request, res: Response) => {
                     orderBy: [{
                         createdAt: "desc"
                     }],
-                    take: 1
-                }
-            }
+                    take: 1000
+                },
+                
+            },
         });
         if (!website) {
       return res.status(404).send("No websites");
@@ -128,18 +138,24 @@ web.get("/:websiteid", Authorize, async (req: Request, res: Response) => {
 
     // Flatten tick data into website object
      const latestTick = website.ticks[0]; // because take: 1
-
-     
-     
-    res.status(200).json({
+    const upCount = website.ticks.filter(t => t.status === "up").length;
+    const uptime = website.ticks.length > 0 ? (upCount / website.ticks.length) * 100 : null;
+   
+    const  response = {
           id: website.id,
         name:website.name,
         url: website.url,
         timeAdded: website.timeAdded,
-        status: latestTick?.status,
-        lastChecked: latestTick?.createdAt,
-        responseTime: latestTick?.response_time_ms,
-        });
+        status: latestTick?.status || "unkown",
+        lastChecked: latestTick?.createdAt || 0,
+        responseTime: latestTick?.response_time_ms || "0",
+        uptime:uptime || 0,
+        };
+    
+
+     //also add it to the response data recentIncidents
+     
+    res.status(200).json(response);
         return;
     } catch (error) {
         res.status(500).send("Try Again. We are facing Traffic");

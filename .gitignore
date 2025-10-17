@@ -35,3 +35,6 @@ yarn-error.log*
 
 # Bun
 bun.lockb
+
+# websocket
+websocket
