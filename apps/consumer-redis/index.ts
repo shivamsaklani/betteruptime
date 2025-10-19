@@ -1,5 +1,5 @@
-import { CreateRegion, ReadGroup, mesAck, mesAckGroup } from "@repo/redisstreams/redisclient";
-import type { ResponseType } from "@repo/redisstreams/types";
+import { Alerts, CreateRegion, ReadGroup, mesAck, mesAckGroup } from "@repo/redisstreams/redisclient";
+import { level, type ResponseType } from "@repo/redisstreams/types";
 import { Prisma } from "@repo/db/client";
 import axios from "axios";
 
@@ -15,39 +15,50 @@ async function consumeRegion(region: string, region_id: string, workerId: string
       if (response && response.length > 0) {
         await Promise.all(
           response[0]!.messages.map(async ({ message }: { message: { url: string; id: string } }) => {
-            const url = message.url.startsWith("http://") || message.url.startsWith("https://")? message.url: `https://${message.url}`;
+            const url = message.url.startsWith("http://") || message.url.startsWith("https://") ? message.url : `https://${message.url}`;
 
             const websiteId = message.id;
             const startTime = Date.now();
 
-            await axios.get(url).then(
-              async () => {
-                const endTime = Date.now();
-                const responseTime = endTime - startTime;
-                const status: "up" | "degraded" = responseTime > 5000? "degraded" : "up"; // 2 ms= threshold
+            try {
+              await axios.get(url);
+              const responseTime = Date.now() - startTime;
+              const status = responseTime > 5000 ? "degraded" : "up";
+              await Prisma.websiteTick.create({
+                data: { status, response_time_ms: responseTime, region_id, website_id: websiteId },
+              });
 
-                await Prisma.websiteTick.create({
-                  data: {
-                    status: status,
-                    response_time_ms: responseTime,
-                    region_id: region_id,
-                    website_id: websiteId,
-                  },
+              if (status === "degraded") {
+                await Alerts({
+                  websiteId,
+                  Reason: `Response time too high (${responseTime} ms)`,
+                  occured: true,
+                  isResolved: false,
+                  level: level.mid, // mid-level severity for degraded
+                });
+              } else {
+                // mark degraded/down alerts as resolved
+                await Alerts({
+                  websiteId,
+                  Reason: `Response time normal (${responseTime} ms)`,
+                  occured: false,
+                  isResolved: true,
+                  level: level.low,
                 });
               }
-            ).catch(
-              async () => {
-                const endTime = Date.now();
-                await Prisma.websiteTick.create({
-                  data: {
-                    status: "down",
-                    response_time_ms: endTime - startTime,
-                    region_id: region_id,
-                    website_id: websiteId,
-                  },
-                });
-              }
-            );
+            } catch (e: any) {
+              const responseTime = Date.now() - startTime;
+              await Prisma.websiteTick.create({
+                data: { status: "down", response_time_ms: responseTime, region_id, website_id: websiteId },
+              });
+              await Alerts({
+                websiteId,
+                Reason: e?.message ?? "Request failed",
+                occured: true,
+                isResolved: false,
+                level: level.high,
+              });
+            }
           })
         );
 
@@ -65,11 +76,11 @@ async function consumeRegion(region: string, region_id: string, workerId: string
 
 async function Worker() {
   setInterval(async () => {
-  try {
+    try {
       let regions = await Prisma.region.findMany({
         select: { id: true, name: true },
       });
-     if (regions.length === 0) {
+      if (regions.length === 0) {
         console.log("No regions found. Creating default region...");
         const defaultRegion = await Prisma.region.create({
           data: { name: "asia" },
@@ -77,22 +88,22 @@ async function Worker() {
         });
         CreateRegion("asia");
         regions = [defaultRegion];
-        activeConsumers.set("asia",true);
+        activeConsumers.set("asia", true);
       }
 
-  
+
       for (const r of regions) {
-        
+
         if (!activeConsumers.has(r.id)) { // tracks new regions entry
           const workerId = `${r.name}-worker-${Date.now()}`;
           activeConsumers.set(r.id, true);
-           await CreateRegion(r.name);
-          await consumeRegion(r.name, r.id, workerId); 
+          await CreateRegion(r.name);
+          await consumeRegion(r.name, r.id, workerId);
         }
       }
-  } catch (error) {
-    console.log("Consumer not running",error);
-  }
+    } catch (error) {
+      console.log("Consumer not running", error);
+    }
   }, 60_000); // every 60 seconds check for new regions
 }
 

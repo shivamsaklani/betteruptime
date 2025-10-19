@@ -1,5 +1,6 @@
 import { createClient, type RedisClientType } from "redis";
-import type { ResponseType, websiteType } from "./types";
+import type { ResponseType, websiteType, Events} from "./types";
+import { Prisma } from "@repo/db/client";
 export const redisclient: RedisClientType  = await createClient({
     url:process.env.Redis_url|| "redis://localhost:6379"
 });
@@ -88,5 +89,50 @@ export async function ReadGroup(groupName:string,workerId:string):Promise<Respon
 export async function mesAckGroup(groupName:string, website:string[]) {
   for(const w of website){
     await mesAck(w,groupName);
+  }
+}
+
+
+// Functions for Alerts in Website 
+export async function Alerts(Event: Events) {
+  try {
+    const key = `events:active:${Event.websiteId}`; // make key unique per website
+    const isActive = await redisclient.get(key);
+    // CASE 1: Incident Occurred (isDown or degraded)
+    if (Event.occured) {
+      if (!isActive) {
+        await Prisma.webEvents.create({
+          data: {
+            name: Event.Reason,
+            level: Event.level,
+            resolved: Event.isResolved,
+            website_id: Event.websiteId,
+            timeAdded: new Date(),
+          },
+        });
+
+        // prevent duplicate alerts for same incident
+        await redisclient.set(key, "active", { EX: 3600 });
+      }
+    }
+
+    // CASE 2: Issue Resolved
+    else if (Event.isResolved) {
+        // remove redis flag since resolved
+        const response = await Prisma.webEvents.updateMany({
+          where: {
+            website_id: Event.websiteId,
+            resolved: false,
+          },
+          data: {
+            resolved: true,
+            resolvedTime:new Date(),
+          },
+        });
+        await redisclient.del(key);
+      
+    }
+  } catch (error) {
+    console.error("Error during Alert processing:", error);
   }
 }

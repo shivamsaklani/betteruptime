@@ -36,9 +36,11 @@ model WebEvents {
   id String @id @default(uuid())
   name String
   level eventlevel
+  resolved Boolean? @default(false)
   website_id String
-  duration DateTime @default(now())
+  resolvedTime DateTime
   website Website @relation(fields: [website_id],references: [id])
+  timeAdded DateTime @default(now())
 }
 
 model Region{

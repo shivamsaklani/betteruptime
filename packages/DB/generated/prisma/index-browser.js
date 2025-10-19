@@ -139,8 +139,10 @@ exports.Prisma.WebEventsScalarFieldEnum = {
   id: 'id',
   name: 'name',
   level: 'level',
+  resolved: 'resolved',
   website_id: 'website_id',
-  duration: 'duration'
+  resolvedTime: 'resolvedTime',
+  timeAdded: 'timeAdded'
 };
 
 exports.Prisma.RegionScalarFieldEnum = {

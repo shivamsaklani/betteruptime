@@ -35,12 +35,14 @@ model Website {
 }
 
 model WebEvents {
-  id         String     @id @default(uuid())
-  name       String
-  level      eventlevel
-  website_id String
-  duration   DateTime   @default(now())
-  website    Website    @relation(fields: [website_id], references: [id])
+  id           String     @id @default(uuid())
+  name         String
+  level        eventlevel
+  resolved     Boolean?   @default(false)
+  website_id   String
+  resolvedTime DateTime   @default(now())
+  website      Website    @relation(fields: [website_id], references: [id])
+  timeAdded    DateTime   @default(now())
 }
 
 model Region {
