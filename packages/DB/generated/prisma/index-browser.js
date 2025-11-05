@@ -160,6 +160,17 @@ exports.Prisma.WebsiteTickScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.ChannelsScalarFieldEnum = {
+  id: 'id',
+  channelName: 'channelName',
+  channelDetails: 'channelDetails',
+  level: 'level',
+  website_id: 'website_id',
+  monitor: 'monitor',
+  lastSent: 'lastSent',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -192,7 +203,8 @@ exports.Prisma.ModelName = {
   Website: 'Website',
   WebEvents: 'WebEvents',
   Region: 'Region',
-  WebsiteTick: 'WebsiteTick'
+  WebsiteTick: 'WebsiteTick',
+  Channels: 'Channels'
 };
 
 /**

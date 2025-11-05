@@ -12,7 +12,6 @@ declare module "express-session" {
   interface SessionData {
     sessionpayload?: {
       token: string;
-      refreshToken: string;
       id: string;
       Username: string;
     };

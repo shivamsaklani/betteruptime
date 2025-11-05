@@ -59,7 +59,7 @@ export async function DelRegion(groupName:string) {
 }// delete Region 
 export async function mesAck(mesid:string,groupName:string) {
 try {
-   const response =await  redisclient.xAck(Stream_Name,groupName,mesid);
+   await  redisclient.xAck(Stream_Name,groupName,mesid);
 } catch (error) {
   console.log("Message Not ack",error);
 }
@@ -108,6 +108,7 @@ export async function Alerts(Event: Events) {
             resolved: Event.isResolved,
             website_id: Event.websiteId,
             timeAdded: new Date(),
+            resolvedTime: new Date(),
           },
         });
 

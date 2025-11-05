@@ -1,0 +1,13 @@
+# ---------- Base Image for All Services ----------
+FROM oven/bun:1.1.25 AS base
+
+WORKDIR /app
+
+# Copy workspace files
+COPY bun.lock package.json ./
+COPY packages ./packages
+
+# Install dependencies (including workspace packages)
+RUN bun install --frozen-lockfile
+
+# This image now contains all shared workspace packages (like @repo/db)

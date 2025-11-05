@@ -31,8 +31,6 @@ web.post("/createwebsite", Authorize, async (req: Request, res: Response) => {
 web.delete("/deletewebsite/:id", Authorize, async (req: Request, res: Response) => {
     const id = req.userid?.id;
     const  webid  = req.params.id;
-    console.log(id);
-    console.log(webid);
     if (!id) {
         res.status(401).send("No user found");
         return;
@@ -49,7 +47,6 @@ web.delete("/deletewebsite/:id", Authorize, async (req: Request, res: Response) 
                 user_id: id
             }
         });
-        console.log(response.name);
         if (!response) {
             res.status(404).send("No Website found");
             return;
@@ -114,7 +111,7 @@ web.get("/getwebsites", Authorize, async (req: Request, res: Response) => {
         return;
     }
 });// Sends all the websites from database
-web.get("/:websiteid", Authorize, async (req: Request, res: Response) => {
+web.get("/selectwebsite/:websiteid", Authorize, async (req: Request, res: Response) => {
     const user_id = req.userid?.id;
     try {
         const website= await Prisma.website.findFirst({
@@ -129,6 +126,12 @@ web.get("/:websiteid", Authorize, async (req: Request, res: Response) => {
                     }],
                     take: 1000
                 },
+                events:{
+                    orderBy:[{
+                        resolvedTime:"desc"
+                    }],
+                    take:100,
+                }
                 
             },
         });
@@ -150,6 +153,7 @@ web.get("/:websiteid", Authorize, async (req: Request, res: Response) => {
         lastChecked: latestTick?.createdAt || 0,
         responseTime: latestTick?.response_time_ms || "0",
         uptime:uptime || 0,
+        recentIncidents:website.events,
         };
     
 
@@ -163,6 +167,45 @@ web.get("/:websiteid", Authorize, async (req: Request, res: Response) => {
     }
 }); //Endpoint for checking Website data
 
+web.get("/getalerts", Authorize, async (req: Request, res: Response) => {
+  const id = req.userid?.id;
+
+  try {
+    // Fetch alerts and include website info
+    const alerts = await Prisma.webEvents.findMany({
+        where:{
+            website:{
+                user_id:id,
+            }
+        },
+      include: {
+        website: true, // assuming your Prisma schema has a relation 'website' in webEvents
+      },
+    });
+
+    if (alerts && alerts.length > 0) {
+      // Map to match your UI structure
+      const formattedAlerts = alerts.map(alert => ({
+        id: alert.id,
+        level: alert.level,           // "low" | "mid" | "high"
+        resolved: alert.resolved,
+        websiteId: alert.website_id,  // keep id for reference
+        name: alert.name, // human-friendly name
+        timeAdded: alert.timeAdded,
+        websitename:alert.website.name,
+        resolvedTime: alert.resolvedTime,
+      }));
+
+      return res.status(200).json({ alerts: formattedAlerts });
+    }
+
+    return res.status(404).json({ message: "No alerts found" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Try again" });
+  }
+});
+//Endpoint for Alerts fetching
 
 
 

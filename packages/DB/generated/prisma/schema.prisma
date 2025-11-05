@@ -30,8 +30,9 @@ model Website {
   user_id   String?
   timeAdded DateTime      @default(now())
   ticks     WebsiteTick[]
-  event_id  WebEvents[]
-  user      User?         @relation(fields: [user_id], references: [id])
+  events    WebEvents[]
+  channels  Channels[] // each website should have channels to send notification through emails , phone etc.
+  user      User?         @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 
 model WebEvents {
@@ -40,8 +41,8 @@ model WebEvents {
   level        eventlevel
   resolved     Boolean?   @default(false)
   website_id   String
-  resolvedTime DateTime   @default(now())
-  website      Website    @relation(fields: [website_id], references: [id])
+  resolvedTime DateTime
+  website      Website    @relation(fields: [website_id], references: [id], onDelete: Cascade)
   timeAdded    DateTime   @default(now())
 }
 
@@ -49,7 +50,7 @@ model Region {
   id      String        @id @default(uuid())
   name    String
   user_id String?
-  user    User?         @relation(fields: [user_id], references: [id])
+  user    User?         @relation(fields: [user_id], references: [id], onDelete: Cascade)
   ticks   WebsiteTick[]
 }
 
@@ -57,14 +58,26 @@ model WebsiteTick {
   id               String    @default(uuid())
   response_time_ms Int
   status           webstatus
-  region           Region    @relation(fields: [region_id], references: [id])
-  website          Website   @relation(fields: [website_id], references: [id])
+  region           Region    @relation(fields: [region_id], references: [id], onDelete: Cascade)
+  website          Website   @relation(fields: [website_id], references: [id], onDelete: Cascade)
   region_id        String
   website_id       String
   createdAt        DateTime  @default(now())
 
   @@id([id, createdAt])
   @@index([createdAt])
+}
+
+model Channels {
+  id             String     @id @default(uuid())
+  channelName    String
+  channelDetails String
+  level          eventlevel
+  website_id     String
+  monitor        Boolean    @default(true)
+  lastSent       DateTime? // last alert time
+  createdAt      DateTime   @default(now())
+  website        Website    @relation(fields: [website_id], references: [id], onDelete: Cascade)
 }
 
 enum webstatus {

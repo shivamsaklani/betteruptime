@@ -38,6 +38,11 @@ export type Region = $Result.DefaultSelection<Prisma.$RegionPayload>
  * 
  */
 export type WebsiteTick = $Result.DefaultSelection<Prisma.$WebsiteTickPayload>
+/**
+ * Model Channels
+ * 
+ */
+export type Channels = $Result.DefaultSelection<Prisma.$ChannelsPayload>
 
 /**
  * Enums
@@ -238,6 +243,16 @@ export class PrismaClient<
     * ```
     */
   get websiteTick(): Prisma.WebsiteTickDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.channels`: Exposes CRUD operations for the **Channels** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Channels
+    * const channels = await prisma.channels.findMany()
+    * ```
+    */
+  get channels(): Prisma.ChannelsDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -682,7 +697,8 @@ export namespace Prisma {
     Website: 'Website',
     WebEvents: 'WebEvents',
     Region: 'Region',
-    WebsiteTick: 'WebsiteTick'
+    WebsiteTick: 'WebsiteTick',
+    Channels: 'Channels'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -701,7 +717,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "website" | "webEvents" | "region" | "websiteTick"
+      modelProps: "user" | "website" | "webEvents" | "region" | "websiteTick" | "channels"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1075,6 +1091,80 @@ export namespace Prisma {
           }
         }
       }
+      Channels: {
+        payload: Prisma.$ChannelsPayload<ExtArgs>
+        fields: Prisma.ChannelsFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ChannelsFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChannelsPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ChannelsFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChannelsPayload>
+          }
+          findFirst: {
+            args: Prisma.ChannelsFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChannelsPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ChannelsFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChannelsPayload>
+          }
+          findMany: {
+            args: Prisma.ChannelsFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChannelsPayload>[]
+          }
+          create: {
+            args: Prisma.ChannelsCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChannelsPayload>
+          }
+          createMany: {
+            args: Prisma.ChannelsCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ChannelsCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChannelsPayload>[]
+          }
+          delete: {
+            args: Prisma.ChannelsDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChannelsPayload>
+          }
+          update: {
+            args: Prisma.ChannelsUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChannelsPayload>
+          }
+          deleteMany: {
+            args: Prisma.ChannelsDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ChannelsUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ChannelsUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChannelsPayload>[]
+          }
+          upsert: {
+            args: Prisma.ChannelsUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChannelsPayload>
+          }
+          aggregate: {
+            args: Prisma.ChannelsAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateChannels>
+          }
+          groupBy: {
+            args: Prisma.ChannelsGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ChannelsGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ChannelsCountArgs<ExtArgs>
+            result: $Utils.Optional<ChannelsCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1176,6 +1266,7 @@ export namespace Prisma {
     webEvents?: WebEventsOmit
     region?: RegionOmit
     websiteTick?: WebsiteTickOmit
+    channels?: ChannelsOmit
   }
 
   /* Types for Logging */
@@ -1297,12 +1388,14 @@ export namespace Prisma {
 
   export type WebsiteCountOutputType = {
     ticks: number
-    event_id: number
+    events: number
+    channels: number
   }
 
   export type WebsiteCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     ticks?: boolean | WebsiteCountOutputTypeCountTicksArgs
-    event_id?: boolean | WebsiteCountOutputTypeCountEvent_idArgs
+    events?: boolean | WebsiteCountOutputTypeCountEventsArgs
+    channels?: boolean | WebsiteCountOutputTypeCountChannelsArgs
   }
 
   // Custom InputTypes
@@ -1326,8 +1419,15 @@ export namespace Prisma {
   /**
    * WebsiteCountOutputType without action
    */
-  export type WebsiteCountOutputTypeCountEvent_idArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type WebsiteCountOutputTypeCountEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: WebEventsWhereInput
+  }
+
+  /**
+   * WebsiteCountOutputType without action
+   */
+  export type WebsiteCountOutputTypeCountChannelsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ChannelsWhereInput
   }
 
 
@@ -2616,7 +2716,8 @@ export namespace Prisma {
     user_id?: boolean
     timeAdded?: boolean
     ticks?: boolean | Website$ticksArgs<ExtArgs>
-    event_id?: boolean | Website$event_idArgs<ExtArgs>
+    events?: boolean | Website$eventsArgs<ExtArgs>
+    channels?: boolean | Website$channelsArgs<ExtArgs>
     user?: boolean | Website$userArgs<ExtArgs>
     _count?: boolean | WebsiteCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["website"]>
@@ -2650,7 +2751,8 @@ export namespace Prisma {
   export type WebsiteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "url" | "user_id" | "timeAdded", ExtArgs["result"]["website"]>
   export type WebsiteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     ticks?: boolean | Website$ticksArgs<ExtArgs>
-    event_id?: boolean | Website$event_idArgs<ExtArgs>
+    events?: boolean | Website$eventsArgs<ExtArgs>
+    channels?: boolean | Website$channelsArgs<ExtArgs>
     user?: boolean | Website$userArgs<ExtArgs>
     _count?: boolean | WebsiteCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -2665,7 +2767,8 @@ export namespace Prisma {
     name: "Website"
     objects: {
       ticks: Prisma.$WebsiteTickPayload<ExtArgs>[]
-      event_id: Prisma.$WebEventsPayload<ExtArgs>[]
+      events: Prisma.$WebEventsPayload<ExtArgs>[]
+      channels: Prisma.$ChannelsPayload<ExtArgs>[]
       user: Prisma.$UserPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -3069,7 +3172,8 @@ export namespace Prisma {
   export interface Prisma__WebsiteClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     ticks<T extends Website$ticksArgs<ExtArgs> = {}>(args?: Subset<T, Website$ticksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WebsiteTickPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    event_id<T extends Website$event_idArgs<ExtArgs> = {}>(args?: Subset<T, Website$event_idArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WebEventsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    events<T extends Website$eventsArgs<ExtArgs> = {}>(args?: Subset<T, Website$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WebEventsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    channels<T extends Website$channelsArgs<ExtArgs> = {}>(args?: Subset<T, Website$channelsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChannelsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     user<T extends Website$userArgs<ExtArgs> = {}>(args?: Subset<T, Website$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -3525,9 +3629,9 @@ export namespace Prisma {
   }
 
   /**
-   * Website.event_id
+   * Website.events
    */
-  export type Website$event_idArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Website$eventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the WebEvents
      */
@@ -3546,6 +3650,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: WebEventsScalarFieldEnum | WebEventsScalarFieldEnum[]
+  }
+
+  /**
+   * Website.channels
+   */
+  export type Website$channelsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Channels
+     */
+    select?: ChannelsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Channels
+     */
+    omit?: ChannelsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChannelsInclude<ExtArgs> | null
+    where?: ChannelsWhereInput
+    orderBy?: ChannelsOrderByWithRelationInput | ChannelsOrderByWithRelationInput[]
+    cursor?: ChannelsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ChannelsScalarFieldEnum | ChannelsScalarFieldEnum[]
   }
 
   /**
@@ -6865,6 +6993,1103 @@ export namespace Prisma {
 
 
   /**
+   * Model Channels
+   */
+
+  export type AggregateChannels = {
+    _count: ChannelsCountAggregateOutputType | null
+    _min: ChannelsMinAggregateOutputType | null
+    _max: ChannelsMaxAggregateOutputType | null
+  }
+
+  export type ChannelsMinAggregateOutputType = {
+    id: string | null
+    channelName: string | null
+    channelDetails: string | null
+    level: $Enums.eventlevel | null
+    website_id: string | null
+    monitor: boolean | null
+    lastSent: Date | null
+    createdAt: Date | null
+  }
+
+  export type ChannelsMaxAggregateOutputType = {
+    id: string | null
+    channelName: string | null
+    channelDetails: string | null
+    level: $Enums.eventlevel | null
+    website_id: string | null
+    monitor: boolean | null
+    lastSent: Date | null
+    createdAt: Date | null
+  }
+
+  export type ChannelsCountAggregateOutputType = {
+    id: number
+    channelName: number
+    channelDetails: number
+    level: number
+    website_id: number
+    monitor: number
+    lastSent: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type ChannelsMinAggregateInputType = {
+    id?: true
+    channelName?: true
+    channelDetails?: true
+    level?: true
+    website_id?: true
+    monitor?: true
+    lastSent?: true
+    createdAt?: true
+  }
+
+  export type ChannelsMaxAggregateInputType = {
+    id?: true
+    channelName?: true
+    channelDetails?: true
+    level?: true
+    website_id?: true
+    monitor?: true
+    lastSent?: true
+    createdAt?: true
+  }
+
+  export type ChannelsCountAggregateInputType = {
+    id?: true
+    channelName?: true
+    channelDetails?: true
+    level?: true
+    website_id?: true
+    monitor?: true
+    lastSent?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type ChannelsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Channels to aggregate.
+     */
+    where?: ChannelsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Channels to fetch.
+     */
+    orderBy?: ChannelsOrderByWithRelationInput | ChannelsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ChannelsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Channels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Channels.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Channels
+    **/
+    _count?: true | ChannelsCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ChannelsMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ChannelsMaxAggregateInputType
+  }
+
+  export type GetChannelsAggregateType<T extends ChannelsAggregateArgs> = {
+        [P in keyof T & keyof AggregateChannels]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateChannels[P]>
+      : GetScalarType<T[P], AggregateChannels[P]>
+  }
+
+
+
+
+  export type ChannelsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ChannelsWhereInput
+    orderBy?: ChannelsOrderByWithAggregationInput | ChannelsOrderByWithAggregationInput[]
+    by: ChannelsScalarFieldEnum[] | ChannelsScalarFieldEnum
+    having?: ChannelsScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ChannelsCountAggregateInputType | true
+    _min?: ChannelsMinAggregateInputType
+    _max?: ChannelsMaxAggregateInputType
+  }
+
+  export type ChannelsGroupByOutputType = {
+    id: string
+    channelName: string
+    channelDetails: string
+    level: $Enums.eventlevel
+    website_id: string
+    monitor: boolean
+    lastSent: Date | null
+    createdAt: Date
+    _count: ChannelsCountAggregateOutputType | null
+    _min: ChannelsMinAggregateOutputType | null
+    _max: ChannelsMaxAggregateOutputType | null
+  }
+
+  type GetChannelsGroupByPayload<T extends ChannelsGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ChannelsGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ChannelsGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ChannelsGroupByOutputType[P]>
+            : GetScalarType<T[P], ChannelsGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ChannelsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    channelName?: boolean
+    channelDetails?: boolean
+    level?: boolean
+    website_id?: boolean
+    monitor?: boolean
+    lastSent?: boolean
+    createdAt?: boolean
+    website?: boolean | WebsiteDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["channels"]>
+
+  export type ChannelsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    channelName?: boolean
+    channelDetails?: boolean
+    level?: boolean
+    website_id?: boolean
+    monitor?: boolean
+    lastSent?: boolean
+    createdAt?: boolean
+    website?: boolean | WebsiteDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["channels"]>
+
+  export type ChannelsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    channelName?: boolean
+    channelDetails?: boolean
+    level?: boolean
+    website_id?: boolean
+    monitor?: boolean
+    lastSent?: boolean
+    createdAt?: boolean
+    website?: boolean | WebsiteDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["channels"]>
+
+  export type ChannelsSelectScalar = {
+    id?: boolean
+    channelName?: boolean
+    channelDetails?: boolean
+    level?: boolean
+    website_id?: boolean
+    monitor?: boolean
+    lastSent?: boolean
+    createdAt?: boolean
+  }
+
+  export type ChannelsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "channelName" | "channelDetails" | "level" | "website_id" | "monitor" | "lastSent" | "createdAt", ExtArgs["result"]["channels"]>
+  export type ChannelsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    website?: boolean | WebsiteDefaultArgs<ExtArgs>
+  }
+  export type ChannelsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    website?: boolean | WebsiteDefaultArgs<ExtArgs>
+  }
+  export type ChannelsIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    website?: boolean | WebsiteDefaultArgs<ExtArgs>
+  }
+
+  export type $ChannelsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Channels"
+    objects: {
+      website: Prisma.$WebsitePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      channelName: string
+      channelDetails: string
+      level: $Enums.eventlevel
+      website_id: string
+      monitor: boolean
+      lastSent: Date | null
+      createdAt: Date
+    }, ExtArgs["result"]["channels"]>
+    composites: {}
+  }
+
+  type ChannelsGetPayload<S extends boolean | null | undefined | ChannelsDefaultArgs> = $Result.GetResult<Prisma.$ChannelsPayload, S>
+
+  type ChannelsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ChannelsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ChannelsCountAggregateInputType | true
+    }
+
+  export interface ChannelsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Channels'], meta: { name: 'Channels' } }
+    /**
+     * Find zero or one Channels that matches the filter.
+     * @param {ChannelsFindUniqueArgs} args - Arguments to find a Channels
+     * @example
+     * // Get one Channels
+     * const channels = await prisma.channels.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ChannelsFindUniqueArgs>(args: SelectSubset<T, ChannelsFindUniqueArgs<ExtArgs>>): Prisma__ChannelsClient<$Result.GetResult<Prisma.$ChannelsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Channels that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ChannelsFindUniqueOrThrowArgs} args - Arguments to find a Channels
+     * @example
+     * // Get one Channels
+     * const channels = await prisma.channels.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ChannelsFindUniqueOrThrowArgs>(args: SelectSubset<T, ChannelsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ChannelsClient<$Result.GetResult<Prisma.$ChannelsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Channels that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChannelsFindFirstArgs} args - Arguments to find a Channels
+     * @example
+     * // Get one Channels
+     * const channels = await prisma.channels.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ChannelsFindFirstArgs>(args?: SelectSubset<T, ChannelsFindFirstArgs<ExtArgs>>): Prisma__ChannelsClient<$Result.GetResult<Prisma.$ChannelsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Channels that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChannelsFindFirstOrThrowArgs} args - Arguments to find a Channels
+     * @example
+     * // Get one Channels
+     * const channels = await prisma.channels.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ChannelsFindFirstOrThrowArgs>(args?: SelectSubset<T, ChannelsFindFirstOrThrowArgs<ExtArgs>>): Prisma__ChannelsClient<$Result.GetResult<Prisma.$ChannelsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Channels that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChannelsFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Channels
+     * const channels = await prisma.channels.findMany()
+     * 
+     * // Get first 10 Channels
+     * const channels = await prisma.channels.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const channelsWithIdOnly = await prisma.channels.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ChannelsFindManyArgs>(args?: SelectSubset<T, ChannelsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChannelsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Channels.
+     * @param {ChannelsCreateArgs} args - Arguments to create a Channels.
+     * @example
+     * // Create one Channels
+     * const Channels = await prisma.channels.create({
+     *   data: {
+     *     // ... data to create a Channels
+     *   }
+     * })
+     * 
+     */
+    create<T extends ChannelsCreateArgs>(args: SelectSubset<T, ChannelsCreateArgs<ExtArgs>>): Prisma__ChannelsClient<$Result.GetResult<Prisma.$ChannelsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Channels.
+     * @param {ChannelsCreateManyArgs} args - Arguments to create many Channels.
+     * @example
+     * // Create many Channels
+     * const channels = await prisma.channels.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ChannelsCreateManyArgs>(args?: SelectSubset<T, ChannelsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Channels and returns the data saved in the database.
+     * @param {ChannelsCreateManyAndReturnArgs} args - Arguments to create many Channels.
+     * @example
+     * // Create many Channels
+     * const channels = await prisma.channels.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Channels and only return the `id`
+     * const channelsWithIdOnly = await prisma.channels.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ChannelsCreateManyAndReturnArgs>(args?: SelectSubset<T, ChannelsCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChannelsPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Channels.
+     * @param {ChannelsDeleteArgs} args - Arguments to delete one Channels.
+     * @example
+     * // Delete one Channels
+     * const Channels = await prisma.channels.delete({
+     *   where: {
+     *     // ... filter to delete one Channels
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ChannelsDeleteArgs>(args: SelectSubset<T, ChannelsDeleteArgs<ExtArgs>>): Prisma__ChannelsClient<$Result.GetResult<Prisma.$ChannelsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Channels.
+     * @param {ChannelsUpdateArgs} args - Arguments to update one Channels.
+     * @example
+     * // Update one Channels
+     * const channels = await prisma.channels.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ChannelsUpdateArgs>(args: SelectSubset<T, ChannelsUpdateArgs<ExtArgs>>): Prisma__ChannelsClient<$Result.GetResult<Prisma.$ChannelsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Channels.
+     * @param {ChannelsDeleteManyArgs} args - Arguments to filter Channels to delete.
+     * @example
+     * // Delete a few Channels
+     * const { count } = await prisma.channels.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ChannelsDeleteManyArgs>(args?: SelectSubset<T, ChannelsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Channels.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChannelsUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Channels
+     * const channels = await prisma.channels.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ChannelsUpdateManyArgs>(args: SelectSubset<T, ChannelsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Channels and returns the data updated in the database.
+     * @param {ChannelsUpdateManyAndReturnArgs} args - Arguments to update many Channels.
+     * @example
+     * // Update many Channels
+     * const channels = await prisma.channels.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Channels and only return the `id`
+     * const channelsWithIdOnly = await prisma.channels.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ChannelsUpdateManyAndReturnArgs>(args: SelectSubset<T, ChannelsUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChannelsPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Channels.
+     * @param {ChannelsUpsertArgs} args - Arguments to update or create a Channels.
+     * @example
+     * // Update or create a Channels
+     * const channels = await prisma.channels.upsert({
+     *   create: {
+     *     // ... data to create a Channels
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Channels we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ChannelsUpsertArgs>(args: SelectSubset<T, ChannelsUpsertArgs<ExtArgs>>): Prisma__ChannelsClient<$Result.GetResult<Prisma.$ChannelsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Channels.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChannelsCountArgs} args - Arguments to filter Channels to count.
+     * @example
+     * // Count the number of Channels
+     * const count = await prisma.channels.count({
+     *   where: {
+     *     // ... the filter for the Channels we want to count
+     *   }
+     * })
+    **/
+    count<T extends ChannelsCountArgs>(
+      args?: Subset<T, ChannelsCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ChannelsCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Channels.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChannelsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ChannelsAggregateArgs>(args: Subset<T, ChannelsAggregateArgs>): Prisma.PrismaPromise<GetChannelsAggregateType<T>>
+
+    /**
+     * Group by Channels.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChannelsGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ChannelsGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ChannelsGroupByArgs['orderBy'] }
+        : { orderBy?: ChannelsGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ChannelsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetChannelsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Channels model
+   */
+  readonly fields: ChannelsFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Channels.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ChannelsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    website<T extends WebsiteDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WebsiteDefaultArgs<ExtArgs>>): Prisma__WebsiteClient<$Result.GetResult<Prisma.$WebsitePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Channels model
+   */
+  interface ChannelsFieldRefs {
+    readonly id: FieldRef<"Channels", 'String'>
+    readonly channelName: FieldRef<"Channels", 'String'>
+    readonly channelDetails: FieldRef<"Channels", 'String'>
+    readonly level: FieldRef<"Channels", 'eventlevel'>
+    readonly website_id: FieldRef<"Channels", 'String'>
+    readonly monitor: FieldRef<"Channels", 'Boolean'>
+    readonly lastSent: FieldRef<"Channels", 'DateTime'>
+    readonly createdAt: FieldRef<"Channels", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Channels findUnique
+   */
+  export type ChannelsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Channels
+     */
+    select?: ChannelsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Channels
+     */
+    omit?: ChannelsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChannelsInclude<ExtArgs> | null
+    /**
+     * Filter, which Channels to fetch.
+     */
+    where: ChannelsWhereUniqueInput
+  }
+
+  /**
+   * Channels findUniqueOrThrow
+   */
+  export type ChannelsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Channels
+     */
+    select?: ChannelsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Channels
+     */
+    omit?: ChannelsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChannelsInclude<ExtArgs> | null
+    /**
+     * Filter, which Channels to fetch.
+     */
+    where: ChannelsWhereUniqueInput
+  }
+
+  /**
+   * Channels findFirst
+   */
+  export type ChannelsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Channels
+     */
+    select?: ChannelsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Channels
+     */
+    omit?: ChannelsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChannelsInclude<ExtArgs> | null
+    /**
+     * Filter, which Channels to fetch.
+     */
+    where?: ChannelsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Channels to fetch.
+     */
+    orderBy?: ChannelsOrderByWithRelationInput | ChannelsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Channels.
+     */
+    cursor?: ChannelsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Channels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Channels.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Channels.
+     */
+    distinct?: ChannelsScalarFieldEnum | ChannelsScalarFieldEnum[]
+  }
+
+  /**
+   * Channels findFirstOrThrow
+   */
+  export type ChannelsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Channels
+     */
+    select?: ChannelsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Channels
+     */
+    omit?: ChannelsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChannelsInclude<ExtArgs> | null
+    /**
+     * Filter, which Channels to fetch.
+     */
+    where?: ChannelsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Channels to fetch.
+     */
+    orderBy?: ChannelsOrderByWithRelationInput | ChannelsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Channels.
+     */
+    cursor?: ChannelsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Channels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Channels.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Channels.
+     */
+    distinct?: ChannelsScalarFieldEnum | ChannelsScalarFieldEnum[]
+  }
+
+  /**
+   * Channels findMany
+   */
+  export type ChannelsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Channels
+     */
+    select?: ChannelsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Channels
+     */
+    omit?: ChannelsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChannelsInclude<ExtArgs> | null
+    /**
+     * Filter, which Channels to fetch.
+     */
+    where?: ChannelsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Channels to fetch.
+     */
+    orderBy?: ChannelsOrderByWithRelationInput | ChannelsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Channels.
+     */
+    cursor?: ChannelsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Channels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Channels.
+     */
+    skip?: number
+    distinct?: ChannelsScalarFieldEnum | ChannelsScalarFieldEnum[]
+  }
+
+  /**
+   * Channels create
+   */
+  export type ChannelsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Channels
+     */
+    select?: ChannelsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Channels
+     */
+    omit?: ChannelsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChannelsInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Channels.
+     */
+    data: XOR<ChannelsCreateInput, ChannelsUncheckedCreateInput>
+  }
+
+  /**
+   * Channels createMany
+   */
+  export type ChannelsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Channels.
+     */
+    data: ChannelsCreateManyInput | ChannelsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Channels createManyAndReturn
+   */
+  export type ChannelsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Channels
+     */
+    select?: ChannelsSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Channels
+     */
+    omit?: ChannelsOmit<ExtArgs> | null
+    /**
+     * The data used to create many Channels.
+     */
+    data: ChannelsCreateManyInput | ChannelsCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChannelsIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Channels update
+   */
+  export type ChannelsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Channels
+     */
+    select?: ChannelsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Channels
+     */
+    omit?: ChannelsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChannelsInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Channels.
+     */
+    data: XOR<ChannelsUpdateInput, ChannelsUncheckedUpdateInput>
+    /**
+     * Choose, which Channels to update.
+     */
+    where: ChannelsWhereUniqueInput
+  }
+
+  /**
+   * Channels updateMany
+   */
+  export type ChannelsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Channels.
+     */
+    data: XOR<ChannelsUpdateManyMutationInput, ChannelsUncheckedUpdateManyInput>
+    /**
+     * Filter which Channels to update
+     */
+    where?: ChannelsWhereInput
+    /**
+     * Limit how many Channels to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Channels updateManyAndReturn
+   */
+  export type ChannelsUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Channels
+     */
+    select?: ChannelsSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Channels
+     */
+    omit?: ChannelsOmit<ExtArgs> | null
+    /**
+     * The data used to update Channels.
+     */
+    data: XOR<ChannelsUpdateManyMutationInput, ChannelsUncheckedUpdateManyInput>
+    /**
+     * Filter which Channels to update
+     */
+    where?: ChannelsWhereInput
+    /**
+     * Limit how many Channels to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChannelsIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Channels upsert
+   */
+  export type ChannelsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Channels
+     */
+    select?: ChannelsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Channels
+     */
+    omit?: ChannelsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChannelsInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Channels to update in case it exists.
+     */
+    where: ChannelsWhereUniqueInput
+    /**
+     * In case the Channels found by the `where` argument doesn't exist, create a new Channels with this data.
+     */
+    create: XOR<ChannelsCreateInput, ChannelsUncheckedCreateInput>
+    /**
+     * In case the Channels was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ChannelsUpdateInput, ChannelsUncheckedUpdateInput>
+  }
+
+  /**
+   * Channels delete
+   */
+  export type ChannelsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Channels
+     */
+    select?: ChannelsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Channels
+     */
+    omit?: ChannelsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChannelsInclude<ExtArgs> | null
+    /**
+     * Filter which Channels to delete.
+     */
+    where: ChannelsWhereUniqueInput
+  }
+
+  /**
+   * Channels deleteMany
+   */
+  export type ChannelsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Channels to delete
+     */
+    where?: ChannelsWhereInput
+    /**
+     * Limit how many Channels to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Channels without action
+   */
+  export type ChannelsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Channels
+     */
+    select?: ChannelsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Channels
+     */
+    omit?: ChannelsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChannelsInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -6931,6 +8156,20 @@ export namespace Prisma {
   };
 
   export type WebsiteTickScalarFieldEnum = (typeof WebsiteTickScalarFieldEnum)[keyof typeof WebsiteTickScalarFieldEnum]
+
+
+  export const ChannelsScalarFieldEnum: {
+    id: 'id',
+    channelName: 'channelName',
+    channelDetails: 'channelDetails',
+    level: 'level',
+    website_id: 'website_id',
+    monitor: 'monitor',
+    lastSent: 'lastSent',
+    createdAt: 'createdAt'
+  };
+
+  export type ChannelsScalarFieldEnum = (typeof ChannelsScalarFieldEnum)[keyof typeof ChannelsScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -7119,7 +8358,8 @@ export namespace Prisma {
     user_id?: StringNullableFilter<"Website"> | string | null
     timeAdded?: DateTimeFilter<"Website"> | Date | string
     ticks?: WebsiteTickListRelationFilter
-    event_id?: WebEventsListRelationFilter
+    events?: WebEventsListRelationFilter
+    channels?: ChannelsListRelationFilter
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }
 
@@ -7130,7 +8370,8 @@ export namespace Prisma {
     user_id?: SortOrderInput | SortOrder
     timeAdded?: SortOrder
     ticks?: WebsiteTickOrderByRelationAggregateInput
-    event_id?: WebEventsOrderByRelationAggregateInput
+    events?: WebEventsOrderByRelationAggregateInput
+    channels?: ChannelsOrderByRelationAggregateInput
     user?: UserOrderByWithRelationInput
   }
 
@@ -7144,7 +8385,8 @@ export namespace Prisma {
     user_id?: StringNullableFilter<"Website"> | string | null
     timeAdded?: DateTimeFilter<"Website"> | Date | string
     ticks?: WebsiteTickListRelationFilter
-    event_id?: WebEventsListRelationFilter
+    events?: WebEventsListRelationFilter
+    channels?: ChannelsListRelationFilter
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }, "id">
 
@@ -7349,6 +8591,76 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"WebsiteTick"> | Date | string
   }
 
+  export type ChannelsWhereInput = {
+    AND?: ChannelsWhereInput | ChannelsWhereInput[]
+    OR?: ChannelsWhereInput[]
+    NOT?: ChannelsWhereInput | ChannelsWhereInput[]
+    id?: StringFilter<"Channels"> | string
+    channelName?: StringFilter<"Channels"> | string
+    channelDetails?: StringFilter<"Channels"> | string
+    level?: EnumeventlevelFilter<"Channels"> | $Enums.eventlevel
+    website_id?: StringFilter<"Channels"> | string
+    monitor?: BoolFilter<"Channels"> | boolean
+    lastSent?: DateTimeNullableFilter<"Channels"> | Date | string | null
+    createdAt?: DateTimeFilter<"Channels"> | Date | string
+    website?: XOR<WebsiteScalarRelationFilter, WebsiteWhereInput>
+  }
+
+  export type ChannelsOrderByWithRelationInput = {
+    id?: SortOrder
+    channelName?: SortOrder
+    channelDetails?: SortOrder
+    level?: SortOrder
+    website_id?: SortOrder
+    monitor?: SortOrder
+    lastSent?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    website?: WebsiteOrderByWithRelationInput
+  }
+
+  export type ChannelsWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ChannelsWhereInput | ChannelsWhereInput[]
+    OR?: ChannelsWhereInput[]
+    NOT?: ChannelsWhereInput | ChannelsWhereInput[]
+    channelName?: StringFilter<"Channels"> | string
+    channelDetails?: StringFilter<"Channels"> | string
+    level?: EnumeventlevelFilter<"Channels"> | $Enums.eventlevel
+    website_id?: StringFilter<"Channels"> | string
+    monitor?: BoolFilter<"Channels"> | boolean
+    lastSent?: DateTimeNullableFilter<"Channels"> | Date | string | null
+    createdAt?: DateTimeFilter<"Channels"> | Date | string
+    website?: XOR<WebsiteScalarRelationFilter, WebsiteWhereInput>
+  }, "id">
+
+  export type ChannelsOrderByWithAggregationInput = {
+    id?: SortOrder
+    channelName?: SortOrder
+    channelDetails?: SortOrder
+    level?: SortOrder
+    website_id?: SortOrder
+    monitor?: SortOrder
+    lastSent?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: ChannelsCountOrderByAggregateInput
+    _max?: ChannelsMaxOrderByAggregateInput
+    _min?: ChannelsMinOrderByAggregateInput
+  }
+
+  export type ChannelsScalarWhereWithAggregatesInput = {
+    AND?: ChannelsScalarWhereWithAggregatesInput | ChannelsScalarWhereWithAggregatesInput[]
+    OR?: ChannelsScalarWhereWithAggregatesInput[]
+    NOT?: ChannelsScalarWhereWithAggregatesInput | ChannelsScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Channels"> | string
+    channelName?: StringWithAggregatesFilter<"Channels"> | string
+    channelDetails?: StringWithAggregatesFilter<"Channels"> | string
+    level?: EnumeventlevelWithAggregatesFilter<"Channels"> | $Enums.eventlevel
+    website_id?: StringWithAggregatesFilter<"Channels"> | string
+    monitor?: BoolWithAggregatesFilter<"Channels"> | boolean
+    lastSent?: DateTimeNullableWithAggregatesFilter<"Channels"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Channels"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     name: string
@@ -7412,7 +8724,8 @@ export namespace Prisma {
     url: string
     timeAdded?: Date | string
     ticks?: WebsiteTickCreateNestedManyWithoutWebsiteInput
-    event_id?: WebEventsCreateNestedManyWithoutWebsiteInput
+    events?: WebEventsCreateNestedManyWithoutWebsiteInput
+    channels?: ChannelsCreateNestedManyWithoutWebsiteInput
     user?: UserCreateNestedOneWithoutWebsitesInput
   }
 
@@ -7423,7 +8736,8 @@ export namespace Prisma {
     user_id?: string | null
     timeAdded?: Date | string
     ticks?: WebsiteTickUncheckedCreateNestedManyWithoutWebsiteInput
-    event_id?: WebEventsUncheckedCreateNestedManyWithoutWebsiteInput
+    events?: WebEventsUncheckedCreateNestedManyWithoutWebsiteInput
+    channels?: ChannelsUncheckedCreateNestedManyWithoutWebsiteInput
   }
 
   export type WebsiteUpdateInput = {
@@ -7432,7 +8746,8 @@ export namespace Prisma {
     url?: StringFieldUpdateOperationsInput | string
     timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
     ticks?: WebsiteTickUpdateManyWithoutWebsiteNestedInput
-    event_id?: WebEventsUpdateManyWithoutWebsiteNestedInput
+    events?: WebEventsUpdateManyWithoutWebsiteNestedInput
+    channels?: ChannelsUpdateManyWithoutWebsiteNestedInput
     user?: UserUpdateOneWithoutWebsitesNestedInput
   }
 
@@ -7443,7 +8758,8 @@ export namespace Prisma {
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
     ticks?: WebsiteTickUncheckedUpdateManyWithoutWebsiteNestedInput
-    event_id?: WebEventsUncheckedUpdateManyWithoutWebsiteNestedInput
+    events?: WebEventsUncheckedUpdateManyWithoutWebsiteNestedInput
+    channels?: ChannelsUncheckedUpdateManyWithoutWebsiteNestedInput
   }
 
   export type WebsiteCreateManyInput = {
@@ -7474,9 +8790,9 @@ export namespace Prisma {
     name: string
     level: $Enums.eventlevel
     resolved?: boolean | null
-    resolvedTime?: Date | string
+    resolvedTime: Date | string
     timeAdded?: Date | string
-    website: WebsiteCreateNestedOneWithoutEvent_idInput
+    website: WebsiteCreateNestedOneWithoutEventsInput
   }
 
   export type WebEventsUncheckedCreateInput = {
@@ -7485,7 +8801,7 @@ export namespace Prisma {
     level: $Enums.eventlevel
     resolved?: boolean | null
     website_id: string
-    resolvedTime?: Date | string
+    resolvedTime: Date | string
     timeAdded?: Date | string
   }
 
@@ -7496,7 +8812,7 @@ export namespace Prisma {
     resolved?: NullableBoolFieldUpdateOperationsInput | boolean | null
     resolvedTime?: DateTimeFieldUpdateOperationsInput | Date | string
     timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
-    website?: WebsiteUpdateOneRequiredWithoutEvent_idNestedInput
+    website?: WebsiteUpdateOneRequiredWithoutEventsNestedInput
   }
 
   export type WebEventsUncheckedUpdateInput = {
@@ -7515,7 +8831,7 @@ export namespace Prisma {
     level: $Enums.eventlevel
     resolved?: boolean | null
     website_id: string
-    resolvedTime?: Date | string
+    resolvedTime: Date | string
     timeAdded?: Date | string
   }
 
@@ -7644,6 +8960,82 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ChannelsCreateInput = {
+    id?: string
+    channelName: string
+    channelDetails: string
+    level: $Enums.eventlevel
+    monitor?: boolean
+    lastSent?: Date | string | null
+    createdAt?: Date | string
+    website: WebsiteCreateNestedOneWithoutChannelsInput
+  }
+
+  export type ChannelsUncheckedCreateInput = {
+    id?: string
+    channelName: string
+    channelDetails: string
+    level: $Enums.eventlevel
+    website_id: string
+    monitor?: boolean
+    lastSent?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type ChannelsUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    channelName?: StringFieldUpdateOperationsInput | string
+    channelDetails?: StringFieldUpdateOperationsInput | string
+    level?: EnumeventlevelFieldUpdateOperationsInput | $Enums.eventlevel
+    monitor?: BoolFieldUpdateOperationsInput | boolean
+    lastSent?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    website?: WebsiteUpdateOneRequiredWithoutChannelsNestedInput
+  }
+
+  export type ChannelsUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    channelName?: StringFieldUpdateOperationsInput | string
+    channelDetails?: StringFieldUpdateOperationsInput | string
+    level?: EnumeventlevelFieldUpdateOperationsInput | $Enums.eventlevel
+    website_id?: StringFieldUpdateOperationsInput | string
+    monitor?: BoolFieldUpdateOperationsInput | boolean
+    lastSent?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ChannelsCreateManyInput = {
+    id?: string
+    channelName: string
+    channelDetails: string
+    level: $Enums.eventlevel
+    website_id: string
+    monitor?: boolean
+    lastSent?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type ChannelsUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    channelName?: StringFieldUpdateOperationsInput | string
+    channelDetails?: StringFieldUpdateOperationsInput | string
+    level?: EnumeventlevelFieldUpdateOperationsInput | $Enums.eventlevel
+    monitor?: BoolFieldUpdateOperationsInput | boolean
+    lastSent?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ChannelsUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    channelName?: StringFieldUpdateOperationsInput | string
+    channelDetails?: StringFieldUpdateOperationsInput | string
+    level?: EnumeventlevelFieldUpdateOperationsInput | $Enums.eventlevel
+    website_id?: StringFieldUpdateOperationsInput | string
+    monitor?: BoolFieldUpdateOperationsInput | boolean
+    lastSent?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -7756,6 +9148,12 @@ export namespace Prisma {
     none?: WebEventsWhereInput
   }
 
+  export type ChannelsListRelationFilter = {
+    every?: ChannelsWhereInput
+    some?: ChannelsWhereInput
+    none?: ChannelsWhereInput
+  }
+
   export type UserNullableScalarRelationFilter = {
     is?: UserWhereInput | null
     isNot?: UserWhereInput | null
@@ -7771,6 +9169,10 @@ export namespace Prisma {
   }
 
   export type WebEventsOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ChannelsOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -8002,6 +9404,77 @@ export namespace Prisma {
     _max?: NestedEnumwebstatusFilter<$PrismaModel>
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type ChannelsCountOrderByAggregateInput = {
+    id?: SortOrder
+    channelName?: SortOrder
+    channelDetails?: SortOrder
+    level?: SortOrder
+    website_id?: SortOrder
+    monitor?: SortOrder
+    lastSent?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ChannelsMaxOrderByAggregateInput = {
+    id?: SortOrder
+    channelName?: SortOrder
+    channelDetails?: SortOrder
+    level?: SortOrder
+    website_id?: SortOrder
+    monitor?: SortOrder
+    lastSent?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ChannelsMinOrderByAggregateInput = {
+    id?: SortOrder
+    channelName?: SortOrder
+    channelDetails?: SortOrder
+    level?: SortOrder
+    website_id?: SortOrder
+    monitor?: SortOrder
+    lastSent?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
   export type WebsiteCreateNestedManyWithoutUserInput = {
     create?: XOR<WebsiteCreateWithoutUserInput, WebsiteUncheckedCreateWithoutUserInput> | WebsiteCreateWithoutUserInput[] | WebsiteUncheckedCreateWithoutUserInput[]
     connectOrCreate?: WebsiteCreateOrConnectWithoutUserInput | WebsiteCreateOrConnectWithoutUserInput[]
@@ -8104,6 +9577,13 @@ export namespace Prisma {
     connect?: WebEventsWhereUniqueInput | WebEventsWhereUniqueInput[]
   }
 
+  export type ChannelsCreateNestedManyWithoutWebsiteInput = {
+    create?: XOR<ChannelsCreateWithoutWebsiteInput, ChannelsUncheckedCreateWithoutWebsiteInput> | ChannelsCreateWithoutWebsiteInput[] | ChannelsUncheckedCreateWithoutWebsiteInput[]
+    connectOrCreate?: ChannelsCreateOrConnectWithoutWebsiteInput | ChannelsCreateOrConnectWithoutWebsiteInput[]
+    createMany?: ChannelsCreateManyWebsiteInputEnvelope
+    connect?: ChannelsWhereUniqueInput | ChannelsWhereUniqueInput[]
+  }
+
   export type UserCreateNestedOneWithoutWebsitesInput = {
     create?: XOR<UserCreateWithoutWebsitesInput, UserUncheckedCreateWithoutWebsitesInput>
     connectOrCreate?: UserCreateOrConnectWithoutWebsitesInput
@@ -8122,6 +9602,13 @@ export namespace Prisma {
     connectOrCreate?: WebEventsCreateOrConnectWithoutWebsiteInput | WebEventsCreateOrConnectWithoutWebsiteInput[]
     createMany?: WebEventsCreateManyWebsiteInputEnvelope
     connect?: WebEventsWhereUniqueInput | WebEventsWhereUniqueInput[]
+  }
+
+  export type ChannelsUncheckedCreateNestedManyWithoutWebsiteInput = {
+    create?: XOR<ChannelsCreateWithoutWebsiteInput, ChannelsUncheckedCreateWithoutWebsiteInput> | ChannelsCreateWithoutWebsiteInput[] | ChannelsUncheckedCreateWithoutWebsiteInput[]
+    connectOrCreate?: ChannelsCreateOrConnectWithoutWebsiteInput | ChannelsCreateOrConnectWithoutWebsiteInput[]
+    createMany?: ChannelsCreateManyWebsiteInputEnvelope
+    connect?: ChannelsWhereUniqueInput | ChannelsWhereUniqueInput[]
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
@@ -8154,6 +9641,20 @@ export namespace Prisma {
     update?: WebEventsUpdateWithWhereUniqueWithoutWebsiteInput | WebEventsUpdateWithWhereUniqueWithoutWebsiteInput[]
     updateMany?: WebEventsUpdateManyWithWhereWithoutWebsiteInput | WebEventsUpdateManyWithWhereWithoutWebsiteInput[]
     deleteMany?: WebEventsScalarWhereInput | WebEventsScalarWhereInput[]
+  }
+
+  export type ChannelsUpdateManyWithoutWebsiteNestedInput = {
+    create?: XOR<ChannelsCreateWithoutWebsiteInput, ChannelsUncheckedCreateWithoutWebsiteInput> | ChannelsCreateWithoutWebsiteInput[] | ChannelsUncheckedCreateWithoutWebsiteInput[]
+    connectOrCreate?: ChannelsCreateOrConnectWithoutWebsiteInput | ChannelsCreateOrConnectWithoutWebsiteInput[]
+    upsert?: ChannelsUpsertWithWhereUniqueWithoutWebsiteInput | ChannelsUpsertWithWhereUniqueWithoutWebsiteInput[]
+    createMany?: ChannelsCreateManyWebsiteInputEnvelope
+    set?: ChannelsWhereUniqueInput | ChannelsWhereUniqueInput[]
+    disconnect?: ChannelsWhereUniqueInput | ChannelsWhereUniqueInput[]
+    delete?: ChannelsWhereUniqueInput | ChannelsWhereUniqueInput[]
+    connect?: ChannelsWhereUniqueInput | ChannelsWhereUniqueInput[]
+    update?: ChannelsUpdateWithWhereUniqueWithoutWebsiteInput | ChannelsUpdateWithWhereUniqueWithoutWebsiteInput[]
+    updateMany?: ChannelsUpdateManyWithWhereWithoutWebsiteInput | ChannelsUpdateManyWithWhereWithoutWebsiteInput[]
+    deleteMany?: ChannelsScalarWhereInput | ChannelsScalarWhereInput[]
   }
 
   export type UserUpdateOneWithoutWebsitesNestedInput = {
@@ -8198,9 +9699,23 @@ export namespace Prisma {
     deleteMany?: WebEventsScalarWhereInput | WebEventsScalarWhereInput[]
   }
 
-  export type WebsiteCreateNestedOneWithoutEvent_idInput = {
-    create?: XOR<WebsiteCreateWithoutEvent_idInput, WebsiteUncheckedCreateWithoutEvent_idInput>
-    connectOrCreate?: WebsiteCreateOrConnectWithoutEvent_idInput
+  export type ChannelsUncheckedUpdateManyWithoutWebsiteNestedInput = {
+    create?: XOR<ChannelsCreateWithoutWebsiteInput, ChannelsUncheckedCreateWithoutWebsiteInput> | ChannelsCreateWithoutWebsiteInput[] | ChannelsUncheckedCreateWithoutWebsiteInput[]
+    connectOrCreate?: ChannelsCreateOrConnectWithoutWebsiteInput | ChannelsCreateOrConnectWithoutWebsiteInput[]
+    upsert?: ChannelsUpsertWithWhereUniqueWithoutWebsiteInput | ChannelsUpsertWithWhereUniqueWithoutWebsiteInput[]
+    createMany?: ChannelsCreateManyWebsiteInputEnvelope
+    set?: ChannelsWhereUniqueInput | ChannelsWhereUniqueInput[]
+    disconnect?: ChannelsWhereUniqueInput | ChannelsWhereUniqueInput[]
+    delete?: ChannelsWhereUniqueInput | ChannelsWhereUniqueInput[]
+    connect?: ChannelsWhereUniqueInput | ChannelsWhereUniqueInput[]
+    update?: ChannelsUpdateWithWhereUniqueWithoutWebsiteInput | ChannelsUpdateWithWhereUniqueWithoutWebsiteInput[]
+    updateMany?: ChannelsUpdateManyWithWhereWithoutWebsiteInput | ChannelsUpdateManyWithWhereWithoutWebsiteInput[]
+    deleteMany?: ChannelsScalarWhereInput | ChannelsScalarWhereInput[]
+  }
+
+  export type WebsiteCreateNestedOneWithoutEventsInput = {
+    create?: XOR<WebsiteCreateWithoutEventsInput, WebsiteUncheckedCreateWithoutEventsInput>
+    connectOrCreate?: WebsiteCreateOrConnectWithoutEventsInput
     connect?: WebsiteWhereUniqueInput
   }
 
@@ -8212,12 +9727,12 @@ export namespace Prisma {
     set?: boolean | null
   }
 
-  export type WebsiteUpdateOneRequiredWithoutEvent_idNestedInput = {
-    create?: XOR<WebsiteCreateWithoutEvent_idInput, WebsiteUncheckedCreateWithoutEvent_idInput>
-    connectOrCreate?: WebsiteCreateOrConnectWithoutEvent_idInput
-    upsert?: WebsiteUpsertWithoutEvent_idInput
+  export type WebsiteUpdateOneRequiredWithoutEventsNestedInput = {
+    create?: XOR<WebsiteCreateWithoutEventsInput, WebsiteUncheckedCreateWithoutEventsInput>
+    connectOrCreate?: WebsiteCreateOrConnectWithoutEventsInput
+    upsert?: WebsiteUpsertWithoutEventsInput
     connect?: WebsiteWhereUniqueInput
-    update?: XOR<XOR<WebsiteUpdateToOneWithWhereWithoutEvent_idInput, WebsiteUpdateWithoutEvent_idInput>, WebsiteUncheckedUpdateWithoutEvent_idInput>
+    update?: XOR<XOR<WebsiteUpdateToOneWithWhereWithoutEventsInput, WebsiteUpdateWithoutEventsInput>, WebsiteUncheckedUpdateWithoutEventsInput>
   }
 
   export type UserCreateNestedOneWithoutRegionInput = {
@@ -8316,6 +9831,28 @@ export namespace Prisma {
     upsert?: WebsiteUpsertWithoutTicksInput
     connect?: WebsiteWhereUniqueInput
     update?: XOR<XOR<WebsiteUpdateToOneWithWhereWithoutTicksInput, WebsiteUpdateWithoutTicksInput>, WebsiteUncheckedUpdateWithoutTicksInput>
+  }
+
+  export type WebsiteCreateNestedOneWithoutChannelsInput = {
+    create?: XOR<WebsiteCreateWithoutChannelsInput, WebsiteUncheckedCreateWithoutChannelsInput>
+    connectOrCreate?: WebsiteCreateOrConnectWithoutChannelsInput
+    connect?: WebsiteWhereUniqueInput
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
+  }
+
+  export type WebsiteUpdateOneRequiredWithoutChannelsNestedInput = {
+    create?: XOR<WebsiteCreateWithoutChannelsInput, WebsiteUncheckedCreateWithoutChannelsInput>
+    connectOrCreate?: WebsiteCreateOrConnectWithoutChannelsInput
+    upsert?: WebsiteUpsertWithoutChannelsInput
+    connect?: WebsiteWhereUniqueInput
+    update?: XOR<XOR<WebsiteUpdateToOneWithWhereWithoutChannelsInput, WebsiteUpdateWithoutChannelsInput>, WebsiteUncheckedUpdateWithoutChannelsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -8501,13 +10038,52 @@ export namespace Prisma {
     _max?: NestedEnumwebstatusFilter<$PrismaModel>
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
   export type WebsiteCreateWithoutUserInput = {
     id?: string
     name: string
     url: string
     timeAdded?: Date | string
     ticks?: WebsiteTickCreateNestedManyWithoutWebsiteInput
-    event_id?: WebEventsCreateNestedManyWithoutWebsiteInput
+    events?: WebEventsCreateNestedManyWithoutWebsiteInput
+    channels?: ChannelsCreateNestedManyWithoutWebsiteInput
   }
 
   export type WebsiteUncheckedCreateWithoutUserInput = {
@@ -8516,7 +10092,8 @@ export namespace Prisma {
     url: string
     timeAdded?: Date | string
     ticks?: WebsiteTickUncheckedCreateNestedManyWithoutWebsiteInput
-    event_id?: WebEventsUncheckedCreateNestedManyWithoutWebsiteInput
+    events?: WebEventsUncheckedCreateNestedManyWithoutWebsiteInput
+    channels?: ChannelsUncheckedCreateNestedManyWithoutWebsiteInput
   }
 
   export type WebsiteCreateOrConnectWithoutUserInput = {
@@ -8634,7 +10211,7 @@ export namespace Prisma {
     name: string
     level: $Enums.eventlevel
     resolved?: boolean | null
-    resolvedTime?: Date | string
+    resolvedTime: Date | string
     timeAdded?: Date | string
   }
 
@@ -8643,7 +10220,7 @@ export namespace Prisma {
     name: string
     level: $Enums.eventlevel
     resolved?: boolean | null
-    resolvedTime?: Date | string
+    resolvedTime: Date | string
     timeAdded?: Date | string
   }
 
@@ -8654,6 +10231,36 @@ export namespace Prisma {
 
   export type WebEventsCreateManyWebsiteInputEnvelope = {
     data: WebEventsCreateManyWebsiteInput | WebEventsCreateManyWebsiteInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ChannelsCreateWithoutWebsiteInput = {
+    id?: string
+    channelName: string
+    channelDetails: string
+    level: $Enums.eventlevel
+    monitor?: boolean
+    lastSent?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type ChannelsUncheckedCreateWithoutWebsiteInput = {
+    id?: string
+    channelName: string
+    channelDetails: string
+    level: $Enums.eventlevel
+    monitor?: boolean
+    lastSent?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type ChannelsCreateOrConnectWithoutWebsiteInput = {
+    where: ChannelsWhereUniqueInput
+    create: XOR<ChannelsCreateWithoutWebsiteInput, ChannelsUncheckedCreateWithoutWebsiteInput>
+  }
+
+  export type ChannelsCreateManyWebsiteInputEnvelope = {
+    data: ChannelsCreateManyWebsiteInput | ChannelsCreateManyWebsiteInput[]
     skipDuplicates?: boolean
   }
 
@@ -8735,6 +10342,36 @@ export namespace Prisma {
     timeAdded?: DateTimeFilter<"WebEvents"> | Date | string
   }
 
+  export type ChannelsUpsertWithWhereUniqueWithoutWebsiteInput = {
+    where: ChannelsWhereUniqueInput
+    update: XOR<ChannelsUpdateWithoutWebsiteInput, ChannelsUncheckedUpdateWithoutWebsiteInput>
+    create: XOR<ChannelsCreateWithoutWebsiteInput, ChannelsUncheckedCreateWithoutWebsiteInput>
+  }
+
+  export type ChannelsUpdateWithWhereUniqueWithoutWebsiteInput = {
+    where: ChannelsWhereUniqueInput
+    data: XOR<ChannelsUpdateWithoutWebsiteInput, ChannelsUncheckedUpdateWithoutWebsiteInput>
+  }
+
+  export type ChannelsUpdateManyWithWhereWithoutWebsiteInput = {
+    where: ChannelsScalarWhereInput
+    data: XOR<ChannelsUpdateManyMutationInput, ChannelsUncheckedUpdateManyWithoutWebsiteInput>
+  }
+
+  export type ChannelsScalarWhereInput = {
+    AND?: ChannelsScalarWhereInput | ChannelsScalarWhereInput[]
+    OR?: ChannelsScalarWhereInput[]
+    NOT?: ChannelsScalarWhereInput | ChannelsScalarWhereInput[]
+    id?: StringFilter<"Channels"> | string
+    channelName?: StringFilter<"Channels"> | string
+    channelDetails?: StringFilter<"Channels"> | string
+    level?: EnumeventlevelFilter<"Channels"> | $Enums.eventlevel
+    website_id?: StringFilter<"Channels"> | string
+    monitor?: BoolFilter<"Channels"> | boolean
+    lastSent?: DateTimeNullableFilter<"Channels"> | Date | string | null
+    createdAt?: DateTimeFilter<"Channels"> | Date | string
+  }
+
   export type UserUpsertWithoutWebsitesInput = {
     update: XOR<UserUpdateWithoutWebsitesInput, UserUncheckedUpdateWithoutWebsitesInput>
     create: XOR<UserCreateWithoutWebsitesInput, UserUncheckedCreateWithoutWebsitesInput>
@@ -8762,56 +10399,60 @@ export namespace Prisma {
     region?: RegionUncheckedUpdateManyWithoutUserNestedInput
   }
 
-  export type WebsiteCreateWithoutEvent_idInput = {
+  export type WebsiteCreateWithoutEventsInput = {
     id?: string
     name: string
     url: string
     timeAdded?: Date | string
     ticks?: WebsiteTickCreateNestedManyWithoutWebsiteInput
+    channels?: ChannelsCreateNestedManyWithoutWebsiteInput
     user?: UserCreateNestedOneWithoutWebsitesInput
   }
 
-  export type WebsiteUncheckedCreateWithoutEvent_idInput = {
+  export type WebsiteUncheckedCreateWithoutEventsInput = {
     id?: string
     name: string
     url: string
     user_id?: string | null
     timeAdded?: Date | string
     ticks?: WebsiteTickUncheckedCreateNestedManyWithoutWebsiteInput
+    channels?: ChannelsUncheckedCreateNestedManyWithoutWebsiteInput
   }
 
-  export type WebsiteCreateOrConnectWithoutEvent_idInput = {
+  export type WebsiteCreateOrConnectWithoutEventsInput = {
     where: WebsiteWhereUniqueInput
-    create: XOR<WebsiteCreateWithoutEvent_idInput, WebsiteUncheckedCreateWithoutEvent_idInput>
+    create: XOR<WebsiteCreateWithoutEventsInput, WebsiteUncheckedCreateWithoutEventsInput>
   }
 
-  export type WebsiteUpsertWithoutEvent_idInput = {
-    update: XOR<WebsiteUpdateWithoutEvent_idInput, WebsiteUncheckedUpdateWithoutEvent_idInput>
-    create: XOR<WebsiteCreateWithoutEvent_idInput, WebsiteUncheckedCreateWithoutEvent_idInput>
+  export type WebsiteUpsertWithoutEventsInput = {
+    update: XOR<WebsiteUpdateWithoutEventsInput, WebsiteUncheckedUpdateWithoutEventsInput>
+    create: XOR<WebsiteCreateWithoutEventsInput, WebsiteUncheckedCreateWithoutEventsInput>
     where?: WebsiteWhereInput
   }
 
-  export type WebsiteUpdateToOneWithWhereWithoutEvent_idInput = {
+  export type WebsiteUpdateToOneWithWhereWithoutEventsInput = {
     where?: WebsiteWhereInput
-    data: XOR<WebsiteUpdateWithoutEvent_idInput, WebsiteUncheckedUpdateWithoutEvent_idInput>
+    data: XOR<WebsiteUpdateWithoutEventsInput, WebsiteUncheckedUpdateWithoutEventsInput>
   }
 
-  export type WebsiteUpdateWithoutEvent_idInput = {
+  export type WebsiteUpdateWithoutEventsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
     ticks?: WebsiteTickUpdateManyWithoutWebsiteNestedInput
+    channels?: ChannelsUpdateManyWithoutWebsiteNestedInput
     user?: UserUpdateOneWithoutWebsitesNestedInput
   }
 
-  export type WebsiteUncheckedUpdateWithoutEvent_idInput = {
+  export type WebsiteUncheckedUpdateWithoutEventsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
     ticks?: WebsiteTickUncheckedUpdateManyWithoutWebsiteNestedInput
+    channels?: ChannelsUncheckedUpdateManyWithoutWebsiteNestedInput
   }
 
   export type UserCreateWithoutRegionInput = {
@@ -8926,7 +10567,8 @@ export namespace Prisma {
     name: string
     url: string
     timeAdded?: Date | string
-    event_id?: WebEventsCreateNestedManyWithoutWebsiteInput
+    events?: WebEventsCreateNestedManyWithoutWebsiteInput
+    channels?: ChannelsCreateNestedManyWithoutWebsiteInput
     user?: UserCreateNestedOneWithoutWebsitesInput
   }
 
@@ -8936,7 +10578,8 @@ export namespace Prisma {
     url: string
     user_id?: string | null
     timeAdded?: Date | string
-    event_id?: WebEventsUncheckedCreateNestedManyWithoutWebsiteInput
+    events?: WebEventsUncheckedCreateNestedManyWithoutWebsiteInput
+    channels?: ChannelsUncheckedCreateNestedManyWithoutWebsiteInput
   }
 
   export type WebsiteCreateOrConnectWithoutTicksInput = {
@@ -8983,7 +10626,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
-    event_id?: WebEventsUpdateManyWithoutWebsiteNestedInput
+    events?: WebEventsUpdateManyWithoutWebsiteNestedInput
+    channels?: ChannelsUpdateManyWithoutWebsiteNestedInput
     user?: UserUpdateOneWithoutWebsitesNestedInput
   }
 
@@ -8993,7 +10637,64 @@ export namespace Prisma {
     url?: StringFieldUpdateOperationsInput | string
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
-    event_id?: WebEventsUncheckedUpdateManyWithoutWebsiteNestedInput
+    events?: WebEventsUncheckedUpdateManyWithoutWebsiteNestedInput
+    channels?: ChannelsUncheckedUpdateManyWithoutWebsiteNestedInput
+  }
+
+  export type WebsiteCreateWithoutChannelsInput = {
+    id?: string
+    name: string
+    url: string
+    timeAdded?: Date | string
+    ticks?: WebsiteTickCreateNestedManyWithoutWebsiteInput
+    events?: WebEventsCreateNestedManyWithoutWebsiteInput
+    user?: UserCreateNestedOneWithoutWebsitesInput
+  }
+
+  export type WebsiteUncheckedCreateWithoutChannelsInput = {
+    id?: string
+    name: string
+    url: string
+    user_id?: string | null
+    timeAdded?: Date | string
+    ticks?: WebsiteTickUncheckedCreateNestedManyWithoutWebsiteInput
+    events?: WebEventsUncheckedCreateNestedManyWithoutWebsiteInput
+  }
+
+  export type WebsiteCreateOrConnectWithoutChannelsInput = {
+    where: WebsiteWhereUniqueInput
+    create: XOR<WebsiteCreateWithoutChannelsInput, WebsiteUncheckedCreateWithoutChannelsInput>
+  }
+
+  export type WebsiteUpsertWithoutChannelsInput = {
+    update: XOR<WebsiteUpdateWithoutChannelsInput, WebsiteUncheckedUpdateWithoutChannelsInput>
+    create: XOR<WebsiteCreateWithoutChannelsInput, WebsiteUncheckedCreateWithoutChannelsInput>
+    where?: WebsiteWhereInput
+  }
+
+  export type WebsiteUpdateToOneWithWhereWithoutChannelsInput = {
+    where?: WebsiteWhereInput
+    data: XOR<WebsiteUpdateWithoutChannelsInput, WebsiteUncheckedUpdateWithoutChannelsInput>
+  }
+
+  export type WebsiteUpdateWithoutChannelsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
+    ticks?: WebsiteTickUpdateManyWithoutWebsiteNestedInput
+    events?: WebEventsUpdateManyWithoutWebsiteNestedInput
+    user?: UserUpdateOneWithoutWebsitesNestedInput
+  }
+
+  export type WebsiteUncheckedUpdateWithoutChannelsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    user_id?: NullableStringFieldUpdateOperationsInput | string | null
+    timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
+    ticks?: WebsiteTickUncheckedUpdateManyWithoutWebsiteNestedInput
+    events?: WebEventsUncheckedUpdateManyWithoutWebsiteNestedInput
   }
 
   export type WebsiteCreateManyUserInput = {
@@ -9014,7 +10715,8 @@ export namespace Prisma {
     url?: StringFieldUpdateOperationsInput | string
     timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
     ticks?: WebsiteTickUpdateManyWithoutWebsiteNestedInput
-    event_id?: WebEventsUpdateManyWithoutWebsiteNestedInput
+    events?: WebEventsUpdateManyWithoutWebsiteNestedInput
+    channels?: ChannelsUpdateManyWithoutWebsiteNestedInput
   }
 
   export type WebsiteUncheckedUpdateWithoutUserInput = {
@@ -9023,7 +10725,8 @@ export namespace Prisma {
     url?: StringFieldUpdateOperationsInput | string
     timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
     ticks?: WebsiteTickUncheckedUpdateManyWithoutWebsiteNestedInput
-    event_id?: WebEventsUncheckedUpdateManyWithoutWebsiteNestedInput
+    events?: WebEventsUncheckedUpdateManyWithoutWebsiteNestedInput
+    channels?: ChannelsUncheckedUpdateManyWithoutWebsiteNestedInput
   }
 
   export type WebsiteUncheckedUpdateManyWithoutUserInput = {
@@ -9063,8 +10766,18 @@ export namespace Prisma {
     name: string
     level: $Enums.eventlevel
     resolved?: boolean | null
-    resolvedTime?: Date | string
+    resolvedTime: Date | string
     timeAdded?: Date | string
+  }
+
+  export type ChannelsCreateManyWebsiteInput = {
+    id?: string
+    channelName: string
+    channelDetails: string
+    level: $Enums.eventlevel
+    monitor?: boolean
+    lastSent?: Date | string | null
+    createdAt?: Date | string
   }
 
   export type WebsiteTickUpdateWithoutWebsiteInput = {
@@ -9116,6 +10829,36 @@ export namespace Prisma {
     resolved?: NullableBoolFieldUpdateOperationsInput | boolean | null
     resolvedTime?: DateTimeFieldUpdateOperationsInput | Date | string
     timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ChannelsUpdateWithoutWebsiteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    channelName?: StringFieldUpdateOperationsInput | string
+    channelDetails?: StringFieldUpdateOperationsInput | string
+    level?: EnumeventlevelFieldUpdateOperationsInput | $Enums.eventlevel
+    monitor?: BoolFieldUpdateOperationsInput | boolean
+    lastSent?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ChannelsUncheckedUpdateWithoutWebsiteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    channelName?: StringFieldUpdateOperationsInput | string
+    channelDetails?: StringFieldUpdateOperationsInput | string
+    level?: EnumeventlevelFieldUpdateOperationsInput | $Enums.eventlevel
+    monitor?: BoolFieldUpdateOperationsInput | boolean
+    lastSent?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ChannelsUncheckedUpdateManyWithoutWebsiteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    channelName?: StringFieldUpdateOperationsInput | string
+    channelDetails?: StringFieldUpdateOperationsInput | string
+    level?: EnumeventlevelFieldUpdateOperationsInput | $Enums.eventlevel
+    monitor?: BoolFieldUpdateOperationsInput | boolean
+    lastSent?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type WebsiteTickCreateManyRegionInput = {
