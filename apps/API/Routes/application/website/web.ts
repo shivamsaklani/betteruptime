@@ -149,7 +149,7 @@ web.get("/selectwebsite/:websiteid", Authorize, async (req: Request, res: Respon
         name:website.name,
         url: website.url,
         timeAdded: website.timeAdded,
-        status: latestTick?.status || "unkown",
+        status: latestTick?.status || "degraded",
         lastChecked: latestTick?.createdAt || 0,
         responseTime: latestTick?.response_time_ms || "0",
         uptime:uptime || 0,
