@@ -89,7 +89,7 @@ try {
             id: userid
         },
         data: {
-            profileImage:imageloc
+            profileImage:`/profiles/${file.name}`
         }
     });
     return res.status(200).json({
@@ -104,9 +104,81 @@ try {
     
 });
 
+profile.get("/getdetails",Authorize,async (req:Request,res:Response)=>{
+  const userid= req.userid?.id;
+  try {
+    const response= await Prisma.user.findFirst({
+      where:{
+        id:userid
+      },
+      select:{
+        email:true,
+        name:true,
+        profileImage:true,
+      }
+    });
+    if(!response){
+      res.status(404).send("No user found");
+      return;
+    }
+    return res.status(200).json(response);
+  } catch (error:any) {
+      console.error("Error updating user name:", error);
+      return res.status(500).send("Internal server error. Please try again later.");
+  }
+})
 
-// profile.post("/changedetails",Authorize,async (req:Request,res:Response)=>{
-//   const userid = req.userid?.id;
 
-// });
+profile.post("/changedetails",Authorize,async (req: Request, res: Response) => {
+    try {
+      const userId = req.userid?.id;
+      const { name } = req.body;
+
+      // Validate input
+      if (!name || typeof name !== "string" || name.trim().length === 0) {
+        return res.status(400).send( "Name is required and cannot be empty.");
+      }
+
+      if (name.trim().length > 50) {
+        return res.status(400).send("Name must be less than 50 characters.");
+      }
+
+      // Find and update user
+      const updatedUser = await Prisma.user.update({
+        where:{
+          id:userId
+        },
+        data:{
+          name:name
+        }
+      });
+
+      if (!updatedUser) {
+        return res.status(404).send("No User Found");
+      }
+
+      return res.status(200).send("Updated");
+    } catch (error: any) {
+      console.error("Error updating user name:", error);
+      return res.status(500).send("Internal server error. Please try again later.");
+    }
+  });
+profile.post("/deleteprofile",Authorize,async (req:Request,res:Response)=>{
+  const userid=req.userid?.id;
+  try {
+    await Prisma.user.update({
+      where:{
+       id:userid 
+      },
+      data:{
+        profileImage:null
+      }
+    });
+   return res.status(200).send("Profile Deleted");
+  } catch (error) {
+     console.error("Error updating user name:", error);
+      return res.status(500).send("Internal server error. Please try again later.");
+    
+  }
+})
 export default profile;

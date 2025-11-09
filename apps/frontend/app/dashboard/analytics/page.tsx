@@ -4,22 +4,45 @@ import { useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
-import {
-  Bar,
-  BarChart,
-  ResponsiveContainer,
-  XAxis,
-  YAxis,
-  PieChart,
-  Pie,
-  Cell,
-} from "recharts"
 import { Calendar, Download, TrendingUp, Clock, Zap, Globe, AlertTriangle } from "lucide-react"
 import { UptimeChart } from "@/components/dashboard/uptime-chart"
 import PageHeader from "@/components/custom/pageheader"
 import { useAppSelector } from "@/lib/hooks"
-
+import MetricBox, { MetricType } from "@/components/custom/MetricBox"
+const Metrics: MetricType[] = [
+  {
+    title: "Avg Uptime",
+    Icon: TrendingUp,
+    heading: "99.8%",
+    subheading: "+0.2%",
+    subheading_description: "from last period",
+    icon_classname:""
+  },
+  {
+    title: "Avg Response",
+    Icon: Clock,
+    heading: "256ms",
+    subheading: "+12ms",
+    subheading_description: "from last period",
+    icon_classname:""
+  },
+  {
+    title: "Total Requests",
+    Icon: Zap,
+    heading: "91.2K",
+    subheading: "+8.1%",
+    subheading_description: "from last period",
+    icon_classname:""
+  },
+  {
+    title: "Incidents",
+    Icon: AlertTriangle,
+    heading: "3",
+    subheading: "-2",
+    subheading_description: "from last period",
+    icon_classname:""
+  },
+];
 // Mock analytics data
 const performanceData = [
   { date: "2024-01-01", uptime: 99.9, responseTime: 245, requests: 12450 },
@@ -86,61 +109,16 @@ export default function AnalyticsPage() {
 
         {/* Key Metrics */}
         <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Avg Uptime</CardTitle>
-              <TrendingUp className="h-4 w-4 text-green-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">99.8%</div>
-              <p className="text-xs text-muted-foreground">
-                <span className="text-green-600">+0.2%</span> from last period
-              </p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Avg Response</CardTitle>
-              <Clock className="h-4 w-4 text-blue-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">265ms</div>
-              <p className="text-xs text-muted-foreground">
-                <span className="text-red-600">+12ms</span> from last period
-              </p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Requests</CardTitle>
-              <Zap className="h-4 w-4 text-orange-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">91.2K</div>
-              <p className="text-xs text-muted-foreground">
-                <span className="text-green-600">+8.1%</span> from last period
-              </p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Incidents</CardTitle>
-              <AlertTriangle className="h-4 w-4 text-red-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">3</div>
-              <p className="text-xs text-muted-foreground">
-                <span className="text-green-600">-2</span> from last period
-              </p>
-            </CardContent>
-          </Card>
+         {Metrics.map((metric)=>(
+          <MetricBox key={metric.title} {...metric} />
+         ))}
         </div>
 
         {/* Performance Charts */}
         <UptimeChart/>
 
         {/* Incidents and Status Distribution */}
-        <div className="grid gap-6 grid-cols-1 xl:grid-cols-3">
+        {/* <div className="grid gap-6 grid-cols-1 xl:grid-cols-3">
           <Card className="xl:col-span-2">
             <CardHeader>
               <CardTitle>Incident History</CardTitle>
@@ -218,7 +196,7 @@ export default function AnalyticsPage() {
               </div>
             </CardContent>
           </Card>
-        </div>
+        </div> */}
 
         {/* Top Performing Websites */}
         <Card>

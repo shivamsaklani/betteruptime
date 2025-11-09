@@ -253,8 +253,8 @@ export default function WebsiteDetailPage() {
           <CardTitle>Recent Incidents</CardTitle>
           <CardDescription>Latest downtime and performance issues</CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
+        <CardContent className="overflow-y-scroll max-h-100">
+          <div className="space-y-4 ">
             {website.recentIncidents.length>0 ? 
               (website.recentIncidents.map((incident, index) => {
               if (!incident.timeAdded || !incident.resolvedTime) return null; // handle missing data
@@ -265,7 +265,7 @@ export default function WebsiteDetailPage() {
               const durationMinute = Math.round((resolvedTime - timeAdded) / (1000 * 60));
 
               return (
-                <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
+                <div key={index} className="flex items-center  justify-between p-4 border rounded-lg">
                   <div className="flex  items-center space-x-4">
                     <AlertTriangle className="h-4 w-4 text-orange-600" />
                     <div >

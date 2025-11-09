@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { useAppDispatch, useAppSelector } from "@/lib/hooks"
-import { logout } from "@/lib/features/auth/authSlice"
+import { logout, updateuser } from "@/lib/features/auth/authSlice"
 
 import { LogOut, Menu } from "lucide-react"
 import { Sidebar } from "@/components/custom/sidebar"
@@ -25,11 +25,25 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { user } = useAppSelector((state) => state.auth);
-  const [image,setimage]=useState<string>();
   useEffect(()=>{
-    setimage(user?.profile);
+    getdetails();
   },[dispatch]);
-
+  const getdetails = async ()=>{
+    try {
+     const detail = await axios.get(`${process.env.NEXT_PUBLIC_BACKENDURL}/profile/getdetails`,{
+      withCredentials:true
+     });
+    if(detail.status == 200){
+       dispatch(updateuser({
+      name:detail.data.name,
+      profile:detail.data.profileImage,
+      email:detail.data.email,
+     }));
+    }
+    } catch (error) {
+      
+    }
+  }
   const handleLogout = async() => {
     dispatch(logout())
     router.push("/");
@@ -68,7 +82,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               <NoticeButton />
               <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-border" />
               <div className="flex items-center gap-x-2">
-                <UserImage image={image} email={user?.email}/>
+                <UserImage image={user?.profile} email={user?.email}/>
                 <Button variant="ghost" size="icon" onClick={handleLogout} className="hover:bg-accent">
                   <LogOut className="h-4 w-4" />
                 </Button>
