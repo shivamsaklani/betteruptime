@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -7,17 +7,24 @@ import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
-import { Camera, Save, Trash2, User, Lock } from "lucide-react";
+import { Camera, Save, Trash2, User, Lock, AlertCircleIcon, UploadCloud } from "lucide-react";
 import PageHeader from "@/components/custom/pageheader";
-
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import axios from "axios";
+import { updateuser } from "@/lib/features/auth/authSlice";
+import { ChangePass } from "@/components/custom/changepass";
+const image = "../../../public/profiles/IMG_0241.JPG"
 export default function ProfileSettings() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const dispatch = useAppDispatch();
+  const imageupload = useRef<HTMLInputElement | null>(null);
+  const user = useAppSelector((state) => state.auth.user);
   const [formData, setFormData] = useState({
-    name: "John Doe",
-    email: "john.doe@example.com",
-    image: "",
+    name: user?.name,
+    email: user?.email,
+    image: user?.profile,
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
@@ -28,46 +35,43 @@ export default function ProfileSettings() {
   };
 
   const handleSaveProfile = async () => {
-    setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setIsLoading(false);
-    toast({
-      title: "Profile updated",
-      description: "Your account information has been updated successfully.",
-    });
-  };
 
-  const handleChangePassword = async () => {
-    if (!formData.currentPassword || !formData.newPassword || !formData.confirmPassword) {
-      toast({ 
-        title: "Error", 
-        description: "All password fields are required.", 
-        variant: "destructive" 
+    if (!selectedFile) {
+      toast({
+        title: "No image selected",
+        description: "Please choose an image to upload.",
+        variant: "destructive",
+
       });
       return;
     }
-    if (formData.newPassword !== formData.confirmPassword) {
-      toast({ 
-        title: "Error", 
-        description: "New passwords do not match.", 
-        variant: "destructive" 
-      });
-      return;
-    }
-
     setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setIsLoading(false);
-    setFormData((prev) => ({ 
-      ...prev, 
-      currentPassword: "", 
-      newPassword: "", 
-      confirmPassword: "" 
-    }));
-    toast({ 
-      title: "Password changed", 
-      description: "Your password has been updated successfully." 
-    });
+    try {
+      const formData = new FormData();
+      formData.append("profile", selectedFile);
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKENDURL}/profile/imageupload`, formData, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      });
+      dispatch(updateuser({
+        profile: response.data.fileLoc as string
+      }));
+      toast({
+        title: "Profile updated",
+        description: "Your account information has been updated successfully.",
+      });
+    } catch (error: any) {
+      console.error("Upload failed:", error);
+      toast({
+        title: "Error",
+        description: error.response?.data?.message || "Upload failed",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,11 +79,13 @@ export default function ProfileSettings() {
     if (file) {
       const imageUrl = URL.createObjectURL(file);
       setFormData((prev) => ({ ...prev, image: imageUrl }));
+      setSelectedFile(file);
     }
   };
 
   const handleImageRemove = () => {
     setFormData((prev) => ({ ...prev, image: "" }));
+    setSelectedFile(null);
   };
 
   const getInitials = (name: string) => {
@@ -95,8 +101,8 @@ export default function ProfileSettings() {
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/20">
       <div className="container max-w-4xl mx-auto px-4 py-12 space-y-8">
         <PageHeader
-          title="Profile Settings" 
-          subtitle="Manage your account details and preferences" 
+          title="Profile Settings"
+          subtitle="Manage your account details and preferences"
         />
 
         {/* Profile Info Card */}
@@ -115,25 +121,29 @@ export default function ProfileSettings() {
           <CardContent className="space-y-8">
             {/* Avatar Section */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+            
               <div className="relative group">
+                 {user?.profile +"Shivam"}
                 <Avatar className="h-24 w-24 ring-4 ring-background shadow-md transition-transform duration-300 group-hover:scale-105">
-                  <AvatarImage src={formData.image} alt="User avatar" />
+                  <AvatarImage
+                    src={user?.profile || formData.image}
+                    alt="User avatar"
+                  />
                   <AvatarFallback className="text-lg font-semibold bg-gradient-to-br from-primary to-accent text-primary-foreground">
-                    {getInitials(formData.name)}
+                    {user?.profile ? getInitials(user.email) : "U"}
                   </AvatarFallback>
                 </Avatar>
-
                 <Button
                   size="sm"
                   className="absolute -bottom-2 -right-2 h-9 w-9 rounded-full p-0 shadow-md hover:shadow-lg transition-all duration-300"
-                  onClick={() => document.getElementById("imageUpload")?.click()}
+                  onClick={() =>imageupload.current?.click()}
                 >
                   <Camera className="h-4 w-4" />
                 </Button>
 
                 <input
                   type="file"
-                  id="imageUpload"
+                  ref={imageupload}
                   accept="image/*"
                   className="hidden"
                   onChange={handleImageUpload}
@@ -148,14 +158,13 @@ export default function ProfileSettings() {
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    onClick={() => document.getElementById("imageUpload")?.click()}
-                    className="hover:bg-primary/5"
+                  <Button
+                    variant="default"
+                    size="sm"
+                    onClick={handleSaveProfile}
                   >
-                    <Camera className="h-4 w-4 mr-2" />
-                    Upload new
+                    <UploadCloud />
+                    Save
                   </Button>
                   {formData.image && (
                     <Button
@@ -181,7 +190,7 @@ export default function ProfileSettings() {
               </Label>
               <Input
                 id="name"
-                value={formData.name}
+                value={user?.name}
                 onChange={(e) => handleInputChange("name", e.target.value)}
                 placeholder="Enter your full name"
                 className="transition-all duration-200 focus:ring-2 focus:ring-primary/20"
@@ -192,21 +201,20 @@ export default function ProfileSettings() {
             <div className="space-y-3">
               <Label htmlFor="email" className="text-sm font-medium">
                 Email Address
+                <span className="font-sm text-sm text-secondary">can't be changed</span>
               </Label>
               <Input
                 id="email"
                 type="email"
-                value={formData.email}
-                onChange={(e) => handleInputChange("email", e.target.value)}
-                placeholder="Enter your email address"
-                className="transition-all duration-200 focus:ring-2 focus:ring-primary/20"
+                value={user?.email}
+                placeholder="Enter your email address" readOnly
               />
             </div>
 
             {/* Save Button */}
             <div className="flex justify-end pt-4">
-              <Button 
-                onClick={handleSaveProfile} 
+              <Button
+                onClick={handleSaveProfile}
                 disabled={isLoading}
                 className="shadow-md hover:shadow-lg transition-all duration-300"
               >
@@ -236,70 +244,9 @@ export default function ProfileSettings() {
               </div>
             </div>
           </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="space-y-3">
-              <Label htmlFor="currentPassword" className="text-sm font-medium">
-                Current Password
-              </Label>
-              <Input
-                id="currentPassword"
-                type="password"
-                value={formData.currentPassword}
-                onChange={(e) => handleInputChange("currentPassword", e.target.value)}
-                placeholder="Enter your current password"
-                className="transition-all duration-200 focus:ring-2 focus:ring-primary/20"
-              />
-            </div>
-
-            <div className="space-y-3">
-              <Label htmlFor="newPassword" className="text-sm font-medium">
-                New Password
-              </Label>
-              <Input
-                id="newPassword"
-                type="password"
-                value={formData.newPassword}
-                onChange={(e) => handleInputChange("newPassword", e.target.value)}
-                placeholder="Enter your new password"
-                className="transition-all duration-200 focus:ring-2 focus:ring-primary/20"
-              />
-              <p className="text-xs text-muted-foreground">
-                Must be at least 8 characters with a mix of letters and numbers
-              </p>
-            </div>
-
-            <div className="space-y-3">
-              <Label htmlFor="confirmPassword" className="text-sm font-medium">
-                Confirm New Password
-              </Label>
-              <Input
-                id="confirmPassword"
-                type="password"
-                value={formData.confirmPassword}
-                onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
-                placeholder="Confirm your new password"
-                className="transition-all duration-200 focus:ring-2 focus:ring-primary/20"
-              />
-            </div>
-
-            <div className="flex justify-end pt-4">
-              <Button 
-                onClick={handleChangePassword} 
-                disabled={isLoading}
-                className="shadow-md hover:shadow-lg transition-all duration-300"
-              >
-                {isLoading ? (
-                  "Updating..."
-                ) : (
-                  <>
-                    <Save className="h-4 w-4 mr-2" />
-                    Change Password
-                  </>
-                )}
-              </Button>
-            </div>
-          </CardContent>
+          <ChangePass />
         </Card>
+
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 "use client"
 
-import { ReactElement, useEffect, useState } from "react"
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -15,28 +15,22 @@ import {
   Search,
   Filter,
   Download,
-  Eye,
   CalendarIcon,
-  Clock,
   AlertTriangle,
   CheckCircle,
-  XCircle,
-  TrendingUp,
-  BarChart3,
 } from "lucide-react"
 
 import { AlertTable } from "@/components/custom/AlertTable"
-import { useAppSelector } from "@/lib/hooks"
 import { useFetchEvents } from "@/hooks/fetchEvents"
 import { Skeleton } from "@/components/custom/Skeleton"
 import PageHeader from "@/components/custom/pageheader"
 
 
 interface StatType {
- label:string,
- value:number,
- icon: React.ReactNode,
- bg:string,
+  label: string,
+  value: number,
+  icon: React.ReactNode,
+  bg: string,
 }
 
 export default function AlertPage() {
@@ -44,8 +38,8 @@ export default function AlertPage() {
   const [severityFilter, setSeverityFilter] = useState("all")
   const [statusFilter, setStatusFilter] = useState<"all" | "resolved" | "unresolved">("all")
   const [dateRange, setDateRange] = useState<{ from?: Date; to?: Date }>({})
-  const {data,success,error,loading}=useFetchEvents();
-   const total = data.length;
+  const { data, error, loading } = useFetchEvents();
+  const total = data.length;
   const resolved = data.filter((a) => a.resolved).length
   const critical = data.filter((a) => a.level === "threat").length
   const stats = [
@@ -77,12 +71,12 @@ export default function AlertPage() {
 
     const matchesSeverity =
       severityFilter === "all" || alert.level === severityFilter
-   const matchesStatus =
-  statusFilter === "all"
-    ? true
-    : statusFilter === "resolved"
-    ? alert.resolved === true
-    : alert.resolved === false
+    const matchesStatus =
+      statusFilter === "all"
+        ? true
+        : statusFilter === "resolved"
+          ? alert.resolved === true
+          : alert.resolved === false
 
     const matchesDateRange =
       !dateRange.from ||
@@ -119,28 +113,17 @@ export default function AlertPage() {
     URL.revokeObjectURL(url)
   }
 
-  if(loading){
-   return (
-    <Skeleton />
-   )
-  }
-  if(error){
-    return(
-      <div className="flex  justify-center items-center">Please Try Again Error Occured: {error}</div>
-    )
-  }
-  if(data.length==0){
+  if (loading) {
     return (
-      <div className="flex space-y-8  justify-center items-center">No Events Found</div>
+      <Skeleton />
     )
   }
-
   return (
     <div className="space-y-8">
       {/* Header */}
       <PageHeader title="Alert History" subtitle="
             View and analyze past alerts and incidents across all your monitored services." >
-         <Button onClick={exportHistory} variant="outline" className="flex items-center gap-2 bg-transparent">
+        <Button onClick={exportHistory} variant="outline" className="flex items-center gap-2 bg-transparent">
           <Download className="h-4 w-4" />
           Export CSV
         </Button>
@@ -148,8 +131,8 @@ export default function AlertPage() {
 
       {/* Statistics Cards */}
       <div className="grid gap-6 md:grid-cols-3">
-       <StatusCard stats={stats}  />
-     
+        <StatusCard stats={stats} />
+
       </div>
 
       {/* Filters */}
@@ -283,18 +266,25 @@ export default function AlertPage() {
           )}
         </CardContent>
       </Card>
-      <AlertTable filteredHistory={filteredHistory} />
+
+      {data.length === 0 ? (
+        <div className="flex justify-center items-center h-64 text-muted-foreground">
+          No Events Found
+        </div>
+      ) : (
+        <AlertTable filteredHistory={filteredHistory} />
+      )}
     </div>
   )
 }
 
 
-const StatusCard = ({stats}:{
-  stats:StatType[]
-})=>{
+const StatusCard = ({ stats }: {
+  stats: StatType[]
+}) => {
 
 
-  return(
+  return (
     <>
       {stats.map((stat) => (
         <Card key={stat.label}>

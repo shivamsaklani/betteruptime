@@ -1,6 +1,3 @@
-// lib/store.ts
-"use client";  // ensures this file is only ever imported in client components
-
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
@@ -26,10 +23,9 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const Reducer= (state: any, action: any) => {
   if (action.type === "RESET_STORE") {
-    // Remove persisted storage
+    // reset everything 
     storage.removeItem("persist:root");
-    // Reset Redux state
-    state = undefined;
+      return persistedReducer(undefined, action);
   }
   return persistedReducer(state, action);
 };

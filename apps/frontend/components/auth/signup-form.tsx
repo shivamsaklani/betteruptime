@@ -64,7 +64,7 @@ export function SignUpForm() {
           name: formData.name,
         }),
       );
-      router.push("/dashboard")
+      router.push("/signin")
       }
      
         

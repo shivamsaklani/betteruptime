@@ -10,6 +10,7 @@
     "@repo/db":"*"
   },
   "scripts": {
+     "build": "tsc --b",
     "dev": "bun --watch index.ts",
     "start": "bun index.ts"
   },

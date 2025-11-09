@@ -8,12 +8,13 @@ import { store, persistor } from "@/lib/store";
 export function ReduxProvider({ children }: { children: React.ReactNode }) {
   return (
     <Provider store={store}>
-      <PersistGate
-  loading={null}
+  <PersistGate
+  loading={<div className="flex justify-center items-center h-screen">Loading...</div>}
   persistor={persistor}
 >
   {children}
 </PersistGate>
+
 
     </Provider>
   );

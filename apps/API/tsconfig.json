@@ -6,12 +6,13 @@
     "module": "ESNext",
     "moduleDetection": "force",
     "jsx": "react-jsx",
-    "types": ["node"],
+    "types": ["bun-types"],
     "allowJs": true,
     // Bundler mode
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
+    // Bundler mode
     "noEmit": true,
 
     // Best practices

@@ -1,18 +1,13 @@
 "use client"
 
 import { useState } from "react"
-import { DashboardLayout } from "@/components/dashboard/dashboard-layout"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import {
-  Area,
-  AreaChart,
   Bar,
   BarChart,
-  Line,
-  LineChart,
   ResponsiveContainer,
   XAxis,
   YAxis,
@@ -23,6 +18,7 @@ import {
 import { Calendar, Download, TrendingUp, Clock, Zap, Globe, AlertTriangle } from "lucide-react"
 import { UptimeChart } from "@/components/dashboard/uptime-chart"
 import PageHeader from "@/components/custom/pageheader"
+import { useAppSelector } from "@/lib/hooks"
 
 // Mock analytics data
 const performanceData = [
@@ -59,7 +55,7 @@ const topWebsites = [
 
 export default function AnalyticsPage() {
   const [timeRange, setTimeRange] = useState("7d")
-
+  const websites = useAppSelector((state)=>state.monitoring.websites);
   const handleExport = () => {
     console.log("Export analytics data")
   }
@@ -232,7 +228,7 @@ export default function AnalyticsPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {topWebsites.map((website, index) => (
+              {websites.map((website, index) => (
                 <div
                   key={website.name}
                   className="flex flex-col sm:flex-row sm:items-center justify-between p-4 border rounded-lg space-y-2 sm:space-y-0"
@@ -245,7 +241,6 @@ export default function AnalyticsPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold text-foreground">{website.name}</h3>
-                      <p className="text-sm text-muted-foreground">{website.requests.toLocaleString()} requests</p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-6 text-sm">

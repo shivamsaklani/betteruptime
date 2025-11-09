@@ -12,6 +12,7 @@
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.15 0 0);
   --primary: oklch(0.62 0.25 12.17); /* Vibrant coral #ff4757 */
+  --success :oklch(66.193% 0.18537 134.935) ;
   --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.35 0.02 264.05); /* Slate gray #4b4b58 */
   --secondary-foreground: oklch(1 0 0);
@@ -80,6 +81,8 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --color-background: var(--background);
+  --color-success: var(--success);
+  --color-success-foreground: oklch(0.15 0 0);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);

@@ -36,7 +36,7 @@ export interface Website {
   responseTime: number
   lastChecked: string
   location :string ,
-  uptime : number ,
+  uptime : number,
   checkInterval :string
   recentIncidents: recentIncidents[]
 }
@@ -53,6 +53,7 @@ export interface User {
   id: string
   email: string
   name: string
+  profile? : string
 }
 
 export interface AuthState {

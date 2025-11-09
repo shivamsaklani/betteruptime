@@ -11,6 +11,7 @@
     "redis": "^5.8.2"
   },
   "scripts": {
+     "build": "tsc --b",
     "dev": "bun --watch index.ts",
     "start": "bun index.ts"
   },

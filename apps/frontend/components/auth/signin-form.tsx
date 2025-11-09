@@ -12,7 +12,8 @@ import { loginStart, loginSuccess, loginFailure } from "@/lib/features/auth/auth
 import { Loader2 } from "lucide-react"
 import axios, { isAxiosError } from "axios"
 import {GoogleIcon, GitHub } from "@/components/ui/customIcons"
-
+import { useToast } from "@/hooks/use-toast"
+import { persistor } from "@/lib/store"
 
 const Authorize =()=>{
   alert ("ok done");
@@ -24,6 +25,8 @@ export function SignInForm() {
       email: "",
       password: "",
     });
+  const {toast} = useToast();
+
   const dispatch = useAppDispatch()
   const { isLoading, error } = useAppSelector((state) => state.auth)
   const router = useRouter()
@@ -54,6 +57,10 @@ export function SignInForm() {
           name: login.data.Username,
         }),
       );
+      persistor.flush();
+      toast({
+        title:"Login Success"
+      });
       
        router.push("/dashboard")
       }
@@ -107,9 +114,9 @@ export function SignInForm() {
 
         <div className="flex items-center justify-between">
           <div className="text-sm">
-            <a href="#" className="text-primary hover:text-primary/80">
+            <Button variant="link" onClick={()=>router.push("/changePassword")} className="cursor-pointer text-primary">
               Forgot your password?
-            </a>
+            </Button>
           </div>
         </div>
       </div>

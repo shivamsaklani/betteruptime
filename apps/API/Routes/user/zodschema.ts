@@ -10,7 +10,7 @@ export const userSchema  = signin.extend({
 })
 
 export const password = z.object({
-        currentpassword:z.string().min(3,{message:"minimum length should be 3"}),
+        oldpassword:z.string().min(3,{message:"minimum length should be 3"}),
         newpassword:z.string().min(3,{message:"minimum length should be 3"}),
         confirmpassword:z.string().min(3,{message:"minimum length should be 3"}),
 })

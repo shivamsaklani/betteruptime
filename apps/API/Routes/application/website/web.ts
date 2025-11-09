@@ -205,6 +205,9 @@ web.get("/getalerts", Authorize, async (req: Request, res: Response) => {
     return res.status(500).json({ message: "Try again" });
   }
 });
+web.post("/sendOTP",Authorize,async(req:Request,res:Response)=>{
+
+});
 //Endpoint for Alerts fetching
 
 

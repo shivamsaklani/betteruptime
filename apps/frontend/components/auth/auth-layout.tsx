@@ -8,9 +8,9 @@ import { ThemeToggle } from "@/components/theme-toggle"
 
 interface AuthLayoutProps {
   children: React.ReactNode
-  title: string
-  subtitle: string
-  linkText: string
+  title?: string
+  subtitle?: string
+  linkText?: string
   linkHref: string
 }
 

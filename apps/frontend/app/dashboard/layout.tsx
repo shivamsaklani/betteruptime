@@ -12,7 +12,9 @@ import { logout } from "@/lib/features/auth/authSlice"
 import { LogOut, Menu } from "lucide-react"
 import { Sidebar } from "@/components/custom/sidebar"
 import axios from "axios"
-import { NoticeBox, NoticeButton } from "@/components/custom/NotificeBox"
+import { NoticeButton } from "@/components/custom/NotificeBox"
+import { useEffect} from "react"
+import UserImage from "@/components/custom/UserImage"
 
 interface DashboardLayoutProps {
   children: React.ReactNode
@@ -23,7 +25,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { user } = useAppSelector((state) => state.auth);
-
+  const [image,setimage]=useState<string>();
+  useEffect(()=>{
+    setimage(user?.profile);
+  },[dispatch]);
 
   const handleLogout = async() => {
     dispatch(logout())
@@ -32,7 +37,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
        await axios.get(`${process.env.NEXT_PUBLIC_BACKENDURL}/user/logout`,{
         withCredentials:true
        }) // connect to this end point and destroy session data 
-        dispatch({ type: "RESET_STORE" });
+      dispatch({ type: "RESET_STORE" });
     } catch (error) {
       console.log("Logout Error"+error);
     }
@@ -63,7 +68,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               <NoticeButton />
               <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-border" />
               <div className="flex items-center gap-x-2">
-                <span className="text-sm font-medium text-foreground hidden sm:inline">{user?.email}</span>
+                <UserImage image={image} email={user?.email}/>
                 <Button variant="ghost" size="icon" onClick={handleLogout} className="hover:bg-accent">
                   <LogOut className="h-4 w-4" />
                 </Button>

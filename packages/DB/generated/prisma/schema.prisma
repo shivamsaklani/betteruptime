@@ -15,12 +15,13 @@ datasource db {
 }
 
 model User {
-  id       String    @id @default(uuid())
-  name     String
-  password String
-  email    String    @unique
-  websites Website[] // user should have individual websites
-  region   Region[] // should have region associated with them
+  id           String    @id @default(uuid())
+  name         String
+  password     String
+  email        String    @unique
+  websites     Website[] // user should have individual websites
+  region       Region[] // should have region associated with them
+  profileImage String?
 }
 
 model Website {
