@@ -204,7 +204,13 @@ web.get("/getalerts", Authorize, async (req: Request, res: Response) => {
     console.error(error);
     return res.status(500).json({ message: "Try again" });
   }
+});// get all the event that had been occured still the date 
+
+web.get("/notification/ack",Authorize,async(req:Request,res:Response)=>{
+    const userId= req.userid?.id;
+    
 });
+
 web.post("/sendOTP",Authorize,async(req:Request,res:Response)=>{
 
 });

@@ -80,7 +80,7 @@ export function SignUpForm() {
         }
         }
       }
-      else { dispatch(loginFailure("Failed to create account. Please try again."))}
+    dispatch(loginFailure("Failed to create account. Please try again."));
     }
   }
 

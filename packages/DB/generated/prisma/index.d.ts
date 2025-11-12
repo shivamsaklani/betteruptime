@@ -3743,6 +3743,7 @@ export namespace Prisma {
     level: $Enums.eventlevel | null
     resolved: boolean | null
     website_id: string | null
+    notified: boolean | null
     resolvedTime: Date | null
     timeAdded: Date | null
   }
@@ -3753,6 +3754,7 @@ export namespace Prisma {
     level: $Enums.eventlevel | null
     resolved: boolean | null
     website_id: string | null
+    notified: boolean | null
     resolvedTime: Date | null
     timeAdded: Date | null
   }
@@ -3763,6 +3765,7 @@ export namespace Prisma {
     level: number
     resolved: number
     website_id: number
+    notified: number
     resolvedTime: number
     timeAdded: number
     _all: number
@@ -3775,6 +3778,7 @@ export namespace Prisma {
     level?: true
     resolved?: true
     website_id?: true
+    notified?: true
     resolvedTime?: true
     timeAdded?: true
   }
@@ -3785,6 +3789,7 @@ export namespace Prisma {
     level?: true
     resolved?: true
     website_id?: true
+    notified?: true
     resolvedTime?: true
     timeAdded?: true
   }
@@ -3795,6 +3800,7 @@ export namespace Prisma {
     level?: true
     resolved?: true
     website_id?: true
+    notified?: true
     resolvedTime?: true
     timeAdded?: true
     _all?: true
@@ -3878,6 +3884,7 @@ export namespace Prisma {
     level: $Enums.eventlevel
     resolved: boolean | null
     website_id: string
+    notified: boolean | null
     resolvedTime: Date
     timeAdded: Date
     _count: WebEventsCountAggregateOutputType | null
@@ -3905,6 +3912,7 @@ export namespace Prisma {
     level?: boolean
     resolved?: boolean
     website_id?: boolean
+    notified?: boolean
     resolvedTime?: boolean
     timeAdded?: boolean
     website?: boolean | WebsiteDefaultArgs<ExtArgs>
@@ -3916,6 +3924,7 @@ export namespace Prisma {
     level?: boolean
     resolved?: boolean
     website_id?: boolean
+    notified?: boolean
     resolvedTime?: boolean
     timeAdded?: boolean
     website?: boolean | WebsiteDefaultArgs<ExtArgs>
@@ -3927,6 +3936,7 @@ export namespace Prisma {
     level?: boolean
     resolved?: boolean
     website_id?: boolean
+    notified?: boolean
     resolvedTime?: boolean
     timeAdded?: boolean
     website?: boolean | WebsiteDefaultArgs<ExtArgs>
@@ -3938,11 +3948,12 @@ export namespace Prisma {
     level?: boolean
     resolved?: boolean
     website_id?: boolean
+    notified?: boolean
     resolvedTime?: boolean
     timeAdded?: boolean
   }
 
-  export type WebEventsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "level" | "resolved" | "website_id" | "resolvedTime" | "timeAdded", ExtArgs["result"]["webEvents"]>
+  export type WebEventsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "level" | "resolved" | "website_id" | "notified" | "resolvedTime" | "timeAdded", ExtArgs["result"]["webEvents"]>
   export type WebEventsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     website?: boolean | WebsiteDefaultArgs<ExtArgs>
   }
@@ -3964,6 +3975,7 @@ export namespace Prisma {
       level: $Enums.eventlevel
       resolved: boolean | null
       website_id: string
+      notified: boolean | null
       resolvedTime: Date
       timeAdded: Date
     }, ExtArgs["result"]["webEvents"]>
@@ -4395,6 +4407,7 @@ export namespace Prisma {
     readonly level: FieldRef<"WebEvents", 'eventlevel'>
     readonly resolved: FieldRef<"WebEvents", 'Boolean'>
     readonly website_id: FieldRef<"WebEvents", 'String'>
+    readonly notified: FieldRef<"WebEvents", 'Boolean'>
     readonly resolvedTime: FieldRef<"WebEvents", 'DateTime'>
     readonly timeAdded: FieldRef<"WebEvents", 'DateTime'>
   }
@@ -8144,6 +8157,7 @@ export namespace Prisma {
     level: 'level',
     resolved: 'resolved',
     website_id: 'website_id',
+    notified: 'notified',
     resolvedTime: 'resolvedTime',
     timeAdded: 'timeAdded'
   };
@@ -8440,6 +8454,7 @@ export namespace Prisma {
     level?: EnumeventlevelFilter<"WebEvents"> | $Enums.eventlevel
     resolved?: BoolNullableFilter<"WebEvents"> | boolean | null
     website_id?: StringFilter<"WebEvents"> | string
+    notified?: BoolNullableFilter<"WebEvents"> | boolean | null
     resolvedTime?: DateTimeFilter<"WebEvents"> | Date | string
     timeAdded?: DateTimeFilter<"WebEvents"> | Date | string
     website?: XOR<WebsiteScalarRelationFilter, WebsiteWhereInput>
@@ -8451,6 +8466,7 @@ export namespace Prisma {
     level?: SortOrder
     resolved?: SortOrderInput | SortOrder
     website_id?: SortOrder
+    notified?: SortOrderInput | SortOrder
     resolvedTime?: SortOrder
     timeAdded?: SortOrder
     website?: WebsiteOrderByWithRelationInput
@@ -8465,6 +8481,7 @@ export namespace Prisma {
     level?: EnumeventlevelFilter<"WebEvents"> | $Enums.eventlevel
     resolved?: BoolNullableFilter<"WebEvents"> | boolean | null
     website_id?: StringFilter<"WebEvents"> | string
+    notified?: BoolNullableFilter<"WebEvents"> | boolean | null
     resolvedTime?: DateTimeFilter<"WebEvents"> | Date | string
     timeAdded?: DateTimeFilter<"WebEvents"> | Date | string
     website?: XOR<WebsiteScalarRelationFilter, WebsiteWhereInput>
@@ -8476,6 +8493,7 @@ export namespace Prisma {
     level?: SortOrder
     resolved?: SortOrderInput | SortOrder
     website_id?: SortOrder
+    notified?: SortOrderInput | SortOrder
     resolvedTime?: SortOrder
     timeAdded?: SortOrder
     _count?: WebEventsCountOrderByAggregateInput
@@ -8492,6 +8510,7 @@ export namespace Prisma {
     level?: EnumeventlevelWithAggregatesFilter<"WebEvents"> | $Enums.eventlevel
     resolved?: BoolNullableWithAggregatesFilter<"WebEvents"> | boolean | null
     website_id?: StringWithAggregatesFilter<"WebEvents"> | string
+    notified?: BoolNullableWithAggregatesFilter<"WebEvents"> | boolean | null
     resolvedTime?: DateTimeWithAggregatesFilter<"WebEvents"> | Date | string
     timeAdded?: DateTimeWithAggregatesFilter<"WebEvents"> | Date | string
   }
@@ -8816,6 +8835,7 @@ export namespace Prisma {
     name: string
     level: $Enums.eventlevel
     resolved?: boolean | null
+    notified?: boolean | null
     resolvedTime: Date | string
     timeAdded?: Date | string
     website: WebsiteCreateNestedOneWithoutEventsInput
@@ -8827,6 +8847,7 @@ export namespace Prisma {
     level: $Enums.eventlevel
     resolved?: boolean | null
     website_id: string
+    notified?: boolean | null
     resolvedTime: Date | string
     timeAdded?: Date | string
   }
@@ -8836,6 +8857,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     level?: EnumeventlevelFieldUpdateOperationsInput | $Enums.eventlevel
     resolved?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    notified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     resolvedTime?: DateTimeFieldUpdateOperationsInput | Date | string
     timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
     website?: WebsiteUpdateOneRequiredWithoutEventsNestedInput
@@ -8847,6 +8869,7 @@ export namespace Prisma {
     level?: EnumeventlevelFieldUpdateOperationsInput | $Enums.eventlevel
     resolved?: NullableBoolFieldUpdateOperationsInput | boolean | null
     website_id?: StringFieldUpdateOperationsInput | string
+    notified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     resolvedTime?: DateTimeFieldUpdateOperationsInput | Date | string
     timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -8857,6 +8880,7 @@ export namespace Prisma {
     level: $Enums.eventlevel
     resolved?: boolean | null
     website_id: string
+    notified?: boolean | null
     resolvedTime: Date | string
     timeAdded?: Date | string
   }
@@ -8866,6 +8890,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     level?: EnumeventlevelFieldUpdateOperationsInput | $Enums.eventlevel
     resolved?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    notified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     resolvedTime?: DateTimeFieldUpdateOperationsInput | Date | string
     timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -8876,6 +8901,7 @@ export namespace Prisma {
     level?: EnumeventlevelFieldUpdateOperationsInput | $Enums.eventlevel
     resolved?: NullableBoolFieldUpdateOperationsInput | boolean | null
     website_id?: StringFieldUpdateOperationsInput | string
+    notified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     resolvedTime?: DateTimeFieldUpdateOperationsInput | Date | string
     timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -9284,6 +9310,7 @@ export namespace Prisma {
     level?: SortOrder
     resolved?: SortOrder
     website_id?: SortOrder
+    notified?: SortOrder
     resolvedTime?: SortOrder
     timeAdded?: SortOrder
   }
@@ -9294,6 +9321,7 @@ export namespace Prisma {
     level?: SortOrder
     resolved?: SortOrder
     website_id?: SortOrder
+    notified?: SortOrder
     resolvedTime?: SortOrder
     timeAdded?: SortOrder
   }
@@ -9304,6 +9332,7 @@ export namespace Prisma {
     level?: SortOrder
     resolved?: SortOrder
     website_id?: SortOrder
+    notified?: SortOrder
     resolvedTime?: SortOrder
     timeAdded?: SortOrder
   }
@@ -10240,6 +10269,7 @@ export namespace Prisma {
     name: string
     level: $Enums.eventlevel
     resolved?: boolean | null
+    notified?: boolean | null
     resolvedTime: Date | string
     timeAdded?: Date | string
   }
@@ -10249,6 +10279,7 @@ export namespace Prisma {
     name: string
     level: $Enums.eventlevel
     resolved?: boolean | null
+    notified?: boolean | null
     resolvedTime: Date | string
     timeAdded?: Date | string
   }
@@ -10369,6 +10400,7 @@ export namespace Prisma {
     level?: EnumeventlevelFilter<"WebEvents"> | $Enums.eventlevel
     resolved?: BoolNullableFilter<"WebEvents"> | boolean | null
     website_id?: StringFilter<"WebEvents"> | string
+    notified?: BoolNullableFilter<"WebEvents"> | boolean | null
     resolvedTime?: DateTimeFilter<"WebEvents"> | Date | string
     timeAdded?: DateTimeFilter<"WebEvents"> | Date | string
   }
@@ -10803,6 +10835,7 @@ export namespace Prisma {
     name: string
     level: $Enums.eventlevel
     resolved?: boolean | null
+    notified?: boolean | null
     resolvedTime: Date | string
     timeAdded?: Date | string
   }
@@ -10846,6 +10879,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     level?: EnumeventlevelFieldUpdateOperationsInput | $Enums.eventlevel
     resolved?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    notified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     resolvedTime?: DateTimeFieldUpdateOperationsInput | Date | string
     timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -10855,6 +10889,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     level?: EnumeventlevelFieldUpdateOperationsInput | $Enums.eventlevel
     resolved?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    notified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     resolvedTime?: DateTimeFieldUpdateOperationsInput | Date | string
     timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -10864,6 +10899,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     level?: EnumeventlevelFieldUpdateOperationsInput | $Enums.eventlevel
     resolved?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    notified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     resolvedTime?: DateTimeFieldUpdateOperationsInput | Date | string
     timeAdded?: DateTimeFieldUpdateOperationsInput | Date | string
   }

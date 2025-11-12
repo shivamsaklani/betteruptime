@@ -142,6 +142,7 @@ exports.Prisma.WebEventsScalarFieldEnum = {
   level: 'level',
   resolved: 'resolved',
   website_id: 'website_id',
+  notified: 'notified',
   resolvedTime: 'resolvedTime',
   timeAdded: 'timeAdded'
 };

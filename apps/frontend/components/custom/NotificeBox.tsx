@@ -13,7 +13,7 @@ import { Button } from "../ui/button";
 import type {notice, recentIncidents } from "@/redux";
 import { Bell, X } from "lucide-react";
 import axios from "axios";
-import { setnotification } from "@/lib/features/notifications/notifySlice";
+import { clearnotification, setnotification } from "@/lib/features/notifications/notifySlice";
 
 interface NoticeBoxProps {
   isNotice: boolean;
@@ -24,6 +24,11 @@ export const NoticeButton = ()=>{
 
   const [noticebox,setnoticebox]=useState(false);
   const notice = useAppSelector((state)=>state.Notification);
+  const dispatch = useAppDispatch();
+  const close = ()=>{
+    setnoticebox(false);
+    dispatch(clearnotification());
+  }
     return(<>
     
     <Button onClick={()=>setnoticebox((prev)=>!prev)} variant="ghost" size="icon" className="hover:bg-primary p-5 relative flex items-center justify-center">
@@ -31,7 +36,7 @@ export const NoticeButton = ()=>{
                 <span className="absolute text-primary/80 flex -top-1 -right-1 items-center justify-center h-4 w-4">{notice.length>0?"+"+notice.length:""}</span>
     </Button>
     
-    <NoticeBox isNotice={noticebox} onclose={()=>setnoticebox(false)}/></>
+    <NoticeBox isNotice={noticebox} onclose={close}/></>
          
     )
 }

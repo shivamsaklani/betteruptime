@@ -42,6 +42,7 @@ model WebEvents {
   level        eventlevel
   resolved     Boolean?   @default(false)
   website_id   String
+  notified     Boolean?   @default(false) //Whether user is notified about the latest event occured 
   resolvedTime DateTime
   website      Website    @relation(fields: [website_id], references: [id], onDelete: Cascade)
   timeAdded    DateTime   @default(now())

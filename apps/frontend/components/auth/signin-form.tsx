@@ -13,7 +13,6 @@ import { Loader2 } from "lucide-react"
 import axios, { isAxiosError } from "axios"
 import {GoogleIcon, GitHub } from "@/components/ui/customIcons"
 import { useToast } from "@/hooks/use-toast"
-import { persistor } from "@/lib/store"
 
 const Authorize =()=>{
   alert ("ok done");
@@ -57,7 +56,6 @@ export function SignInForm() {
           name: login.data.Username,
         }),
       );
-      persistor.flush();
       toast({
         title:"Login Success"
       });
@@ -65,7 +63,7 @@ export function SignInForm() {
        router.push("/dashboard")
       }
       
-    } catch (err) {
+    } catch (err:any) {
       if(isAxiosError(err)){
         if(err.response?.status){
           switch(err.response.status){
@@ -76,6 +74,7 @@ export function SignInForm() {
           }
         }
       }
+      dispatch(loginFailure("Oop! We are Facing Traffic"));
     }
   }
 

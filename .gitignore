@@ -32,7 +32,7 @@ yarn-error.log*
 
 # Turbo
 .turbo
-
+Readme.md
 # Bun
 bun.lockb
 

@@ -19,7 +19,6 @@
   "dependencies": {
     "@repo/db": "workspace:*",
     "@repo/redisstreams": "*",
-    "@repo/uservalidation": "workspace:*",
     "@types/bcrypt": "^6.0.0",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.2",
