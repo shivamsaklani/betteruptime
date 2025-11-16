@@ -1,6 +1,6 @@
 // add logic to how the user view and create a graph in this 
 
-import { Prisma } from "@repo/db/client";
+import { PrismaClient } from "@prisma/client";
 import type { Request, Response } from "express";
 const express = require("express");
 const charts = express();
@@ -8,7 +8,7 @@ const charts = express();
 charts.get("/uptime/:id", async (req: Request, res: Response) => {
     const id = req.params.id;
     try {
-        const fetchdata = await Prisma.websiteTick.findMany({
+        const fetchdata = await PrismaClient.websiteTick.findMany({
             where: {
                 website_id: id,
             },
@@ -84,7 +84,7 @@ charts.get("/responsetime/:id", async (req: Request, res: Response) => {
     }
 
     // Fetch data from DB
-    const rawData = await Prisma.websiteTick.findMany({
+    const rawData = await PrismaClient.websiteTick.findMany({
       where: {
         website_id: id,
         createdAt: { gte: startTime },

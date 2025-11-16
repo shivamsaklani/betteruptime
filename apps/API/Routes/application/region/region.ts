@@ -1,7 +1,8 @@
 import type { Request, Response } from "express";
-import { Prisma } from "@repo/db/client";
+
 import {CreateRegion, DelRegion} from "@repo/redisstreams/redisclient";
 import { Authorize } from "../../user/middleware";
+import { PrismaClient } from "@prisma/client";
 const express = require("express");
 const region = express.Router();
 
@@ -10,7 +11,7 @@ region.post("/createregion",Authorize,async (req:Request,res:Response)=>{
   const {region}= req.body;
   const userId=req.userid?.id;
   try {
-    await Prisma.region.create({
+    await PrismaClient.region.create({
       data:{
         name:region,
         user_id:userId
@@ -27,7 +28,7 @@ region.post("/createregion",Authorize,async (req:Request,res:Response)=>{
 region.delete("/delregion",Authorize,async (req:Request,res:Response)=>{
   const {id,region}= req.body;
   try {
-    await Prisma.region.delete({
+    await PrismaClient.region.delete({
       where:{
         id:id,
       }

@@ -1,9 +1,9 @@
 import type { Request, Response } from "express";
 import { Authorize } from "./middleware";
-import { Prisma } from "@repo/db/client";
 import fileUpload from "express-fileupload";
 import bcrypt from "bcrypt";
 import { password } from "./zodschema";
+import { PrismaClient } from "@prisma/client";
 const express = require("express");
 const profile = express.Router();
 profile.use(fileUpload({
@@ -38,7 +38,7 @@ profile.post("/changepassword", Authorize, async (req: Request, res: Response) =
     const { oldpassword, newpassword } = result.data;
 
     //  Fetch user and verify old password
-    const user = await Prisma.user.findUnique({ where: { id: userid } });
+    const user = await PrismaClient.user.findUnique({ where: { id: userid } });
     if (!user) {
       return res.status(404).send("User not found");
     }
@@ -53,7 +53,7 @@ profile.post("/changepassword", Authorize, async (req: Request, res: Response) =
     const hashedPassword = await bcrypt.hash(newpassword, salt);
 
     //  Update user password
-    await Prisma.user.update({
+    await PrismaClient.user.update({
       where: { id: userid },
       data: { password: hashedPassword },
     });
@@ -84,7 +84,7 @@ if (!file) {
 
 try {
   await file.mv(imageloc);
-  await Prisma.user.update({
+  await PrismaClient.user.update({
         where: {
             id: userid
         },
@@ -107,7 +107,7 @@ try {
 profile.get("/getdetails",Authorize,async (req:Request,res:Response)=>{
   const userid= req.userid?.id;
   try {
-    const response= await Prisma.user.findFirst({
+    const response= await PrismaClient.user.findFirst({
       where:{
         id:userid
       },
@@ -144,7 +144,7 @@ profile.post("/changedetails",Authorize,async (req: Request, res: Response) => {
       }
 
       // Find and update user
-      const updatedUser = await Prisma.user.update({
+      const updatedUser = await PrismaClient.user.update({
         where:{
           id:userId
         },
@@ -166,7 +166,7 @@ profile.post("/changedetails",Authorize,async (req: Request, res: Response) => {
 profile.post("/deleteprofile",Authorize,async (req:Request,res:Response)=>{
   const userid=req.userid?.id;
   try {
-    await Prisma.user.update({
+    await PrismaClient.user.update({
       where:{
        id:userid 
       },

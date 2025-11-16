@@ -1,0 +1,25 @@
+{
+  "name": "database",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+   "scripts": {
+    "start": "bun ./routes/index.ts",
+    "build": "tsc --b",
+    "dev": "bun --watch ./routes/index.ts"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.0",
+    "prisma": "^6.19.0",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.2",
+    "cors": "^2.8.5",
+    "express": "^5.1.0"
+  }
+}

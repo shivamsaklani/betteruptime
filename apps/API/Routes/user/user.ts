@@ -1,13 +1,12 @@
-import { Prisma } from "@repo/db/client";
 import type { Request, Response } from "express"; 
 import bcrypt from "bcrypt";
 import { signin, userSchema } from "./zodschema";
 import jwt from "jsonwebtoken";
 import googleAuth from "./google/googleauth";
+import { Prisma } from "@repo/db/client";
 const express = require("express");
 const user = express.Router();
 const JWT_SECRET=process.env.JWT_TOKEN;
-const REFRESH_SECRET = process.env.REFRESH_SECRET;
 user.use("/google",googleAuth);
 user.get("/", (req:Request, res:Response) => {
   return res.send("Server is Running ");
@@ -30,7 +29,7 @@ user.post("/signup", async (req:Request, res:Response) => {
 
  try {
 
-  // if user exist in the database 
+  // if user exist in the Prisma 
     const existingUser = await Prisma.user.findFirst({
       where: {
       email: trustedData.data.email  
