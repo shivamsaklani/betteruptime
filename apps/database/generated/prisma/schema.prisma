@@ -1,0 +1,96 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String    @id @default(uuid())
+  name         String
+  password     String
+  email        String    @unique
+  websites     Website[] // user should have individual websites
+  region       Region[] // should have region associated with them
+  profileImage String?
+}
+
+model Website {
+  id        String        @id @default(uuid())
+  name      String
+  url       String
+  user_id   String?
+  timeAdded DateTime      @default(now())
+  ticks     WebsiteTick[]
+  events    WebEvents[]
+  channels  Channels[] // each website should have channels to send notification through emails , phone etc.
+  user      User?         @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model WebEvents {
+  id           String     @id @default(uuid())
+  name         String
+  level        eventlevel
+  resolved     Boolean?   @default(false)
+  website_id   String
+  notified     Boolean?   @default(false) //Whether user is notified about the latest event occured 
+  resolvedTime DateTime
+  website      Website    @relation(fields: [website_id], references: [id], onDelete: Cascade)
+  timeAdded    DateTime   @default(now())
+}
+
+model Region {
+  id      String        @id @default(uuid())
+  name    String
+  user_id String?
+  user    User?         @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  ticks   WebsiteTick[]
+}
+
+model WebsiteTick {
+  id               String    @default(uuid())
+  response_time_ms Int
+  status           webstatus
+  region           Region    @relation(fields: [region_id], references: [id], onDelete: Cascade)
+  website          Website   @relation(fields: [website_id], references: [id], onDelete: Cascade)
+  region_id        String
+  website_id       String
+  createdAt        DateTime  @default(now())
+
+  @@id([id, createdAt])
+  @@index([createdAt])
+}
+
+model Channels {
+  id             String     @id @default(uuid())
+  channelName    String
+  channelDetails String
+  level          eventlevel
+  website_id     String
+  monitor        Boolean    @default(true)
+  lastSent       DateTime? // last alert time
+  createdAt      DateTime   @default(now())
+  website        Website    @relation(fields: [website_id], references: [id], onDelete: Cascade)
+}
+
+enum webstatus {
+  up
+  down
+  degraded
+}
+
+enum eventlevel {
+  low
+  mid
+  high
+  threat
+}
