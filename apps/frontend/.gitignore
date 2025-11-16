@@ -9,6 +9,7 @@
 
 # production
 /build
+/public/profiles
 
 # debug
 npm-debug.log*
