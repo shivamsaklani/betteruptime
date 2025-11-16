@@ -130,7 +130,7 @@ router.get("/:table/:id", async (req: Request, res: Response, next: NextFunction
 router.post("/:table", async (req: Request, res: Response, next: NextFunction) => {
   const table = req.params.table as ModelName;
   const delegate = getDelegate(table);
-
+  console.log(table);
   try {
     const query = req.query;
     console.log(req.body);
@@ -147,6 +147,7 @@ router.post("/:table", async (req: Request, res: Response, next: NextFunction) =
     const result = await delegate.create(cleanArgs);
     res.status(201).json(result);
   } catch (err) {
+    console.log(err);
     next(err);
   }
 });

@@ -4,6 +4,7 @@ import { signin, userSchema } from "./zodschema";
 import jwt from "jsonwebtoken";
 import googleAuth from "./google/googleauth";
 import { Prisma } from "@repo/db/client";
+import axios from "axios";
 const express = require("express");
 const user = express.Router();
 const JWT_SECRET=process.env.JWT_TOKEN;
@@ -30,31 +31,32 @@ user.post("/signup", async (req:Request, res:Response) => {
  try {
 
   // if user exist in the Prisma 
-    const existingUser = await Prisma.user.findFirst({
-      where: {
-      email: trustedData.data.email  
-      }
-    });
+  // const existingUser = await axios.get(`${process.env.DATABASE_SERVER}/user/${trustedData.data.email}`);
+    // const existingUser = await Prisma.user.findFirst({
+    //   where: {
+    //   email: trustedData.data.email  
+    //   }
+    // });
 
-    if (existingUser) {
-      return res.status(409).send("User with this email already exists");
-    }
+    // if (existingUser) {
+    //   return res.status(409).send("User with this email already exists");
+    // }
 
 // create new user
   let hashedpassword='';
     if(salt){
      hashedpassword=await bcrypt.hash(trustedData.data.password,salt);
     }
+
      const createuser = async ()=>{
-  const {id} =await Prisma.user.create({
-    data:{
+    const User =await axios.post(`${process.env.DATABASE_SERVER}/User`,{
       name:trustedData.data.username,
       password: hashedpassword,
       email:trustedData.data.email
-    }
-   });
+    });
+    console.log(User.data);
     if(res.status(200)){
-    res.status(200).json({id});
+    res.status(200).json(User.data);
     return;
   }
   }
