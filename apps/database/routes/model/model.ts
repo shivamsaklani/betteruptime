@@ -104,6 +104,7 @@ router.get("/:table/:id", async (req: Request, res: Response, next: NextFunction
   try {
     const id = IdSchema.parse(req.params.id);
     const query = req.query;
+    console.log(query);
 
     const args: FindUniqueArgs<typeof table> = {
       where: { id },
@@ -130,10 +131,8 @@ router.get("/:table/:id", async (req: Request, res: Response, next: NextFunction
 router.post("/:table", async (req: Request, res: Response, next: NextFunction) => {
   const table = req.params.table as ModelName;
   const delegate = getDelegate(table);
-  console.log(table);
   try {
     const query = req.query;
-    console.log(req.body);
     const args: CreateArgs<typeof table> = {
       data: req.body,
       select: parseJSON(query.select, "select"),
@@ -189,7 +188,6 @@ router.delete("/:table/:id", async (req: Request, res: Response, next: NextFunct
   const delegate = getDelegate(table);
   try {
     const id = IdSchema.parse(req.params.id);
-    console.log(id);
     const args: DeleteArgs<typeof table> = { where: { id } };
 
     const result = await delegate.delete(args);
@@ -214,5 +212,78 @@ router.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => 
   console.error("Unexpected error:", err);
   res.status(500).json({ error: "Internal server error" });
 });
+
+/* ==============================================================
+   12. Advanced Filter → GET /filter/:table/:column
+   ============================================================== */
+router.get(
+  "/filter/:table/:column",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const table = req.params.table as ModelName;
+    const column:any = req.params.column;
+    const delegate = getDelegate(table);
+
+    try {
+      const {
+        value,
+        op = "equals",
+        skip = "0",
+        take = "20",
+      } = req.query as Record<string, string>;
+
+      if (!value) {
+        return res
+          .status(400)
+          .json({ error: "Missing required ?value= query parameter" });
+      }
+
+      /* ==========================================================
+         Convert Query Value → Proper Type
+         ========================================================== */
+      let typedValue: any = value;
+
+      if (!isNaN(Number(value))) typedValue = Number(value); // numeric
+      else if (value === "true" || value === "false") typedValue = value === "true"; // boolean
+      else if (!isNaN(Date.parse(value))) typedValue = new Date(value); // date/time
+
+      /* ==========================================================
+         Build Prisma "where" filter based on operator
+         ========================================================== */
+      const ops: Record<string, any> = {
+        equals: { equals: typedValue },
+        contains: { contains: String(typedValue) },
+        startsWith: { startsWith: String(typedValue) },
+        endsWith: { endsWith: String(typedValue) },
+        gt: { gt: typedValue },
+        gte: { gte: typedValue },
+        lt: { lt: typedValue },
+        lte: { lte: typedValue },
+      };
+
+      if (!ops[op]) {
+        return res.status(400).json({
+          error: `Invalid operator '${op}'. Valid ops: ${Object.keys(ops).join(
+            ", "
+          )}`,
+        });
+      }
+
+      const where = {
+        [column]: ops[op],
+      };
+
+      const result = await delegate.findMany({
+        where,
+        skip: Number(skip),
+        take: Number(take),
+      });
+
+      res.json(result);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
 
 export default router;
