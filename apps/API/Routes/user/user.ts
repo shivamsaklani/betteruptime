@@ -119,42 +119,6 @@ user.post("/signin",async (req:Request, res:Response) => {
   
 });
 
-// refresh token to create for new access token 
-// user.post("/refresh", async (req: Request, res: Response) => {
-//   try {
-//     const { refreshToken } = req.body as {refreshToken?: string};
-
-//     if (!refreshToken) {
-//       res.status(400).send("Refresh token required");
-//       return;
-//     }
-
-//     // ✅ Verify refresh token
-//     jwt.verify(refreshToken, REFRESH_SECRET as string, (err:jwt.VerifyErrors | null, decoded:any) => {
-//       if (err || !decoded) {
-//         res.status(403).send("Invalid or expired refresh token");
-//         return;
-//       }
-//       console.log(decoded); // Todo : type safe this 
-//       const token= jwt.sign({
-//       username:decoded.email,
-//       id:decoded.id
-//       },JWT_SECRET as string,{
-//       expiresIn:"1h"
-//       });
-
-//       // ⚡ Option 1: Return ONLY new access token (keep same refresh token)
-//       if (req.session.sessionpayload) {
-//         req.session.sessionpayload.token  = token
-//       }
-//       res.status(200).json("Refreshed");
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).send("Internal Server Error: " + error);
-//   }
-// });
-
 user.get("/logout", async (req: Request, res: Response) => {
   req.session.destroy(err => {
     if (err) {
