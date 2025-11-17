@@ -3,7 +3,7 @@ import { Authorize } from "./middleware";
 import fileUpload from "express-fileupload";
 import bcrypt from "bcrypt";
 import { password } from "./zodschema";
-import { PrismaClient } from "@prisma/client";
+import axios from "axios";
 const express = require("express");
 const profile = express.Router();
 profile.use(fileUpload({
@@ -24,7 +24,6 @@ profile.post("/changepassword", Authorize, async (req: Request, res: Response) =
     if (!userid) {
       return res.status(401).send("Unauthorized: No user found");
     }
-
     //  Validate request body
     const result = password.safeParse(req.body.user);
     if (!result.success) {
@@ -38,7 +37,8 @@ profile.post("/changepassword", Authorize, async (req: Request, res: Response) =
     const { oldpassword, newpassword } = result.data;
 
     //  Fetch user and verify old password
-    const user = await PrismaClient.user.findUnique({ where: { id: userid } });
+    const userDB = await axios.get(`${process.env.DATABASE_SERVER}/user/${userid}`);
+    const user = userDB.data;
     if (!user) {
       return res.status(404).send("User not found");
     }
@@ -53,10 +53,10 @@ profile.post("/changepassword", Authorize, async (req: Request, res: Response) =
     const hashedPassword = await bcrypt.hash(newpassword, salt);
 
     //  Update user password
-    await PrismaClient.user.update({
-      where: { id: userid },
-      data: { password: hashedPassword },
+    await axios.put(`${process.env.DATABASE_SERVER}/user/${userid}`,{
+      password:hashedPassword
     });
+
 
     return res.status(200).json({
       success: true,
@@ -84,14 +84,17 @@ if (!file) {
 
 try {
   await file.mv(imageloc);
-  await PrismaClient.user.update({
-        where: {
-            id: userid
-        },
-        data: {
-            profileImage:`/profiles/${file.name}`
-        }
+  await axios.put(`${process.env.DATABASE_SERVER}/user/${userid}`,{
+    profileImage:`/profiles/${file.name}`
     });
+  // await PrismaClient.user.update({
+  //       where: {
+  //           id: userid
+  //       },
+  //       data: {
+  //           profileImage:`/profiles/${file.name}`
+  //       }
+  //   });
     return res.status(200).json({
       mesg: "Image Uploaded Successfully",
       fileLoc:`/profiles/${file.name}`
@@ -107,21 +110,19 @@ try {
 profile.get("/getdetails",Authorize,async (req:Request,res:Response)=>{
   const userid= req.userid?.id;
   try {
-    const response= await PrismaClient.user.findFirst({
-      where:{
-        id:userid
-      },
-      select:{
-        email:true,
-        name:true,
-        profileImage:true,
-      }
-    });
+      const select = encodeURIComponent(
+      JSON.stringify({
+        email: true,
+        name: true,
+        profileImage: true,
+      })
+    );
+    const response = await axios.get(`${process.env.DATABASE_SERVER}/user/${userid}?select=${select}`);
     if(!response){
       res.status(404).send("No user found");
       return;
     }
-    return res.status(200).json(response);
+    return res.status(200).json(response.data);
   } catch (error:any) {
       console.error("Error updating user name:", error);
       return res.status(500).send("Internal server error. Please try again later.");
@@ -144,14 +145,10 @@ profile.post("/changedetails",Authorize,async (req: Request, res: Response) => {
       }
 
       // Find and update user
-      const updatedUser = await PrismaClient.user.update({
-        where:{
-          id:userId
-        },
-        data:{
-          name:name
-        }
+      const User = await axios.put(`${process.env.DATABASE_SERVER}/user/${userId}`,{
+        name:name
       });
+      const updatedUser = User.data;
 
       if (!updatedUser) {
         return res.status(404).send("No User Found");
@@ -163,22 +160,28 @@ profile.post("/changedetails",Authorize,async (req: Request, res: Response) => {
       return res.status(500).send("Internal server error. Please try again later.");
     }
   });
+
+
+
 profile.post("/deleteprofile",Authorize,async (req:Request,res:Response)=>{
   const userid=req.userid?.id;
   try {
-    await PrismaClient.user.update({
-      where:{
-       id:userid 
-      },
-      data:{
-        profileImage:null
+    await axios.delete(`${process.env.DATABASE_SERVER}/user/${userid}`);
+
+     req.session.destroy((err) => {
+      if (err) {
+        console.error("Session destroy error:", err);
+        return res.status(500).send("Could not destroy session");
       }
+      res.clearCookie("connect.sid");
+      return res.status(200).send("Profile Deleted & Logged out");
     });
+
    return res.status(200).send("Profile Deleted");
   } catch (error) {
      console.error("Error updating user name:", error);
       return res.status(500).send("Internal server error. Please try again later.");
     
   }
-})
+});
 export default profile;
