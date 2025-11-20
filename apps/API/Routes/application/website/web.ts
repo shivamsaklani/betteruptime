@@ -1,8 +1,6 @@
-import { Prisma } from "@repo/db/client";
 import { Authorize } from "../../user/middleware";
 import type { Request, Response } from "express";
 import axios from "axios";
-import type { any } from "zod";
 
 const express = require("express");
 const web = express.Router();
@@ -41,7 +39,6 @@ web.delete("/deletewebsite/:id", Authorize, async (req: Request, res: Response) 
     }
     try {
         const response = await axios.delete(`${process.env.DATABASE_SERVER}/website/${webid}`);
-        console.log(response.status);
         if (!response) {
             res.status(404).send("No Website found");
             return;
@@ -50,7 +47,6 @@ web.delete("/deletewebsite/:id", Authorize, async (req: Request, res: Response) 
         return;
     } catch (e) {
         res.status(500).send("Please Try Again");
-        console.log(e);
         return;
     }
 }); //EndPoint for Deleting a Website
@@ -200,7 +196,6 @@ web.get("/getalerts", Authorize, async (req: Request, res: Response) => {
       }
     })
     const alerts =  fetch.data;
-    console.log(alerts);
 
     if (alerts && alerts.length > 0) {
       // Map to match your UI structure

@@ -1,25 +1,29 @@
 // add logic to how the user view and create a graph in this 
-
-import { PrismaClient } from "@prisma/client";
+import axios from "axios";
 import type { Request, Response } from "express";
 const express = require("express");
 const charts = express();
 
 charts.get("/uptime/:id", async (req: Request, res: Response) => {
     const id = req.params.id;
-    try {
-        const fetchdata = await PrismaClient.websiteTick.findMany({
-            where: {
+    const  where= {
                 website_id: id,
-            },
+            };
+    try {
+        const fetchDB = await axios.get(`${process.env.DATABASE_SERVER}/websiteTick`,{
+          params:{
+            where:JSON.stringify(where),
             take: 100,
-            select: {
-                status: true,
-            },
-            orderBy: {
+            orderBy:JSON.stringify( {
                 createdAt: "desc", // optional, ensures latest first
-            },
-        });
+            }),
+             select:JSON.stringify( {
+                status: true,
+            }),
+
+          }
+        })
+        const fetchdata = fetchDB.data;
         const total = fetchdata.length;
         if (total == 0) {
             return res.status(401).json({
@@ -84,14 +88,18 @@ charts.get("/responsetime/:id", async (req: Request, res: Response) => {
     }
 
     // Fetch data from DB
-    const rawData = await PrismaClient.websiteTick.findMany({
-      where: {
+    const fetchDB = await axios.get(`${process.env.DATABASE_SERVER}/websiteTick`,{
+      params:{
+         where:JSON.stringify( {
         website_id: id,
         createdAt: { gte: startTime },
-      },
-      orderBy: { createdAt: "asc" },
-      select: { response_time_ms: true, createdAt: true },
-    });
+      }),
+         orderBy: JSON.stringify({ createdAt: "asc" }),
+      select: JSON.stringify({ response_time_ms: true, createdAt: true }),
+
+      }
+    })
+    const rawData = fetchDB.data;
 
     if (rawData.length === 0) {
       return res.status(200).json({ response: [], label: [] });
