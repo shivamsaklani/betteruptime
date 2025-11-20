@@ -104,7 +104,6 @@ router.get("/:table/:id", async (req: Request, res: Response, next: NextFunction
   try {
     const id = IdSchema.parse(req.params.id);
     const query = req.query;
-    console.log(query);
 
     const args: FindUniqueArgs<typeof table> = {
       where: { id },
@@ -146,7 +145,6 @@ router.post("/:table", async (req: Request, res: Response, next: NextFunction) =
     const result = await delegate.create(cleanArgs);
     res.status(201).json(result);
   } catch (err) {
-    console.log(err);
     next(err);
   }
 });
@@ -220,35 +218,43 @@ router.get(
   "/filter/:table/:column",
   async (req: Request, res: Response, next: NextFunction) => {
     const table = req.params.table as ModelName;
-    const column:any = req.params.column;
+    const column: any = req.params.column;
     const delegate = getDelegate(table);
 
     try {
-      const {
-        value,
-        op = "equals",
-        skip = "0",
-        take = "20",
-      } = req.query as Record<string, string>;
+      let { include,select, where, value, op = "equals", skip = "0", take = "20" } =
+        req.query as Record<string, string>;
 
+      /* ==========================================================
+         CASE 1: Advanced Prisma Query (where + include)
+         ========================================================== */
+      if (include || where) {
+        const parsedInclude = include ? JSON.parse(include) : undefined;
+        const parsedWhere = where ? JSON.parse(where) : {};
+        const parsedSelect = select ?JSON.parse(select): undefined;
+        const result = await delegate.findMany({
+          where: parsedWhere,
+          include: parsedInclude,
+          select:parsedSelect,
+        });
+        return res.json(result);
+      }
+
+      /* ==========================================================
+         CASE 2: Simple existing filter (value/op)
+         ========================================================== */
       if (!value) {
         return res
           .status(400)
           .json({ error: "Missing required ?value= query parameter" });
       }
 
-      /* ==========================================================
-         Convert Query Value → Proper Type
-         ========================================================== */
       let typedValue: any = value;
 
-      if (!isNaN(Number(value))) typedValue = Number(value); // numeric
-      else if (value === "true" || value === "false") typedValue = value === "true"; // boolean
-      else if (!isNaN(Date.parse(value))) typedValue = new Date(value); // date/time
+      if (!isNaN(Number(value))) typedValue = Number(value);
+      else if (value === "true" || value === "false") typedValue = value === "true";
+      else if (!isNaN(Date.parse(value))) typedValue = new Date(value);
 
-      /* ==========================================================
-         Build Prisma "where" filter based on operator
-         ========================================================== */
       const ops: Record<string, any> = {
         equals: { equals: typedValue },
         contains: { contains: String(typedValue) },
@@ -262,28 +268,28 @@ router.get(
 
       if (!ops[op]) {
         return res.status(400).json({
-          error: `Invalid operator '${op}'. Valid ops: ${Object.keys(ops).join(
-            ", "
-          )}`,
+          error: `Invalid operator '${op}'. Valid ops: ${Object.keys(ops).join(", ")}`,
         });
       }
 
-      const where = {
+      const simpleWhere = {
         [column]: ops[op],
       };
 
       const result = await delegate.findMany({
-        where,
+        where: simpleWhere,
         skip: Number(skip),
         take: Number(take),
       });
 
-      res.json(result);
+      return res.json(result);
     } catch (err) {
       next(err);
     }
   }
 );
+
+
 
 
 export default router;

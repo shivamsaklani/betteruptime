@@ -1,6 +1,8 @@
 import { Prisma } from "@repo/db/client";
 import { Authorize } from "../../user/middleware";
 import type { Request, Response } from "express";
+import axios from "axios";
+import type { any } from "zod";
 
 const express = require("express");
 const web = express.Router();
@@ -14,20 +16,22 @@ web.post("/createwebsite", Authorize, async (req: Request, res: Response) => {
         return;
     }
     try {
-        const web= await Prisma.website.create({
-            data: {
-                url: url,
-                name:name,
-                user_id: id
-            }
+        const website = await axios.post(`${process.env.DATABASE_SERVER}/website`,{
+              url: url,
+              name:name,
+              user_id: id
         });
+        const web = website.data;
         res.status(200).send(web.id);
         return;
     } catch (e) {
+      console.log(e);
         res.status(500).send("Please Try Again"+e);
         return;
     }
 }); // EndPoint for Creating a Website
+
+
 web.delete("/deletewebsite/:id", Authorize, async (req: Request, res: Response) => {
     const id = req.userid?.id;
     const  webid  = req.params.id;
@@ -36,17 +40,8 @@ web.delete("/deletewebsite/:id", Authorize, async (req: Request, res: Response) 
         return;
     }
     try {
-        await Prisma.websiteTick.deleteMany({
-  where: {
-    website_id: webid,
-  },
-});
-        const response = await Prisma.website.delete({
-            where: {
-                id: webid,
-                user_id: id
-            }
-        });
+        const response = await axios.delete(`${process.env.DATABASE_SERVER}/website/${webid}`);
+        console.log(response.status);
         if (!response) {
             res.status(404).send("No Website found");
             return;
@@ -59,39 +54,49 @@ web.delete("/deletewebsite/:id", Authorize, async (req: Request, res: Response) 
         return;
     }
 }); //EndPoint for Deleting a Website
+
+
+
 web.get("/getwebsites", Authorize, async (req: Request, res: Response) => {
     const id = req.userid?.id;
     try {
 
-        const websites = await Prisma.website.findMany({
-            where: {
-                user_id: id,
-            },
-            select: {
-                name:true,
-                url: true,
-                id: true,
-                timeAdded: true,
-                ticks: {
-                    orderBy: {
-                        createdAt: "desc",   // latest tick first
-                    },
-                    take: 1,               // only one tick
-                    select: {
-                        status: true,
-                        createdAt:true,
-                        response_time_ms:true
-                    },
-                }
+       const where = JSON.stringify({ user_id: id });
+
+    const select = JSON.stringify({
+      id: true,
+      name: true,
+      url: true,
+      timeAdded: true,
+      ticks: {
+        orderBy: { createdAt: "desc" },
+        take: 1,
+        select: {
+          status: true,
+          createdAt: true,
+          response_time_ms: true,
+        },
+      },
+    });
+        const url = `${process.env.DATABASE_SERVER}/filter/website/user_id`;
+
+        const websiteGet = await axios.get(url,{
+            params:{
+                where,
+                select
+                
             }
         });
+        const websites= websiteGet.data;
    
     if (!websites || websites.length === 0) {
       return res.status(404).send("No websites");
     }
 
     // Flatten tick data into website object
-    const flattenedWebsites = websites.map((w) => {
+    const flattenedWebsites = websites.map((w:{
+        ticks: any;id:string,name:string,url:string,timeAdded:Date
+}) => {
       const latestTick = w.ticks[0]; // because take: 1
       return {
         id: w.id,
@@ -107,19 +112,19 @@ web.get("/getwebsites", Authorize, async (req: Request, res: Response) => {
         return;
 
     } catch (error) {
-        res.status(500).send("We ara facing issue Please try after some time");
+        res.status(500).send("We ara facing issue Please try after some time" + error);
         return;
     }
 });// Sends all the websites from database
+
+
 web.get("/selectwebsite/:websiteid", Authorize, async (req: Request, res: Response) => {
     const user_id = req.userid?.id;
-    try {
-        const website= await Prisma.website.findFirst({
-            where: {
+    const  where=JSON.stringify({
                 user_id: user_id,
                 id: req.params.websiteid
-            },
-            include: {
+            });
+    const  include=JSON.stringify({
                 ticks: {
                     orderBy: [{
                         createdAt: "desc"
@@ -133,15 +138,23 @@ web.get("/selectwebsite/:websiteid", Authorize, async (req: Request, res: Respon
                     take:100,
                 }
                 
-            },
-        });
+              });
+
+    try {
+       const fetch = await axios.get(`${process.env.DATABASE_SERVER}/website`,{
+        params:{
+          where,
+          include,
+        }
+       });
+       const website = fetch.data[0];
         if (!website) {
       return res.status(404).send("No websites");
     }
 
     // Flatten tick data into website object
      const latestTick = website.ticks[0]; // because take: 1
-    const upCount = website.ticks.filter(t => t.status === "up").length;
+    const upCount = website.ticks.filter((t:any) => t.status === "up").length;
     const uptime = website.ticks.length > 0 ? (upCount / website.ticks.length) * 100 : null;
    
     const  response = {
@@ -169,23 +182,29 @@ web.get("/selectwebsite/:websiteid", Authorize, async (req: Request, res: Respon
 
 web.get("/getalerts", Authorize, async (req: Request, res: Response) => {
   const id = req.userid?.id;
-
-  try {
-    // Fetch alerts and include website info
-    const alerts = await Prisma.webEvents.findMany({
-        where:{
+  const  include={
+        website: true, // assuming your Prisma schema has a relation 'website' in webEvents
+      };
+  const where={
             website:{
                 user_id:id,
             }
-        },
-      include: {
-        website: true, // assuming your Prisma schema has a relation 'website' in webEvents
-      },
-    });
+        };
+
+  try {
+    // Fetch alerts and include website info
+    const fetch = await axios.get(`${process.env.DATABASE_SERVER}/webEvents`,{
+      params:{
+        where:JSON.stringify(where),
+        include:JSON.stringify(include)
+      }
+    })
+    const alerts =  fetch.data;
+    console.log(alerts);
 
     if (alerts && alerts.length > 0) {
       // Map to match your UI structure
-      const formattedAlerts = alerts.map(alert => ({
+      const formattedAlerts = alerts.map((alert: { id: any; level: any; resolved: any; website_id: any; name: any; timeAdded: any; website: { name: any; }; resolvedTime: any; }) => ({
         id: alert.id,
         level: alert.level,           // "low" | "mid" | "high"
         resolved: alert.resolved,

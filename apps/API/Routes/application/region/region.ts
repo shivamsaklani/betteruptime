@@ -2,7 +2,7 @@ import type { Request, Response } from "express";
 
 import {CreateRegion, DelRegion} from "@repo/redisstreams/redisclient";
 import { Authorize } from "../../user/middleware";
-import { PrismaClient } from "@prisma/client";
+import axios from "axios";
 const express = require("express");
 const region = express.Router();
 
@@ -11,14 +11,14 @@ region.post("/createregion",Authorize,async (req:Request,res:Response)=>{
   const {region}= req.body;
   const userId=req.userid?.id;
   try {
-    await PrismaClient.region.create({
-      data:{
-        name:region,
-        user_id:userId
-      }
+     const createR= await axios.post(`${process.env.DATABASE_SERVER}/region`,{
+      name:region,
+      user_id:userId
     });
+    if(createR.status ==200 && 201){
     CreateRegion(region);
     res.status(200).send(`Region created:${region}`);
+    }
     return;
   } catch (error) {
       res.status(500).send("Try Again. We are facing Traffic");
@@ -28,11 +28,7 @@ region.post("/createregion",Authorize,async (req:Request,res:Response)=>{
 region.delete("/delregion",Authorize,async (req:Request,res:Response)=>{
   const {id,region}= req.body;
   try {
-    await PrismaClient.region.delete({
-      where:{
-        id:id,
-      }
-    });
+    await axios.delete(`${process.env.DATABASE_SERVER}/region`);
     DelRegion(region);
     res.status(200).send(`Region Deleted`);
     return;

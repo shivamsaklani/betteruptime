@@ -26,9 +26,9 @@ charts.get("/uptime/:id", async (req: Request, res: Response) => {
                 "status": []
             });
         }
-        const uptime = fetchdata.filter((w) => w.status == "up" ).length;
-        const downtime = fetchdata.filter((w) =>  w.status == "down" ).length;
-        const degraded = fetchdata.filter((w) =>  w.status == "degraded" ).length;
+        const uptime = fetchdata.filter((w:any) => w.status == "up" ).length;
+        const downtime = fetchdata.filter((w:any) =>  w.status == "down" ).length;
+        const degraded = fetchdata.filter((w:any) =>  w.status == "degraded" ).length;
 
         const success = Number(((uptime / total) * 100).toFixed(2));
         const failed = Number(((downtime / total) * 100).toFixed(2));
