@@ -1,7 +1,7 @@
 import express, { type Request, type Response, type NextFunction } from "express";
-import { PrismaClient, Prisma } from "../../generated/prisma";
+import { Prisma } from "../../generated/prisma/client";
 import { z } from "zod";
-const prisma = new PrismaClient();
+import prisma from "../..";
 const router = express.Router();
 
 /* ==============================================================
@@ -42,6 +42,7 @@ function getDelegate<M extends ModelName>(model: M): ModelDelegate<M> {
   if (!delegate || typeof delegate !== "object") {
     throw new Error(`Model not found. Did you run 'prisma generate'?`);
   }
+  
   return delegate as ModelDelegate<M>;
 }
 
@@ -145,8 +146,11 @@ router.get("/:table/:id", async (req: Request, res: Response, next: NextFunction
    8. POST /:table → create
    ============================================================== */
 router.post("/:table", async (req: Request, res: Response, next: NextFunction) => {
+  
   const table = req.params.table as ModelName;
+    console.log(table);
   const delegate = getDelegate(table);
+
   try {
     const query = req.query;
     const args: CreateArgs<typeof table> = {
@@ -160,6 +164,7 @@ router.post("/:table", async (req: Request, res: Response, next: NextFunction) =
     ) as CreateArgs<typeof table>;
 
     const result = await delegate.create(cleanArgs);
+    console.log(result);
     res.status(201).json(result);
   } catch (err) {
     next(err);
@@ -298,6 +303,7 @@ router.get(
 
 router.put("/:table", async (req: Request, res: Response, next: NextFunction) => {
   const table = req.params.table as ModelName;
+  console.log(table);
   const delegate = (prisma as any)[table] // must return prisma[table]
 
   try {
