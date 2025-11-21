@@ -5,6 +5,23 @@ const prisma = new PrismaClient();
 const router = express.Router();
 
 /* ==============================================================
+   Error Handler
+   ============================================================== */
+router.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
+  if (err instanceof z.ZodError) {
+    return res.status(400).json({ error: "Validation failed", issues: err.issues });
+  }
+
+  if (err instanceof Prisma.PrismaClientKnownRequestError) {
+    return res.status(400).json({ error: err.message, code: err.code });
+  }
+
+  console.error("Unexpected error:", err);
+  res.status(500).json({ error: "Internal server error" });
+});
+
+
+/* ==============================================================
    1. Extract Model Names & Delegates Safely
    ============================================================== */
 type ModelName = keyof typeof prisma; // e.g. "user" | "post" | ...
@@ -195,24 +212,10 @@ router.delete("/:table/:id", async (req: Request, res: Response, next: NextFunct
   }
 });
 
-/* ==============================================================
-   11. Error Handler
-   ============================================================== */
-router.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
-  if (err instanceof z.ZodError) {
-    return res.status(400).json({ error: "Validation failed", issues: err.issues });
-  }
 
-  if (err instanceof Prisma.PrismaClientKnownRequestError) {
-    return res.status(400).json({ error: err.message, code: err.code });
-  }
-
-  console.error("Unexpected error:", err);
-  res.status(500).json({ error: "Internal server error" });
-});
 
 /* ==============================================================
-   12. Advanced Filter → GET /filter/:table/:column
+   11. Advanced Filter → GET /filter/:table/:column
    ============================================================== */
 router.get(
   "/filter/:table/:column",
@@ -288,6 +291,44 @@ router.get(
     }
   }
 );
+
+/* ==============================================================
+   12. Update Many → put /:table
+   ============================================================== */
+
+router.put("/:table", async (req: Request, res: Response, next: NextFunction) => {
+  const table = req.params.table as ModelName;
+  const delegate = (prisma as any)[table] // must return prisma[table]
+
+  try {
+    const query = req.query;
+
+    const where = parseJSON(query.where, "where") || {};
+    const select = parseJSON(query.select, "select");
+    const include = parseJSON(query.include, "include");
+
+    const updateResult = await delegate.updateMany({
+      where,
+      data: req.body
+    });
+
+    let updatedRows = null;
+    if (select || include) {
+      updatedRows = await delegate.findMany({ where, select, include });
+    }
+
+    res.json({
+      count: updateResult.count,
+      updated: updatedRows
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+
+
+
 
 
 

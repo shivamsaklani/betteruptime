@@ -4,13 +4,15 @@
   "type": "module",
   "private": true,
   "dependencies": {
+    "@repo/db": "*",
+    "@repo/redisstreams": "*",
     "@types/redis": "^4.0.11",
-    "redis": "^5.8.2",
-    "@repo/redisstreams":"*",
-    "@repo/db":"*"
+    "axios": "^1.13.2",
+    "dotenv": "^17.2.3",
+    "redis": "^5.8.2"
   },
   "scripts": {
-     "build": "tsc --b",
+    "build": "tsc --b",
     "dev": "bun --watch index.ts",
     "start": "bun index.ts"
   },
