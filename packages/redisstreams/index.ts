@@ -1,6 +1,5 @@
 import { createClient, type RedisClientType } from "redis";
 import type { ResponseType, websiteType, Events } from "./types";
-import { Prisma } from "@repo/db/client";
 import axios from "axios";
 export const redisclient: RedisClientType = await createClient({
   url: process.env.Redis_url || "redis://localhost:6379"
@@ -34,6 +33,8 @@ export async function PushBulk(website: websiteType[]) {
     await PushWebsite(w);
   }
 }// pushes all the websites from database to the queue
+
+
 export async function CreateRegion(region: string) {
   try {
     const exist = await redisclient.exists(region); //check if the region is in the stream or not 
@@ -110,17 +111,6 @@ export async function Alerts(Event: Events) {
           timeAdded: new Date(),
           resolvedTime: new Date(),
         });
-        if (response.status == 200) console.log("Website added");
-        // await Prisma.webEvents.create({
-        //   data: {
-        //     name: Event.Reason,
-        //     level: Event.level,
-        //     resolved: Event.isResolved,
-        //     website_id: Event.websiteId,
-        //     timeAdded: new Date(),
-        //     resolvedTime: new Date(),
-        //   },
-        // });
 
         // prevent duplicate alerts for same incident
         await redisclient.set(key, "active", { EX: 3600 });
@@ -141,19 +131,6 @@ export async function Alerts(Event: Events) {
           }
         }
       });
-      if(response.status ==200){
-        console.log("Updated");
-      }
-      // const response = await Prisma.webEvents.updateMany({
-      //   where: {
-      //     website_id: Event.websiteId,
-      //     resolved: false,
-      //   },
-      //   data: {
-      //     resolved: true,
-      //     resolvedTime:new Date(),
-      //   },
-      // });
       await redisclient.del(key);
 
     }

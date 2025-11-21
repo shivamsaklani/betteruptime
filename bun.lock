@@ -49,6 +49,7 @@
         "@repo/redisstreams": "*",
         "@types/redis": "^4.0.11",
         "axios": "^1.12.2",
+        "dotenv": "^17.2.3",
         "redis": "^5.8.2",
       },
       "devDependencies": {
@@ -157,7 +158,6 @@
     "apps/pusher": {
       "name": "pusher",
       "dependencies": {
-        "@repo/db": "*",
         "@repo/redisstreams": "*",
         "@types/redis": "^4.0.11",
         "axios": "^1.13.2",
