@@ -29,9 +29,7 @@ async function consumeRegion(region: string, region_id: string, workerId: string
               await axios.post(`${process.env.DATABASE_SERVER}/websiteTick`,{
                  status, response_time_ms: responseTime, region_id, website_id: websiteId 
               });
-              // await Prisma.websiteTick.create({
-              //   data: { status, response_time_ms: responseTime, region_id, website_id: websiteId },
-              // });
+       
 
               if (status === "degraded") {
                 await Alerts({
@@ -56,9 +54,7 @@ async function consumeRegion(region: string, region_id: string, workerId: string
               await axios.post(`${process.env.DATABASE_SERVER}/websiteTick`,{
                  status:"down", response_time_ms: responseTime, region_id, website_id: websiteId 
               });
-              // await Prisma.websiteTick.create({
-              //   data: { status: "down", response_time_ms: responseTime, region_id, website_id: websiteId },
-              // });
+           
               await Alerts({
                 websiteId,
                 Reason: e?.message ?? "Request failed",
@@ -91,9 +87,7 @@ async function Worker() {
         }
       });
       let regions = fetch.data;
-      // let regions = await Prisma.region.findMany({
-      //   select: { id: true, name: true },
-      // });
+
       if (regions.length === 0) {
         console.log("No regions found. Creating default region...");
         console.log(process.env.DATABASE_SERVER);
@@ -104,11 +98,6 @@ async function Worker() {
             select: JSON.stringify({ id: true, name: true })},
         });
         const defaultRegion =fetchRegion.data;
-        console.log(defaultRegion);
-        // const defaultRegion = await Prisma.region.create({
-        //   data: { name: "asia" },
-        //   select: { id: true, name: true },
-        // });
         CreateRegion("asia");
         regions = [defaultRegion];
         activeConsumers.set("asia", true);
