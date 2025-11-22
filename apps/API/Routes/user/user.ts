@@ -1,13 +1,12 @@
-import { Prisma } from "@repo/db/client";
 import type { Request, Response } from "express"; 
 import bcrypt from "bcrypt";
 import { signin, userSchema } from "./zodschema";
 import jwt from "jsonwebtoken";
 import googleAuth from "./google/googleauth";
+import axios from "axios";
 const express = require("express");
 const user = express.Router();
 const JWT_SECRET=process.env.JWT_TOKEN;
-const REFRESH_SECRET = process.env.REFRESH_SECRET;
 user.use("/google",googleAuth);
 user.get("/", (req:Request, res:Response) => {
   return res.send("Server is Running ");
@@ -30,14 +29,9 @@ user.post("/signup", async (req:Request, res:Response) => {
 
  try {
 
-  // if user exist in the database 
-    const existingUser = await Prisma.user.findFirst({
-      where: {
-      email: trustedData.data.email  
-      }
-    });
-
-    if (existingUser) {
+  // if user exist in the Prisma 
+  const existingUser = await axios.get(`${process.env.DATABASE_SERVER}/filter/user/email?value=${trustedData.data.email}`);
+    if (Array.isArray(existingUser.data) && existingUser.data.length >0) {
       return res.status(409).send("User with this email already exists");
     }
 
@@ -46,16 +40,15 @@ user.post("/signup", async (req:Request, res:Response) => {
     if(salt){
      hashedpassword=await bcrypt.hash(trustedData.data.password,salt);
     }
+
      const createuser = async ()=>{
-  const {id} =await Prisma.user.create({
-    data:{
+    const User =await axios.post(`${process.env.DATABASE_SERVER}/User`,{
       name:trustedData.data.username,
       password: hashedpassword,
       email:trustedData.data.email
-    }
-   });
+    });
     if(res.status(200)){
-    res.status(200).json({id});
+    res.status(200).json(User.data);
     return;
   }
   }
@@ -69,55 +62,71 @@ user.post("/signup", async (req:Request, res:Response) => {
  );
 
  // SignIn
-user.post("/signin",async (req:Request, res:Response) => {
+user.post("/signin", async (req: Request, res: Response) => {
   try {
     const trustedData = signin.safeParse(req.body);
-    if(!trustedData.success){
-      res.status(400).send("Invalid request data");
-      return;
+    if (!trustedData.success) {
+      return res.status(400).send("Invalid request data");
     }
-    const userData= await Prisma.user.findFirst({
-      where:{
-        email:trustedData.data.email
-      }
-    });
-    if(!userData){
-      res.status(404).send("No user Found");
-      return;
+
+    // Fetch user by email
+    const userResp = await axios.get(
+      `${process.env.DATABASE_SERVER}/filter/user/email?value=${encodeURIComponent(
+        trustedData.data.email
+      )}`
+    );
+
+    const user = userResp.data[0]; // ← extract user safely
+
+    // Check if user exists
+    if (!user) {
+      return res.status(404).send("No user Found");
     }
-    const hashedpassword= await bcrypt.compare(trustedData.data.password,userData?.password);
-    if(!hashedpassword){
-      res.status(401).send("Password mismatch");
-      return;
+
+    // Compare password
+    const passwordMatch = await bcrypt.compare(
+      trustedData.data.password,
+      user.password
+    );
+
+    if (!passwordMatch) {
+      return res.status(401).send("Password mismatch");
     }
-    const token= jwt.sign({
-      username:userData?.email,
-      id:userData?.id
-    },JWT_SECRET as string,{
-      expiresIn:"1h"
-    });
-    req.session.sessionpayload= {token:token,id:userData.id,Username:userData.name};
-   
+
+    // Generate JWT
+    const token = jwt.sign(
+      {
+        username: user.email,
+        id: user.id,
+      },
+      JWT_SECRET as string,
+      { expiresIn: "1h" }
+    );
+
+    // Save Session Payload
+    req.session.sessionpayload = {
+      token: token,
+      id: user.id,
+      Username: user.name,
+    };
+
     req.session.save((err) => {
-  if (err) {
-    console.error("Session save error:", err);
-    return res.status(500).send("Could not save session");
-  }
-  // This ensures Set-Cookie header is sent
-  res.status(200).json({
-    message: "SignIn successful",
-    id: userData.id,
-    username: userData.name,
-  });
-  return;
-});
-    
+      if (err) {
+        console.error("Session save error:", err);
+        return res.status(500).send("Could not save session");
+      }
+
+      return res.status(200).json({
+        message: "SignIn successful",
+        id: user.id,
+        username: user.name,
+      });
+    });
   } catch (error) {
-     res.status(500).send("Sorry we are facing some issues"+error);
-     return;
-  }    
-  
+    return res.status(500).send("Sorry we are facing some issues: " + error);
+  }
 });
+
 
 user.get("/logout", async (req: Request, res: Response) => {
   req.session.destroy(err => {
