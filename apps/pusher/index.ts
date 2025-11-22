@@ -1,4 +1,4 @@
-import { PushBulk } from "@repo/redisstreams/redisclient";
+
 import axios from "axios";
 import dotenv from "dotenv";
 dotenv.config();
@@ -17,15 +17,18 @@ async function Pusher() {
       }
     });
     const websites = fetch.data;
-    PushBulk(websites);
+    await axios.post(`${process.env.REDIS_SERVER}/pushbulk`,{
+      websites
+    });
+    // PushBulk(websites);
     // change it to API Request too 
 
   } catch (error) {
-    console.log("Error");
+    console.log("Error"+error);
   }
 
 }
 
 setInterval(() => {
   Pusher();
-}, 20_000);
+}, 30_000);

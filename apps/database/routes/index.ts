@@ -10,8 +10,6 @@ app.use(cors({
 
 app.use("/api/v1", model);
 
-
 app.listen(process.env.DATABASE_PORT, () =>
   console.log(`Database is Running ${process.env.DATABASE_PORT}`)
-
 );

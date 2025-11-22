@@ -1,6 +1,4 @@
 import type { Request, Response } from "express";
-
-import {CreateRegion, DelRegion} from "@repo/redisstreams/redisclient";
 import { Authorize } from "../../user/middleware";
 import axios from "axios";
 const express = require("express");
@@ -16,7 +14,10 @@ region.post("/createregion",Authorize,async (req:Request,res:Response)=>{
       user_id:userId
     });
     if(createR.status ==200 && 201){
-    CreateRegion(region);
+     await axios.post(`${process.env.REDIS_SERVER}/createregion`,{
+          region:region
+        });
+    // CreateRegion(region);
     res.status(200).send(`Region created:${region}`);
     }
     return;
@@ -29,7 +30,8 @@ region.delete("/delregion",Authorize,async (req:Request,res:Response)=>{
   const {id,region}= req.body;
   try {
     await axios.delete(`${process.env.DATABASE_SERVER}/region`);
-    DelRegion(region);
+    await axios.delete(`${process.env.REDIS_SERVER}/deleteRegion/id?value=${region}`);
+    // DelRegion(region);
     res.status(200).send(`Region Deleted`);
     return;
   } catch (error) {

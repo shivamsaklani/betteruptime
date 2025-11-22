@@ -1,20 +1,24 @@
-import { createClient, type RedisClientType } from "redis";
+// import { createClient, type RedisClientType } from "redis";
 import type { ResponseType, websiteType, Events } from "./types";
 import axios from "axios";
-export const redisclient: RedisClientType = await createClient({
-  url: process.env.Redis_url || "redis://localhost:6379"
-});
-redisclient.on("error", (err) => {
-  console.error("Redis connection error:", err.message);
-});
+// export const redisclient: RedisClientType = await createClient({
+//   url: process.env.Redis_url || "redis://localhost:6379"
+// });
+// redisclient.on("error", (err) => {
+//   console.error("Redis connection error:", err.message);
+// });
+import { connectRedis,redisclient } from "./main";
+
+await connectRedis();
+
 const Stream_Name = 'uptime:website';
-try {
-  await redisclient.connect();
-  console.log("Connected to Redis");
-} catch (err) {
-  console.error("Failed to connect to Redis:", err);
-  process.exit(1);
-}
+// try {
+//   await redisclient.connect();
+//   console.log("Connected to Redis");
+// } catch (err) {
+//   console.error("Failed to connect to Redis:", err);
+//   process.exit(1);
+// }
 
 
 async function PushWebsite({ url, id }: websiteType) {
@@ -25,7 +29,6 @@ async function PushWebsite({ url, id }: websiteType) {
     });
   } catch (error) {
     console.log("Connection Error", error);
-
   }
 } // pushes website into the queue
 export async function PushBulk(website: websiteType[]) {
@@ -52,6 +55,8 @@ export async function CreateRegion(region: string) {
     console.log("Error Creating Group", error);
   }
 } // creates new Region in the Stream
+
+
 export async function DelRegion(groupName: string) {
   try {
     await redisclient.xGroupDestroy(Stream_Name, groupName);
@@ -59,6 +64,8 @@ export async function DelRegion(groupName: string) {
     console.error(`Error deleting consumer: ${error}`);
   }
 }// delete Region 
+
+
 export async function mesAck(mesid: string, groupName: string) {
   try {
     await redisclient.xAck(Stream_Name, groupName, mesid);
@@ -66,12 +73,15 @@ export async function mesAck(mesid: string, groupName: string) {
     console.log("Message Not ack", error);
   }
 }
+
+
 export async function ReadGroup(groupName: string, workerId: string): Promise<ResponseType[]> {
   if (!groupName) {
     return [];
   }
 
   try {
+  
     const website = await redisclient.xReadGroup(groupName, workerId, {
       key: Stream_Name,
       "id": ">"
@@ -88,12 +98,12 @@ export async function ReadGroup(groupName: string, workerId: string): Promise<Re
 
 }
 
+
 export async function mesAckGroup(groupName: string, website: string[]) {
   for (const w of website) {
     await mesAck(w, groupName);
   }
 }
-
 
 // Functions for Alerts in Website 
 export async function Alerts(Event: Events) {
@@ -102,8 +112,9 @@ export async function Alerts(Event: Events) {
     const isActive = await redisclient.get(key);
     // CASE 1: Incident Occurred (isDown or degraded)
     if (Event.occured) {
+    
       if (!isActive) {
-        const response = await axios.post(`${process.env.DATABASE_SERVER}/webEvents`, {
+        await axios.post(`${process.env.DATABASE_SERVER}/WebEvent`, {
           name: Event.Reason,
           level: Event.level,
           resolved: Event.isResolved,
@@ -119,16 +130,17 @@ export async function Alerts(Event: Events) {
 
     // CASE 2: Issue Resolved
     else if (Event.isResolved) {
+      console.log("is resolved");
       // remove redis flag since resolved
-      const response = await axios.put(`${process.env.DATABASE_SERVER}/webEvents`, {
+      const response = await axios.put(`${process.env.DATABASE_SERVER}/WebEvent`, {
         resolved: true,
         resolvedTime: new Date(),
       }, {
         params: {
-          where: {
+          where: JSON.stringify({
             website_id: Event.websiteId,
             resolved: false,
-          }
+          })
         }
       });
       await redisclient.del(key);

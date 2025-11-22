@@ -42,8 +42,8 @@ function getDelegate<M extends ModelName>(model: M): ModelDelegate<M> {
   if (!delegate || typeof delegate !== "object") {
     throw new Error(`Model not found. Did you run 'prisma generate'?`);
   }
-  
-  return delegate as ModelDelegate<M>;
+
+return delegate as ModelDelegate<M>;
 }
 
 /* ==============================================================
@@ -148,7 +148,6 @@ router.get("/:table/:id", async (req: Request, res: Response, next: NextFunction
 router.post("/:table", async (req: Request, res: Response, next: NextFunction) => {
   
   const table = req.params.table as ModelName;
-    console.log(table);
   const delegate = getDelegate(table);
 
   try {
@@ -164,7 +163,6 @@ router.post("/:table", async (req: Request, res: Response, next: NextFunction) =
     ) as CreateArgs<typeof table>;
 
     const result = await delegate.create(cleanArgs);
-    console.log(result);
     res.status(201).json(result);
   } catch (err) {
     next(err);
@@ -303,7 +301,6 @@ router.get(
 
 router.put("/:table", async (req: Request, res: Response, next: NextFunction) => {
   const table = req.params.table as ModelName;
-  console.log(table);
   const delegate = (prisma as any)[table] // must return prisma[table]
 
   try {

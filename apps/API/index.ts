@@ -2,8 +2,12 @@ import express from "express";
 import API from "./Routes";
 import cors from "cors";
 import session, { Store } from "express-session";
-import { redisclient } from "@repo/redisstreams/redisclient";
+import { createClient, type RedisClientType } from "redis";
 import { RedisStore } from "connect-redis";
+ const redisclient: RedisClientType = createClient({
+  url: process.env.REDIS_URL || "redis://localhost:6379"
+});
+redisclient.connect().catch(console.error);
 const store = new RedisStore({
   client: redisclient,
   prefix: "session:",

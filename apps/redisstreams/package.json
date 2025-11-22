@@ -7,6 +7,11 @@
     "./redisclient": "./index.ts",
     "./types": "./types.d.ts"
   },
+  "scripts": {
+    "build": "tsc --b",
+    "dev": "bun --watch index.ts",
+    "start": "bun index.ts"
+  },
   "devDependencies": {
     "@types/bun": "latest"
   },
@@ -16,6 +21,7 @@
   "dependencies": {
     "@types/redis": "^4.0.11",
     "axios": "^1.13.2",
+    "dotenv": "^17.2.3",
     "redis": "^5.8.2"
   }
 }

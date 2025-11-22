@@ -5,6 +5,7 @@
 5) Documentations of the projects.
 
 CREATE EXTENSION timescaledb;
-SELECT create_hypertable('"WebsiteTick"', '"createdAt"');
+
+SELECT create_hypertable('websitetick', 'createdAt',migrate_data=>true);
 
 add this to the readme

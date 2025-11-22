@@ -189,7 +189,7 @@ web.get("/getalerts", Authorize, async (req: Request, res: Response) => {
 
   try {
     // Fetch alerts and include website info
-    const fetch = await axios.get(`${process.env.DATABASE_SERVER}/webEvents`,{
+    const fetch = await axios.get(`${process.env.DATABASE_SERVER}/WebEvent`,{
       params:{
         where:JSON.stringify(where),
         include:JSON.stringify(include)
