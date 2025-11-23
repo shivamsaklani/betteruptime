@@ -1,27 +1,16 @@
-# ---------- Builder ----------
-FROM oven/bun:1.1.25 AS builder
+# ---------- Builder / Final Image ----------
+FROM oven/bun:1.1.25
 
 WORKDIR /app
 
-# Copy everything from root of monorepo (not just API)
+# Copy entire API
 COPY . .
 
-# Bun will now see packages/ and apps/
-RUN bun install --frozen-lockfile
+# Install dependencies
+RUN bun install
 
-# Build API
-WORKDIR /app/apps/API
-RUN bun run build
+# Expose API port
+EXPOSE 3001
 
-# ---------- Runtime ----------
-FROM oven/bun:1.1.25 AS runtime
-
-WORKDIR /app
-
-# Copy built output and dependencies
-COPY --from=builder /app/apps/API /app
-COPY --from=builder /app/node_modules /app/node_modules
-COPY --from=builder /app/packages /app/packages
-
-EXPOSE 3000
-CMD ["bun", "run", "start"]
+# Start the API
+CMD ["bun", "start"]

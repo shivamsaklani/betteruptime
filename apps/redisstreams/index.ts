@@ -7,7 +7,7 @@ const app = express();
 
 app.use(express.json());
 app.use("/api/v1",router);
-const PORT = process.env.RedisPort || 5000;
+const PORT = process.env.RedisPort || 4001;
 
 app.listen(PORT, () => {
     console.log(`API Server running on port ${PORT}`);

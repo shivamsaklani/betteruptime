@@ -87,7 +87,7 @@ export async function ReadGroup(groupName: string, workerId: string): Promise<Re
       "id": ">"
     },
       {
-        BLOCK: 60_000
+        BLOCK: 30_000
       });
     if (!website) return [];
     return website as ResponseType[];

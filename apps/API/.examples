@@ -1,5 +1,46 @@
-JWT_TOKEN = "JWT_TOKEN"
-SESSION_SECRET =  "SESSION_SECRET"
-ImageDirectory = "Profile pics folder"
-GOOGLE_CLIENT_SECRET = "GOOGLE_CLIENT_SECRET"
-GOOGLE_CLIENT_ID = "GOOGLE_CLIENT_ID"
+# ============================
+# AUTH SECRETS
+# ============================
+JWT_TOKEN=
+REFRESH_SECRET=
+SESSION_SECRET=
+
+# ==========================================
+# FIREBASE CONFIG
+# ==========================================
+FB_APIKEY=
+FB_AUTH_DOMAIN=
+FB_PROJECT_ID=
+FB_STORAGE_BUCKET=
+FB_MESSAGE_SENDER_ID=
+FB_APPID=
+FB_MEASUREMENT_ID=
+
+# ==========================================
+# GOOGLE OAUTH
+# ==========================================
+GOOGLE_CLIENT_SECRET=
+GOOGLE_CLIENT_ID=
+
+# ==========================================
+# FILE STORAGE
+# ==========================================
+IMAGE_DIRECTORY= 
+
+# ==========================================
+# PRISMA / DATABASE
+# ==========================================
+DATABASE_URL="postgresql://USER:PASSWORD@HOST:5432/DATABASE"
+DATABASE_SERVER="http://localhost:5000/api/v1"
+
+# ==========================================
+# REDIS
+# ==========================================
+REDIS_SERVER="http://localhost:4001/api/v1"
+REDIS_URL="redis://localhost:6379"
+
+# ==========================================
+# NOTES
+# Prisma does NOT auto load .env. Use:
+#   import "dotenv/config";
+# ==========================================

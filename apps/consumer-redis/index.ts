@@ -105,8 +105,6 @@ async function consumeRegion(region: string, region_id: string, workerId: string
         await axios.post(`${process.env.REDIS_SERVER}/ackGroup`,{
           website:response[0]!.messages.map((w) => w.id), 
           groupName:region
-
-
         });
         // mesAckGroup(region, response[0]!.messages.map((w) => w.id));
       } else {
