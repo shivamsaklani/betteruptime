@@ -4,18 +4,25 @@ import fileUpload from "express-fileupload";
 import bcrypt from "bcrypt";
 import { password } from "./zodschema";
 import axios from "axios";
+import {v2 as  cloudinary, type UploadApiResponse} from "cloudinary";
+import fs from "fs";
 const express = require("express");
+
 const profile = express.Router();
-profile.use(fileUpload({
-  useTempFiles : true,
-  tempFileDir :  `${process.env.ImageDirectory}`,// 413 for big files error
-   limits: {
-            fileSize: 10000000, // Around 10MB
-        },
-        abortOnLimit: true,
-}));
+profile.use( fileUpload({
+    // useTempFiles: true,
+    // tempFileDir: "/tmp/",         // recommended temp dir
+    limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
+    abortOnLimit: true,
+    createParentPath: true
+  }));
 // add logic to user profile and settings data
 
+cloudinary.config({
+ cloud_name:process.env.CLOUDINARY_CLOUD_NAME,
+  api_key :process.env.CLOUDINARY_API_KEY,
+  api_secret:process.env.CLOUDINARY_API_SECRET
+});
 
 
 profile.post("/changepassword", Authorize, async (req: Request, res: Response) => {
@@ -72,39 +79,94 @@ profile.post("/changepassword", Authorize, async (req: Request, res: Response) =
 });
 
 
-profile.post("/imageupload",Authorize,async (req:Request, res:Response)=>{
+// profile.post("/imageupload", Authorize, async (req: Request, res: Response) => {
+//   const file = req.files?.profile as fileUpload.UploadedFile | undefined;
+//   const userid = req.userid?.id;
+//   if (!file) {
+//     return res.status(400).json({ message: "No Image Selected" });
+//   }
+//   try {
+//     // wrap cloudinary stream in a promise
+//     const result = await new Promise<UploadApiResponse>((resolve, reject) => {
+//       const uploadStream = cloudinary.uploader.upload_stream(
+//         {
+//           resource_type: "image",
+//            folder: "profiles",
+//         },
+//         (error, result) => {
+//           // console.log(result);
+//           if (error) return reject(error);
+//           if (!result) return reject(new Error("Upload failed"));
+//           resolve(result);
+//         }
+//       );
+//       console.log("running");
+//       uploadStream.end(file.data);
+//     });
 
-const file = req.files?.profile  as fileUpload.UploadedFile;;
-const userid = req.userid?.id;
-const imageloc =`${process.env.ImageDirectory}`+`${file.name}`;
-
-if (!file) {
-  return res.status(400).send("No Image Selected");
-}
-
-try {
-  await file.mv(imageloc);
-  await axios.put(`${process.env.DATABASE_SERVER}/user/${userid}`,{
-    profileImage:`/profiles/${file.name}`
-    });
-  // await PrismaClient.user.update({
-  //       where: {
-  //           id: userid
-  //       },
-  //       data: {
-  //           profileImage:`/profiles/${file.name}`
-  //       }
-  //   });
-    return res.status(200).json({
-      mesg: "Image Uploaded Successfully",
-      fileLoc:`/profiles/${file.name}`
-    });
-} catch (error) {
-    console.error(error);
-  return res.status(500).json({ success: false, message: "Server error" });
-}
-
+//     console.log("result"+result);
     
+//     // now Cloudinary upload is finished safely
+//     // await axios.put(`${process.env.DATABASE_SERVER}/user/${userid}`, {
+//     //   profileImage: result.secure_url,
+//     // });
+
+//     return res.status(200).send("Image Uploaded Successfully");
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({
+//       success: false,
+//       message: "Server error",
+//       error,
+//     });
+//   }
+// });
+profile.post("/imageupload", Authorize, async (req: Request, res: Response) => {
+  const file = req.files?.profile as fileUpload.UploadedFile;
+  const userid = req.userid?.id as string;
+
+  // Basic validation
+  if (!file) return res.status(400).json({ message: "No image selected" });
+  if (!userid) return res.status(401).json({ message: "Unauthorized" });
+  if (!file.mimetype.startsWith("image/"))
+    return res.status(400).json({ message: "Only images are allowed" });
+  if (file.size > 10 * 1024 * 1024)
+    return res.status(400).json({ message: "Image too large (max 10MB)" });
+
+  try {
+    const b64 = Buffer.from(file.data).toString("base64");
+    const dataUri = `data:${file.mimetype};base64,${b64}`;
+
+    const result = await cloudinary.uploader.upload(dataUri, {
+      folder: "profiles",
+      public_id: userid,           // one unique image per user
+      overwrite: true,             // replace old profile pic
+      resource_type: "image",
+      // format: "webp",              // modern & small (optional)
+      // transformation: [
+      //   { width: 600, height: 600, crop: "limit", quality: "auto", fetch_format: "auto" }
+      // ],
+    });
+
+    // Save the URL to your database
+    await axios.put(`${process.env.DATABASE_SERVER}/user/${userid}`, {
+      profileImage: result.secure_url,
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Profile image uploaded successfully",
+      url: result.secure_url,
+    });
+
+  } catch (error: any) {
+    console.error("Image upload failed:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to upload image",
+      details: error.message,
+    });
+  }
 });
 
 profile.get("/getdetails",Authorize,async (req:Request,res:Response)=>{
