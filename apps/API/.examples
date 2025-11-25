@@ -1,46 +1,19 @@
-# ============================
-# AUTH SECRETS
-# ============================
+# SECRETS
 JWT_TOKEN=
 REFRESH_SECRET=
 SESSION_SECRET=
 
-# ==========================================
-# FIREBASE CONFIG
-# ==========================================
-FB_APIKEY=
-FB_AUTH_DOMAIN=
-FB_PROJECT_ID=
-FB_STORAGE_BUCKET=
-FB_MESSAGE_SENDER_ID=
-FB_APPID=
-FB_MEASUREMENT_ID=
+# CLOUDINARY 
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
 
-# ==========================================
-# GOOGLE OAUTH
-# ==========================================
+# EMAILS
 GOOGLE_CLIENT_SECRET=
 GOOGLE_CLIENT_ID=
 
-# ==========================================
-# FILE STORAGE
-# ==========================================
-IMAGE_DIRECTORY= 
-
-# ==========================================
-# PRISMA / DATABASE
-# ==========================================
-DATABASE_URL="postgresql://USER:PASSWORD@HOST:5432/DATABASE"
-DATABASE_SERVER="http://localhost:5000/api/v1"
-
-# ==========================================
-# REDIS
-# ==========================================
-REDIS_SERVER="http://localhost:4001/api/v1"
-REDIS_URL="redis://localhost:6379"
-
-# ==========================================
-# NOTES
-# Prisma does NOT auto load .env. Use:
-#   import "dotenv/config";
-# ==========================================
+# DATABASE ENV
+DATABASE_URL="postgresql://postgres:YOUR_PASSWORD@localhost:5432/uptime"
+DATABASE_SERVER="http://localhost:PORT/api/v1"
+REDIS_SERVER="http://localhost:PORT/api/v1"
+Redis_url="redis://localhost:PORT"
