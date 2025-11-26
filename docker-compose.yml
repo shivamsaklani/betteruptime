@@ -1,0 +1,68 @@
+name: "uptime"
+
+services:
+  api:
+    image: shivamsaklani/uptime:api
+    ports:
+      - "3001:3001"
+    env_file:
+      - ./apps/API/.env
+    depends_on:
+      - postgres
+      - redis
+      - redis_streams
+
+  consumer:
+    image: shivamsaklani/uptime:consumer
+    env_file:
+      - ./apps/consumer-redis/.env
+    depends_on:
+      - redis
+      - redis_streams
+
+  db:
+    image: shivamsaklani/uptime:db
+    env_file:
+      - ./apps/database/.env
+    ports:
+      - "5000:5000"
+    depends_on:
+      - postgres
+
+  frontend:
+    image: shivamsaklani/uptime:frontend
+    env_file:
+      - ./apps/frontend/.env.local
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+
+  pusher:
+    image: shivamsaklani/uptime:pusher
+    env_file:
+      - ./apps/pusher/.env
+
+  redis_streams:
+    image: shivamsaklani/uptime:redis_streams
+    env_file:
+      - ./apps/redisstreams/.env
+    ports:
+      - "4001:4001"
+
+  redis:
+    image: redis/redis-stack:latest
+    ports:
+      - "6379:6379"
+      - "8080:8080"   # Redis Insight UI
+
+  postgres:
+    image: timescale/timescaledb:latest-pg17
+    environment:
+      POSTGRES_DB: uptime
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: saklani2004*
+    ports:
+      - "5432:5432"
+    volumes:
+      - /media/shivamsaklani/Development/dockerdb:/var/lib/postgresql/data

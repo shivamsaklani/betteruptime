@@ -115,13 +115,12 @@ user.post("/signin", async (req: Request, res: Response) => {
         console.error("Session save error:", err);
         return res.status(500).send("Could not save session");
       }
-
-      return res.status(200).json({
+    });
+  return res.status(200).json({
         message: "SignIn successful",
         id: user.id,
         username: user.name,
-      });
-    });
+   });
   } catch (error) {
     return res.status(500).send("Sorry we are facing some issues: " + error);
   }
