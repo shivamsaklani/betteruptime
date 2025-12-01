@@ -12,15 +12,15 @@ export type ResponseType = {
 }
 
 export type Events = {
-  occured: boolean, 
-  Reason: string, 
-  level: level, 
-  websiteId: string, 
+  occured: boolean,
+  Reason: string,
+  level: level,
+  websiteId: string,
   isResolved: boolean
 }
 
-export enum level{
-  low="low",
+export enum level {
+  low = "low",
   mid = "mid",
   high = "high",
   threat = "threat"

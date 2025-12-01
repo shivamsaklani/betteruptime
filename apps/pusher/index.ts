@@ -3,12 +3,12 @@ import axios from "axios";
 import dotenv from "dotenv";
 dotenv.config();
 async function Pusher() {
-  if (!process.env.DATBASE_SERVER) {
+  if (!process.env.DATABASE_SERVER) {
     console.error("❌ DATABASE_SERVER is not defined in .env");
     return;
   }
   try {
-    const fetch = await axios.get(`${process.env.DATBASE_SERVER}/website`, {
+    const fetch = await axios.get(`${process.env.DATABASE_SERVER}/website`, {
       params: {
         select: JSON.stringify({
           url: true,
@@ -16,19 +16,21 @@ async function Pusher() {
         })
       }
     });
+
     const websites = fetch.data;
-    await axios.post(`${process.env.REDIS_SERVER}/pushbulk`,{
+    const redis_res = await axios.post(`${process.env.REDIS_SERVER}/pushbulk`, {
       websites
     });
-    // PushBulk(websites);
-    // change it to API Request too 
+    if (redis_res.status == 400) {
+      console.log("No Websites");
+    }
 
   } catch (error) {
-    console.log("Error"+error);
+    console.log("Error " + error);
   }
 
 }
 
 setInterval(() => {
   Pusher();
-}, 30_000);
+}, 30000);

@@ -149,7 +149,6 @@ router.post("/:table", async (req: Request, res: Response, next: NextFunction) =
   
   const table = req.params.table as ModelName;
   const delegate = getDelegate(table);
-
   try {
     const query = req.query;
     const args: CreateArgs<typeof table> = {
@@ -157,7 +156,6 @@ router.post("/:table", async (req: Request, res: Response, next: NextFunction) =
       select: parseJSON(query.select, "select"),
       include: parseJSON(query.include, "include"),
     };
-
     const cleanArgs = Object.fromEntries(
       Object.entries(args).filter(([_, v]) => v !== undefined)
     ) as CreateArgs<typeof table>;

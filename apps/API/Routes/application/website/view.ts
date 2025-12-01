@@ -48,104 +48,98 @@ charts.get("/uptime/:id", async (req: Request, res: Response) => {
     }
 }); // gives data to the pie chart uptime for each website
 
+// Convert UTC → IST
+const toIST = (date: Date) => {
+  return new Date(date.getTime() + 5.5 * 60 * 60 * 1000);
+};
+
 charts.get("/responsetime/:id", async (req: Request, res: Response) => {
   const id = req.params.id;
-  const timeframe = (req.query.timeframe as string) || "1h"; // default 1 hour
+  const timeframe = (req.query.timeframe as string) || "1h";
 
   try {
     const now = new Date();
     let startTime = new Date();
-    let groupInterval = "minute";
+    let groupInterval: "second" | "minute" | "hour" = "minute";
 
-    // Determine timeframe and grouping
     switch (timeframe) {
-      case "1m":
-        startTime.setMinutes(now.getMinutes() - 1);
+      case "10m":
+        startTime.setMinutes(now.getMinutes() - 10);
         groupInterval = "second";
         break;
-      case "5m":
-        startTime.setMinutes(now.getMinutes() - 5);
+      case "30m":
+        startTime.setMinutes(now.getMinutes() - 30);
         groupInterval = "second";
         break;
       case "1h":
         startTime.setHours(now.getHours() - 1);
         groupInterval = "minute";
         break;
-      case "1d":
-        startTime.setDate(now.getDate() - 1);
+      case "24h":
+        startTime.setHours(now.getHours() - 24);
         groupInterval = "hour";
         break;
-      case "1mo":
-        startTime.setMonth(now.getMonth() - 1);
-        groupInterval = "day";
-        break;
-      case "1y":
-        startTime.setFullYear(now.getFullYear() - 1);
-        groupInterval = "month";
-        break;
       default:
-        startTime.setHours(now.getHours() - 1);
+        return res.status(400).json({
+          error: "Invalid timeframe. Use 10m, 30m, 1h, or 24h.",
+        });
     }
 
-    // Fetch data from DB
-    const fetchDB = await axios.get(`${process.env.DATABASE_SERVER}/websiteTick`,{
-      params:{
-         where:JSON.stringify( {
-        website_id: id,
-        createdAt: { gte: startTime },
-      }),
-         orderBy: JSON.stringify({ createdAt: "asc" }),
-      select: JSON.stringify({ response_time_ms: true, createdAt: true }),
+    const fetchDB = await axios.get(`${process.env.DATABASE_SERVER}/websiteTick`, {
+      params: {
+        where: JSON.stringify({
+          website_id: id,
+          createdAt: { gte: startTime },
+        }),
+        orderBy: JSON.stringify({ createdAt: "asc" }),
+        select: JSON.stringify({ response_time_ms: true, createdAt: true }),
+      },
+    });
 
-      }
-    })
     const rawData = fetchDB.data;
 
-    if (rawData.length === 0) {
-      return res.status(200).json({ response: [], label: [] });
-    }
+    if (rawData.length === 0)
+      return res.status(200).json({ responsetime: [], label: [] });
 
-    // Group data by interval
-    const grouped: Record<string, number[]> = {};
+    // Grouped data = store actual IST date instead of ISO strings
+    const grouped: Record<string, { date: Date; values: number[] }> = {};
+
     for (const entry of rawData) {
-      const date = new Date(entry.createdAt);
-      let key: string;
-      switch (groupInterval) {
-        case "second":
-          key = date.toISOString().slice(0, 19);
-          break;
-        case "minute":
-          key = date.toISOString().slice(0, 16);
-          break;
-        case "hour":
-          key = date.toISOString().slice(0, 13);
-          break;
-        case "day":
-          key = date.toISOString().slice(0, 10);
-          break;
-        case "month":
-          key = date.toISOString().slice(0, 7);
-          break;
-        default:
-          key = date.toISOString();
-      }
-      if (!grouped[key]) grouped[key] = [];
-      grouped[key].push(entry.response_time_ms);
+      const dateIST = toIST(new Date(entry.createdAt));
+
+      let key = "";
+
+      if (groupInterval === "second")
+        key = `${dateIST.getHours()}-${dateIST.getMinutes()}-${dateIST.getSeconds()}`;
+
+      if (groupInterval === "minute")
+        key = `${dateIST.getHours()}-${dateIST.getMinutes()}`;
+
+      if (groupInterval === "hour")
+        key = `${dateIST.getHours()}`;
+
+      if (!grouped[key]) grouped[key] = { date: dateIST, values: [] };
+      grouped[key].values.push(entry.response_time_ms);
     }
 
-    // Prepare response arrays
     const labels: string[] = [];
     const responseTimes: number[] = [];
 
-    for (const [key, values] of Object.entries(grouped)) {
-      const avg = values.reduce((a, b) => a + b, 0) / values.length;
+    for (const key in grouped) {
+      const g = grouped[key];
+
+      const avg =
+        g.values.reduce((a, b) => a + b, 0) / g.values.length;
+
       responseTimes.push(Number(avg.toFixed(2)));
 
-      const date = new Date(key);
       labels.push(
-        groupInterval === "day"
-          ? date.toLocaleDateString(undefined)
-          : date.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })
+        groupInterval === "hour"
+          ? g.date.toLocaleTimeString([], { hour: "2-digit" })
+          : g.date.toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })
       );
     }
 
@@ -157,7 +151,10 @@ charts.get("/responsetime/:id", async (req: Request, res: Response) => {
     console.error(error);
     res.status(500).send("Try Again");
   }
-});// gives response line chart data for each website
+});
+
+
+// gives response line chart data for each website
 
 
 export default charts;

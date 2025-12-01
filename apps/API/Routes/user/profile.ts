@@ -4,14 +4,11 @@ import fileUpload from "express-fileupload";
 import bcrypt from "bcrypt";
 import { password } from "./zodschema";
 import axios from "axios";
-import {v2 as  cloudinary, type UploadApiResponse} from "cloudinary";
-import fs from "fs";
+import {v2 as  cloudinary} from "cloudinary";
 const express = require("express");
 
 const profile = express.Router();
 profile.use( fileUpload({
-    // useTempFiles: true,
-    // tempFileDir: "/tmp/",         // recommended temp dir
     limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
     abortOnLimit: true,
     createParentPath: true
@@ -79,48 +76,6 @@ profile.post("/changepassword", Authorize, async (req: Request, res: Response) =
 });
 
 
-// profile.post("/imageupload", Authorize, async (req: Request, res: Response) => {
-//   const file = req.files?.profile as fileUpload.UploadedFile | undefined;
-//   const userid = req.userid?.id;
-//   if (!file) {
-//     return res.status(400).json({ message: "No Image Selected" });
-//   }
-//   try {
-//     // wrap cloudinary stream in a promise
-//     const result = await new Promise<UploadApiResponse>((resolve, reject) => {
-//       const uploadStream = cloudinary.uploader.upload_stream(
-//         {
-//           resource_type: "image",
-//            folder: "profiles",
-//         },
-//         (error, result) => {
-//           // console.log(result);
-//           if (error) return reject(error);
-//           if (!result) return reject(new Error("Upload failed"));
-//           resolve(result);
-//         }
-//       );
-//       console.log("running");
-//       uploadStream.end(file.data);
-//     });
-
-//     console.log("result"+result);
-    
-//     // now Cloudinary upload is finished safely
-//     // await axios.put(`${process.env.DATABASE_SERVER}/user/${userid}`, {
-//     //   profileImage: result.secure_url,
-//     // });
-
-//     return res.status(200).send("Image Uploaded Successfully");
-//   } catch (error) {
-//     console.error(error);
-//     return res.status(500).json({
-//       success: false,
-//       message: "Server error",
-//       error,
-//     });
-//   }
-// });
 profile.post("/imageupload", Authorize, async (req: Request, res: Response) => {
   const file = req.files?.profile as fileUpload.UploadedFile;
   const userid = req.userid?.id as string;
@@ -142,10 +97,6 @@ profile.post("/imageupload", Authorize, async (req: Request, res: Response) => {
       public_id: userid,           // one unique image per user
       overwrite: true,             // replace old profile pic
       resource_type: "image",
-      // format: "webp",              // modern & small (optional)
-      // transformation: [
-      //   { width: 600, height: 600, crop: "limit", quality: "auto", fetch_format: "auto" }
-      // ],
     });
 
     // Save the URL to your database

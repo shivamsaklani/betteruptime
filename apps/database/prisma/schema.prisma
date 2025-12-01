@@ -33,7 +33,7 @@ model Website {
   user_id   String?
   timeAdded DateTime        @default(now())
   ticks     WebsiteTick[]
-  events    WebEvent[]
+  events    WebEvent[]      
   channels  Channel[]
   user      User?           @relation(fields: [user_id], references: [id], onDelete: Cascade)
 

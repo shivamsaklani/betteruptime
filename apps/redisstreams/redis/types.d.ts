@@ -8,7 +8,7 @@ export type MessageType = {
 }
 export type ResponseType = {
   name: string,
-  messages: MessageType[]
+  messages: MessageType[] // each message type 
 }
 
 export type Events = {

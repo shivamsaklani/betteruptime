@@ -5,7 +5,7 @@ import session, { Store } from "express-session";
 import { createClient, type RedisClientType } from "redis";
 import { RedisStore } from "connect-redis";
  const redisclient: RedisClientType = createClient({
-  url: process.env.REDIS_URL || "redis://localhost:6379"
+  url: process.env.Redis_url
 });
 redisclient.connect().catch(console.error);
 const store = new RedisStore({

@@ -1,10 +1,10 @@
 #!/bin/sh
 set -e
 
-echo "Waiting for Neon DB..."
+echo "Waiting for DB..."
 
 until echo "SELECT 1;" | bunx prisma db execute --stdin; do
-  echo "Neon not ready yet... retrying in 3 seconds..."
+  echo "DB not ready yet... retrying in 3 seconds..."
   echo $DATABASE_URL
 
   sleep 3

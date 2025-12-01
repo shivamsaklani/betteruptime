@@ -5,9 +5,8 @@ import { GeistMono } from "geist/font/mono"
 import { ThemeProvider } from "@/components/theme-provider"
 import { ReduxProvider } from "@/components/redux-provider"
 import { Suspense } from "react"
-import "./globals.css"
 import { Toaster } from "@/components/ui/toaster"
-
+import "./globals.css"
 export const metadata: Metadata = {
   title: "BetterUptime",
   description: "Professional website monitoring and uptime tracking",

@@ -2,35 +2,35 @@ name: "uptime"
 
 services:
   api:
-    image: shivamsaklani/uptime:api
+    build: ./apps/API
     ports:
       - "3001:3001"
     env_file:
-      - ./apps/API/.env
+      - ./apps/API/docker.env
     depends_on:
       - postgres
       - redis
       - redis_streams
 
   consumer:
-    image: shivamsaklani/uptime:consumer
+    build: ./apps/consumer-redis
     env_file:
-      - ./apps/consumer-redis/.env
+      - ./apps/consumer-redis/docker.env
     depends_on:
       - redis
       - redis_streams
 
   db:
-    image: shivamsaklani/uptime:db
+    build: ./apps/database
     env_file:
-      - ./apps/database/.env
+      - ./apps/database/docker.env
     ports:
       - "5000:5000"
     depends_on:
       - postgres
 
   frontend:
-    image: shivamsaklani/uptime:frontend
+    build: ./apps/frontend
     env_file:
       - ./apps/frontend/.env.local
     ports:
@@ -39,14 +39,14 @@ services:
       - api
 
   pusher:
-    image: shivamsaklani/uptime:pusher
+    build: ./apps/pusher
     env_file:
-      - ./apps/pusher/.env
+      - ./apps/pusher/docker.env
 
   redis_streams:
-    image: shivamsaklani/uptime:redis_streams
+    build: ./apps/redisstreams
     env_file:
-      - ./apps/redisstreams/.env
+      - ./apps/redisstreams/docker.env
     ports:
       - "4001:4001"
 
@@ -54,7 +54,7 @@ services:
     image: redis/redis-stack:latest
     ports:
       - "6379:6379"
-      - "8080:8080"   # Redis Insight UI
+      - "8001:8001"
 
   postgres:
     image: timescale/timescaledb:latest-pg17

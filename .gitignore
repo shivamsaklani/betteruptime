@@ -5,7 +5,7 @@ node_modules/
 
 # Testing
 coverage/
-
+docker.env
 # Next.js
 .next/
 out/
@@ -13,6 +13,7 @@ out/
 # Production
 build/
 dist/
+data/postgres
 
 # Misc
 .DS_Store

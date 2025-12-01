@@ -9,19 +9,21 @@ region.post("/createregion",Authorize,async (req:Request,res:Response)=>{
   const {region}= req.body;
   const userId=req.userid?.id;
   try {
-     const createR= await axios.post(`${process.env.DATABASE_SERVER}/region`,{
+     await axios.post(`${process.env.DATABASE_SERVER}/region`,{
       name:region,
       user_id:userId
     });
-    if(createR.status ==200 && 201){
-     await axios.post(`${process.env.REDIS_SERVER}/createregion`,{
+
+     const response = await axios.post(`${process.env.REDIS_SERVER}/createregion`,{
           region:region
         });
+
     // CreateRegion(region);
-    res.status(200).send(`Region created:${region}`);
-    }
+    console.log(response.data);
+    res.status(200).send(region);
     return;
   } catch (error) {
+    console.log(error);
       res.status(500).send("Try Again. We are facing Traffic");
     return;
   }

@@ -16,12 +16,10 @@ export default function SelectRange({ value, onChange }: SelectRangeProps) {
         <SelectContent>
           <SelectGroup>
             <SelectLabel>Time Range</SelectLabel>
-            <SelectItem value="1m">1 minute</SelectItem>
-            <SelectItem value="5m">5 minutes</SelectItem>
+            <SelectItem value="10m">10minute</SelectItem>
+            <SelectItem value="30m">30minutes</SelectItem>
             <SelectItem value="1h">1 hour</SelectItem>
-            <SelectItem value="1d">24 hours</SelectItem>
-            <SelectItem value="1mo">1 Month</SelectItem>
-            <SelectItem value="1y">1 Year</SelectItem>
+            <SelectItem value="24h">24 hours</SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>
