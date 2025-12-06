@@ -56,7 +56,8 @@ export const ModelName = {
   WebEvent: 'WebEvent',
   Region: 'Region',
   WebsiteTick: 'WebsiteTick',
-  Channel: 'Channel'
+  MonitoredChannel: 'MonitoredChannel',
+  WebsiteMonitored: 'WebsiteMonitored'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -131,18 +132,27 @@ export const WebsiteTickScalarFieldEnum = {
 export type WebsiteTickScalarFieldEnum = (typeof WebsiteTickScalarFieldEnum)[keyof typeof WebsiteTickScalarFieldEnum]
 
 
-export const ChannelScalarFieldEnum = {
+export const MonitoredChannelScalarFieldEnum = {
   id: 'id',
   channelName: 'channelName',
+  user_id: 'user_id',
   channelDetails: 'channelDetails',
-  level: 'level',
+  monitor: 'monitor'
+} as const
+
+export type MonitoredChannelScalarFieldEnum = (typeof MonitoredChannelScalarFieldEnum)[keyof typeof MonitoredChannelScalarFieldEnum]
+
+
+export const WebsiteMonitoredScalarFieldEnum = {
+  id: 'id',
   website_id: 'website_id',
-  monitor: 'monitor',
+  channel_id: 'channel_id',
+  level: 'level',
   lastSent: 'lastSent',
   createdAt: 'createdAt'
 } as const
 
-export type ChannelScalarFieldEnum = (typeof ChannelScalarFieldEnum)[keyof typeof ChannelScalarFieldEnum]
+export type WebsiteMonitoredScalarFieldEnum = (typeof WebsiteMonitoredScalarFieldEnum)[keyof typeof WebsiteMonitoredScalarFieldEnum]
 
 
 export const SortOrder = {

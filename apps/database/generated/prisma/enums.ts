@@ -18,6 +18,14 @@ export const WebStatus = {
 export type WebStatus = (typeof WebStatus)[keyof typeof WebStatus]
 
 
+export const ChannelType = {
+  email: 'email',
+  telegram: 'telegram'
+} as const
+
+export type ChannelType = (typeof ChannelType)[keyof typeof ChannelType]
+
+
 export const EventLevel = {
   low: 'low',
   mid: 'mid',

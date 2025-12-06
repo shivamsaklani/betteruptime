@@ -389,7 +389,8 @@ export const ModelName = {
   WebEvent: 'WebEvent',
   Region: 'Region',
   WebsiteTick: 'WebsiteTick',
-  Channel: 'Channel'
+  MonitoredChannel: 'MonitoredChannel',
+  WebsiteMonitored: 'WebsiteMonitored'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -405,7 +406,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "website" | "webEvent" | "region" | "websiteTick" | "channel"
+    modelProps: "user" | "website" | "webEvent" | "region" | "websiteTick" | "monitoredChannel" | "websiteMonitored"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -779,77 +780,151 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    Channel: {
-      payload: Prisma.$ChannelPayload<ExtArgs>
-      fields: Prisma.ChannelFieldRefs
+    MonitoredChannel: {
+      payload: Prisma.$MonitoredChannelPayload<ExtArgs>
+      fields: Prisma.MonitoredChannelFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.ChannelFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChannelPayload> | null
+          args: Prisma.MonitoredChannelFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MonitoredChannelPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.ChannelFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChannelPayload>
+          args: Prisma.MonitoredChannelFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MonitoredChannelPayload>
         }
         findFirst: {
-          args: Prisma.ChannelFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChannelPayload> | null
+          args: Prisma.MonitoredChannelFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MonitoredChannelPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.ChannelFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChannelPayload>
+          args: Prisma.MonitoredChannelFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MonitoredChannelPayload>
         }
         findMany: {
-          args: Prisma.ChannelFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChannelPayload>[]
+          args: Prisma.MonitoredChannelFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MonitoredChannelPayload>[]
         }
         create: {
-          args: Prisma.ChannelCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChannelPayload>
+          args: Prisma.MonitoredChannelCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MonitoredChannelPayload>
         }
         createMany: {
-          args: Prisma.ChannelCreateManyArgs<ExtArgs>
+          args: Prisma.MonitoredChannelCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.ChannelCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChannelPayload>[]
+          args: Prisma.MonitoredChannelCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MonitoredChannelPayload>[]
         }
         delete: {
-          args: Prisma.ChannelDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChannelPayload>
+          args: Prisma.MonitoredChannelDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MonitoredChannelPayload>
         }
         update: {
-          args: Prisma.ChannelUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChannelPayload>
+          args: Prisma.MonitoredChannelUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MonitoredChannelPayload>
         }
         deleteMany: {
-          args: Prisma.ChannelDeleteManyArgs<ExtArgs>
+          args: Prisma.MonitoredChannelDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.ChannelUpdateManyArgs<ExtArgs>
+          args: Prisma.MonitoredChannelUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.ChannelUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChannelPayload>[]
+          args: Prisma.MonitoredChannelUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MonitoredChannelPayload>[]
         }
         upsert: {
-          args: Prisma.ChannelUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChannelPayload>
+          args: Prisma.MonitoredChannelUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MonitoredChannelPayload>
         }
         aggregate: {
-          args: Prisma.ChannelAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateChannel>
+          args: Prisma.MonitoredChannelAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMonitoredChannel>
         }
         groupBy: {
-          args: Prisma.ChannelGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.ChannelGroupByOutputType>[]
+          args: Prisma.MonitoredChannelGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MonitoredChannelGroupByOutputType>[]
         }
         count: {
-          args: Prisma.ChannelCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.ChannelCountAggregateOutputType> | number
+          args: Prisma.MonitoredChannelCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MonitoredChannelCountAggregateOutputType> | number
+        }
+      }
+    }
+    WebsiteMonitored: {
+      payload: Prisma.$WebsiteMonitoredPayload<ExtArgs>
+      fields: Prisma.WebsiteMonitoredFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.WebsiteMonitoredFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WebsiteMonitoredPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.WebsiteMonitoredFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WebsiteMonitoredPayload>
+        }
+        findFirst: {
+          args: Prisma.WebsiteMonitoredFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WebsiteMonitoredPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.WebsiteMonitoredFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WebsiteMonitoredPayload>
+        }
+        findMany: {
+          args: Prisma.WebsiteMonitoredFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WebsiteMonitoredPayload>[]
+        }
+        create: {
+          args: Prisma.WebsiteMonitoredCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WebsiteMonitoredPayload>
+        }
+        createMany: {
+          args: Prisma.WebsiteMonitoredCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.WebsiteMonitoredCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WebsiteMonitoredPayload>[]
+        }
+        delete: {
+          args: Prisma.WebsiteMonitoredDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WebsiteMonitoredPayload>
+        }
+        update: {
+          args: Prisma.WebsiteMonitoredUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WebsiteMonitoredPayload>
+        }
+        deleteMany: {
+          args: Prisma.WebsiteMonitoredDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.WebsiteMonitoredUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.WebsiteMonitoredUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WebsiteMonitoredPayload>[]
+        }
+        upsert: {
+          args: Prisma.WebsiteMonitoredUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WebsiteMonitoredPayload>
+        }
+        aggregate: {
+          args: Prisma.WebsiteMonitoredAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateWebsiteMonitored>
+        }
+        groupBy: {
+          args: Prisma.WebsiteMonitoredGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WebsiteMonitoredGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.WebsiteMonitoredCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WebsiteMonitoredCountAggregateOutputType> | number
         }
       }
     }
@@ -948,18 +1023,27 @@ export const WebsiteTickScalarFieldEnum = {
 export type WebsiteTickScalarFieldEnum = (typeof WebsiteTickScalarFieldEnum)[keyof typeof WebsiteTickScalarFieldEnum]
 
 
-export const ChannelScalarFieldEnum = {
+export const MonitoredChannelScalarFieldEnum = {
   id: 'id',
   channelName: 'channelName',
+  user_id: 'user_id',
   channelDetails: 'channelDetails',
-  level: 'level',
+  monitor: 'monitor'
+} as const
+
+export type MonitoredChannelScalarFieldEnum = (typeof MonitoredChannelScalarFieldEnum)[keyof typeof MonitoredChannelScalarFieldEnum]
+
+
+export const WebsiteMonitoredScalarFieldEnum = {
+  id: 'id',
   website_id: 'website_id',
-  monitor: 'monitor',
+  channel_id: 'channel_id',
+  level: 'level',
   lastSent: 'lastSent',
   createdAt: 'createdAt'
 } as const
 
-export type ChannelScalarFieldEnum = (typeof ChannelScalarFieldEnum)[keyof typeof ChannelScalarFieldEnum]
+export type WebsiteMonitoredScalarFieldEnum = (typeof WebsiteMonitoredScalarFieldEnum)[keyof typeof WebsiteMonitoredScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1070,6 +1154,20 @@ export type ListEnumWebStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Pr
 
 
 /**
+ * Reference to a field of type 'ChannelType'
+ */
+export type EnumChannelTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChannelType'>
+    
+
+
+/**
+ * Reference to a field of type 'ChannelType[]'
+ */
+export type ListEnumChannelTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChannelType[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -1166,7 +1264,8 @@ export type GlobalOmitConfig = {
   webEvent?: Prisma.WebEventOmit
   region?: Prisma.RegionOmit
   websiteTick?: Prisma.WebsiteTickOmit
-  channel?: Prisma.ChannelOmit
+  monitoredChannel?: Prisma.MonitoredChannelOmit
+  websiteMonitored?: Prisma.WebsiteMonitoredOmit
 }
 
 /* Types for Logging */

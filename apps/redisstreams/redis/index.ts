@@ -156,7 +156,12 @@ export async function Alerts(Event: Events) {
           timeAdded: new Date(),
           resolvedTime: new Date(),
         });
-
+        await axios.post(`${process.env.DATABASE_SERVER}/channel/sendEmail`,{
+          subject : "Error Occured",
+          Heading: Event.level,
+          message: Event.Reason,
+          website_id:Event.websiteId
+        })
         await redisclient.set(key, "active", { EX: 3600 });
       }
       return;
