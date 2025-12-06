@@ -80,3 +80,25 @@ Learn more about the power of Turborepo:
 - [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
 - [Configuration Options](https://turborepo.com/docs/reference/configuration)
 - [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+Screenshots
+<img width="1820" height="925" alt="Screenshot From 2025-12-06 23-56-42" src="https://github.com/user-attachments/assets/0f2e9a45-4553-4c24-ad83-729cc7c0ac0a" />
+
+<img width="1820" height="925" alt="Screenshot From 2025-12-06 23-56-48" src="https://github.com/user-attachments/assets/5e3e87b3-35a3-410a-904b-9cb778ef2880" />
+
+<img width="1820" height="925" alt="Screenshot From 2025-12-06 23-57-04" src="https://github.com/user-attachments/assets/7513318d-8644-43f9-b476-506f58ab92bf" />
+
+<img width="1820" height="925" alt="Screenshot From 2025-12-06 23-57-45" src="https://github.com/user-attachments/assets/c3c2859f-efaf-406e-88dc-671d442695cc" />
+
+<img width="1820" height="925" alt="Screenshot From 2025-12-06 23-58-06" src="https://github.com/user-attachments/assets/5a94821c-52f5-4899-b329-b7e0bc3181dd" />
+
+<img width="1820" height="925" alt="Screenshot From 2025-12-06 23-58-39" src="https://github.com/user-attachments/assets/1fa65eb8-9fca-4949-9b73-2e13f014788b" />
+
+<img width="1820" height="925" alt="Screenshot From 2025-12-06 23-58-47" src="https://github.com/user-attachments/assets/41382419-9411-421b-a26a-2b18da2446e8" />
+
+<img width="1820" height="925" alt="Screenshot From 2025-12-06 23-58-53" src="https://github.com/user-attachments/assets/6c0d4b6f-07d9-4712-a3e0-8663a0aaa1bc" />
+
+<img width="1820" height="925" alt="Screenshot From 2025-12-06 23-59-05" src="https://github.com/user-attachments/assets/a8ca9abe-6aa0-4efd-b2aa-701cac17a2f7" />
+
+<img width="1820" height="925" alt="Screenshot From 2025-12-06 23-59-22" src="https://github.com/user-attachments/assets/be9a1ccf-18cc-4939-90ad-d120ec4211b3" />
+
+
