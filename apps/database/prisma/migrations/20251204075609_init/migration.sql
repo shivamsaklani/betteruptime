@@ -2,6 +2,9 @@
 CREATE TYPE "webstatus" AS ENUM ('up', 'down', 'degraded');
 
 -- CreateEnum
+CREATE TYPE "channelType" AS ENUM ('email', 'telegram');
+
+-- CreateEnum
 CREATE TYPE "eventlevel" AS ENUM ('low', 'mid', 'high', 'threat');
 
 -- CreateTable
@@ -33,7 +36,7 @@ CREATE TABLE "webevents" (
     "level" "eventlevel" NOT NULL,
     "resolved" BOOLEAN DEFAULT false,
     "website_id" TEXT NOT NULL,
-    "resolvedTime" TIMESTAMP(3) NOT NULL,
+    "resolvedTime" TIMESTAMP(3),
     "timeAdded" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "webevents_pkey" PRIMARY KEY ("id")
@@ -63,15 +66,24 @@ CREATE TABLE "websitetick" (
 -- CreateTable
 CREATE TABLE "channel" (
     "id" TEXT NOT NULL,
-    "channelName" TEXT NOT NULL,
+    "channelName" "channelType" NOT NULL,
+    "user_id" TEXT NOT NULL,
     "channelDetails" TEXT NOT NULL,
-    "level" "eventlevel" NOT NULL,
-    "website_id" TEXT NOT NULL,
     "monitor" BOOLEAN NOT NULL DEFAULT true,
+
+    CONSTRAINT "channel_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "WebsiteMonitored" (
+    "id" TEXT NOT NULL,
+    "website_id" TEXT NOT NULL,
+    "channel_id" TEXT NOT NULL,
+    "level" "eventlevel" NOT NULL,
     "lastSent" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "channel_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "WebsiteMonitored_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -96,4 +108,10 @@ ALTER TABLE "websitetick" ADD CONSTRAINT "websitetick_region_id_fkey" FOREIGN KE
 ALTER TABLE "websitetick" ADD CONSTRAINT "websitetick_website_id_fkey" FOREIGN KEY ("website_id") REFERENCES "website"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "channel" ADD CONSTRAINT "channel_website_id_fkey" FOREIGN KEY ("website_id") REFERENCES "website"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "channel" ADD CONSTRAINT "channel_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "WebsiteMonitored" ADD CONSTRAINT "WebsiteMonitored_website_id_fkey" FOREIGN KEY ("website_id") REFERENCES "website"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "WebsiteMonitored" ADD CONSTRAINT "WebsiteMonitored_channel_id_fkey" FOREIGN KEY ("channel_id") REFERENCES "channel"("id") ON DELETE CASCADE ON UPDATE CASCADE;

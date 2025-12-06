@@ -22,8 +22,9 @@ model User {
   websites     Website[]
   region       Region[]
   profileImage String?
-
+  monitoredChannels MonitoredChannel[]
   @@map("user")
+  
 }
 
 model Website {
@@ -34,11 +35,12 @@ model Website {
   timeAdded DateTime        @default(now())
   ticks     WebsiteTick[]
   events    WebEvent[]      
-  channels  Channel[]
   user      User?           @relation(fields: [user_id], references: [id], onDelete: Cascade)
-
+  monitoredwebsites WebsiteMonitored[]
+  
   @@map("website")
 }
+
 
 model WebEvent {
   id           String       @id @default(uuid())
@@ -46,7 +48,7 @@ model WebEvent {
   level        EventLevel   @map("level")
   resolved     Boolean?     @default(false)
   website_id   String
-  resolvedTime DateTime
+  resolvedTime DateTime?
   website      Website      @relation(fields: [website_id], references: [id], onDelete: Cascade)
   timeAdded    DateTime     @default(now())
 
@@ -78,18 +80,30 @@ model WebsiteTick {
   @@map("websitetick")
 }
 
-model Channel {
-  id             String       @id @default(uuid())
-  channelName    String
-  channelDetails String
-  level          EventLevel   @map("level")
+model MonitoredChannel {
+  id                String             @id @default(uuid())
+  channelName       ChannelType
+  user_id           String
+  channelDetails    String
+  user              User               @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  monitor           Boolean            @default(true)
+
+  websiteMonitoreds WebsiteMonitored[]
+
+  @@map("channel")
+}
+
+
+model WebsiteMonitored {
+  id      String   @id  @default(uuid())
   website_id     String
-  monitor        Boolean      @default(true)
+  channel_id     String
+  level             EventLevel       @map("level")
   lastSent       DateTime?
   createdAt      DateTime     @default(now())
   website        Website      @relation(fields: [website_id], references: [id], onDelete: Cascade)
+  channel        MonitoredChannel @relation(fields: [channel_id], references: [id], onDelete: Cascade)
 
-  @@map("channel")
 }
 
 enum WebStatus {
@@ -98,6 +112,12 @@ enum WebStatus {
   degraded @map("degraded")
 
   @@map("webstatus")
+}
+
+enum ChannelType {
+  email  @map("email")
+  telegram @map("telegram")
+   @@map("channelType")
 }
 
 enum EventLevel {

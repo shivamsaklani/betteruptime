@@ -43,7 +43,12 @@ export type Region = Prisma.RegionModel
  */
 export type WebsiteTick = Prisma.WebsiteTickModel
 /**
- * Model Channel
+ * Model MonitoredChannel
  * 
  */
-export type Channel = Prisma.ChannelModel
+export type MonitoredChannel = Prisma.MonitoredChannelModel
+/**
+ * Model WebsiteMonitored
+ * 
+ */
+export type WebsiteMonitored = Prisma.WebsiteMonitoredModel

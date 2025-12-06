@@ -184,6 +184,7 @@ export type UserWhereInput = {
   profileImage?: Prisma.StringNullableFilter<"User"> | string | null
   websites?: Prisma.WebsiteListRelationFilter
   region?: Prisma.RegionListRelationFilter
+  monitoredChannels?: Prisma.MonitoredChannelListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -194,6 +195,7 @@ export type UserOrderByWithRelationInput = {
   profileImage?: Prisma.SortOrderInput | Prisma.SortOrder
   websites?: Prisma.WebsiteOrderByRelationAggregateInput
   region?: Prisma.RegionOrderByRelationAggregateInput
+  monitoredChannels?: Prisma.MonitoredChannelOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -207,6 +209,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   profileImage?: Prisma.StringNullableFilter<"User"> | string | null
   websites?: Prisma.WebsiteListRelationFilter
   region?: Prisma.RegionListRelationFilter
+  monitoredChannels?: Prisma.MonitoredChannelListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -239,6 +242,7 @@ export type UserCreateInput = {
   profileImage?: string | null
   websites?: Prisma.WebsiteCreateNestedManyWithoutUserInput
   region?: Prisma.RegionCreateNestedManyWithoutUserInput
+  monitoredChannels?: Prisma.MonitoredChannelCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -249,6 +253,7 @@ export type UserUncheckedCreateInput = {
   profileImage?: string | null
   websites?: Prisma.WebsiteUncheckedCreateNestedManyWithoutUserInput
   region?: Prisma.RegionUncheckedCreateNestedManyWithoutUserInput
+  monitoredChannels?: Prisma.MonitoredChannelUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -259,6 +264,7 @@ export type UserUpdateInput = {
   profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   websites?: Prisma.WebsiteUpdateManyWithoutUserNestedInput
   region?: Prisma.RegionUpdateManyWithoutUserNestedInput
+  monitoredChannels?: Prisma.MonitoredChannelUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -269,6 +275,7 @@ export type UserUncheckedUpdateInput = {
   profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   websites?: Prisma.WebsiteUncheckedUpdateManyWithoutUserNestedInput
   region?: Prisma.RegionUncheckedUpdateManyWithoutUserNestedInput
+  monitoredChannels?: Prisma.MonitoredChannelUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -324,6 +331,11 @@ export type UserNullableScalarRelationFilter = {
   isNot?: Prisma.UserWhereInput | null
 }
 
+export type UserScalarRelationFilter = {
+  is?: Prisma.UserWhereInput
+  isNot?: Prisma.UserWhereInput
+}
+
 export type StringFieldUpdateOperationsInput = {
   set?: string
 }
@@ -364,6 +376,20 @@ export type UserUpdateOneWithoutRegionNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRegionInput, Prisma.UserUpdateWithoutRegionInput>, Prisma.UserUncheckedUpdateWithoutRegionInput>
 }
 
+export type UserCreateNestedOneWithoutMonitoredChannelsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutMonitoredChannelsInput, Prisma.UserUncheckedCreateWithoutMonitoredChannelsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutMonitoredChannelsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutMonitoredChannelsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutMonitoredChannelsInput, Prisma.UserUncheckedCreateWithoutMonitoredChannelsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutMonitoredChannelsInput
+  upsert?: Prisma.UserUpsertWithoutMonitoredChannelsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutMonitoredChannelsInput, Prisma.UserUpdateWithoutMonitoredChannelsInput>, Prisma.UserUncheckedUpdateWithoutMonitoredChannelsInput>
+}
+
 export type UserCreateWithoutWebsitesInput = {
   id?: string
   name: string
@@ -371,6 +397,7 @@ export type UserCreateWithoutWebsitesInput = {
   email: string
   profileImage?: string | null
   region?: Prisma.RegionCreateNestedManyWithoutUserInput
+  monitoredChannels?: Prisma.MonitoredChannelCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutWebsitesInput = {
@@ -380,6 +407,7 @@ export type UserUncheckedCreateWithoutWebsitesInput = {
   email: string
   profileImage?: string | null
   region?: Prisma.RegionUncheckedCreateNestedManyWithoutUserInput
+  monitoredChannels?: Prisma.MonitoredChannelUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutWebsitesInput = {
@@ -405,6 +433,7 @@ export type UserUpdateWithoutWebsitesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   region?: Prisma.RegionUpdateManyWithoutUserNestedInput
+  monitoredChannels?: Prisma.MonitoredChannelUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutWebsitesInput = {
@@ -414,6 +443,7 @@ export type UserUncheckedUpdateWithoutWebsitesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   region?: Prisma.RegionUncheckedUpdateManyWithoutUserNestedInput
+  monitoredChannels?: Prisma.MonitoredChannelUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutRegionInput = {
@@ -423,6 +453,7 @@ export type UserCreateWithoutRegionInput = {
   email: string
   profileImage?: string | null
   websites?: Prisma.WebsiteCreateNestedManyWithoutUserInput
+  monitoredChannels?: Prisma.MonitoredChannelCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutRegionInput = {
@@ -432,6 +463,7 @@ export type UserUncheckedCreateWithoutRegionInput = {
   email: string
   profileImage?: string | null
   websites?: Prisma.WebsiteUncheckedCreateNestedManyWithoutUserInput
+  monitoredChannels?: Prisma.MonitoredChannelUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutRegionInput = {
@@ -457,6 +489,7 @@ export type UserUpdateWithoutRegionInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   websites?: Prisma.WebsiteUpdateManyWithoutUserNestedInput
+  monitoredChannels?: Prisma.MonitoredChannelUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRegionInput = {
@@ -466,6 +499,63 @@ export type UserUncheckedUpdateWithoutRegionInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   websites?: Prisma.WebsiteUncheckedUpdateManyWithoutUserNestedInput
+  monitoredChannels?: Prisma.MonitoredChannelUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutMonitoredChannelsInput = {
+  id?: string
+  name: string
+  password: string
+  email: string
+  profileImage?: string | null
+  websites?: Prisma.WebsiteCreateNestedManyWithoutUserInput
+  region?: Prisma.RegionCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutMonitoredChannelsInput = {
+  id?: string
+  name: string
+  password: string
+  email: string
+  profileImage?: string | null
+  websites?: Prisma.WebsiteUncheckedCreateNestedManyWithoutUserInput
+  region?: Prisma.RegionUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutMonitoredChannelsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutMonitoredChannelsInput, Prisma.UserUncheckedCreateWithoutMonitoredChannelsInput>
+}
+
+export type UserUpsertWithoutMonitoredChannelsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutMonitoredChannelsInput, Prisma.UserUncheckedUpdateWithoutMonitoredChannelsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutMonitoredChannelsInput, Prisma.UserUncheckedCreateWithoutMonitoredChannelsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutMonitoredChannelsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutMonitoredChannelsInput, Prisma.UserUncheckedUpdateWithoutMonitoredChannelsInput>
+}
+
+export type UserUpdateWithoutMonitoredChannelsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  websites?: Prisma.WebsiteUpdateManyWithoutUserNestedInput
+  region?: Prisma.RegionUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutMonitoredChannelsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  websites?: Prisma.WebsiteUncheckedUpdateManyWithoutUserNestedInput
+  region?: Prisma.RegionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -476,11 +566,13 @@ export type UserUncheckedUpdateWithoutRegionInput = {
 export type UserCountOutputType = {
   websites: number
   region: number
+  monitoredChannels: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   websites?: boolean | UserCountOutputTypeCountWebsitesArgs
   region?: boolean | UserCountOutputTypeCountRegionArgs
+  monitoredChannels?: boolean | UserCountOutputTypeCountMonitoredChannelsArgs
 }
 
 /**
@@ -507,6 +599,13 @@ export type UserCountOutputTypeCountRegionArgs<ExtArgs extends runtime.Types.Ext
   where?: Prisma.RegionWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountMonitoredChannelsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MonitoredChannelWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -516,6 +615,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   profileImage?: boolean
   websites?: boolean | Prisma.User$websitesArgs<ExtArgs>
   region?: boolean | Prisma.User$regionArgs<ExtArgs>
+  monitoredChannels?: boolean | Prisma.User$monitoredChannelsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -547,6 +647,7 @@ export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = run
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   websites?: boolean | Prisma.User$websitesArgs<ExtArgs>
   region?: boolean | Prisma.User$regionArgs<ExtArgs>
+  monitoredChannels?: boolean | Prisma.User$monitoredChannelsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -557,6 +658,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     websites: Prisma.$WebsitePayload<ExtArgs>[]
     region: Prisma.$RegionPayload<ExtArgs>[]
+    monitoredChannels: Prisma.$MonitoredChannelPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -960,6 +1062,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   websites<T extends Prisma.User$websitesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$websitesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WebsitePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   region<T extends Prisma.User$regionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$regionArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RegionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  monitoredChannels<T extends Prisma.User$monitoredChannelsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$monitoredChannelsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MonitoredChannelPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1427,6 +1530,30 @@ export type User$regionArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   distinct?: Prisma.RegionScalarFieldEnum | Prisma.RegionScalarFieldEnum[]
+}
+
+/**
+ * User.monitoredChannels
+ */
+export type User$monitoredChannelsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MonitoredChannel
+   */
+  select?: Prisma.MonitoredChannelSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MonitoredChannel
+   */
+  omit?: Prisma.MonitoredChannelOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MonitoredChannelInclude<ExtArgs> | null
+  where?: Prisma.MonitoredChannelWhereInput
+  orderBy?: Prisma.MonitoredChannelOrderByWithRelationInput | Prisma.MonitoredChannelOrderByWithRelationInput[]
+  cursor?: Prisma.MonitoredChannelWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MonitoredChannelScalarFieldEnum | Prisma.MonitoredChannelScalarFieldEnum[]
 }
 
 /**

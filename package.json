@@ -23,9 +23,12 @@
   ],
   "dependencies": {
     "@types/express": "^5.0.5",
+    "@types/nodemailer": "^7.0.4",
     "axios": "^1.13.2",
     "cloudinary": "^2.8.0",
     "express": "^5.1.0",
+    "mailtrap": "^4.3.2",
+    "nodemailer": "^7.0.11",
     "zod": "^3.25.74"
   }
 }

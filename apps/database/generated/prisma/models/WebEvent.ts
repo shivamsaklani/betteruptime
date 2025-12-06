@@ -165,7 +165,7 @@ export type WebEventGroupByOutputType = {
   level: $Enums.EventLevel
   resolved: boolean | null
   website_id: string
-  resolvedTime: Date
+  resolvedTime: Date | null
   timeAdded: Date
   _count: WebEventCountAggregateOutputType | null
   _min: WebEventMinAggregateOutputType | null
@@ -196,7 +196,7 @@ export type WebEventWhereInput = {
   level?: Prisma.EnumEventLevelFilter<"WebEvent"> | $Enums.EventLevel
   resolved?: Prisma.BoolNullableFilter<"WebEvent"> | boolean | null
   website_id?: Prisma.StringFilter<"WebEvent"> | string
-  resolvedTime?: Prisma.DateTimeFilter<"WebEvent"> | Date | string
+  resolvedTime?: Prisma.DateTimeNullableFilter<"WebEvent"> | Date | string | null
   timeAdded?: Prisma.DateTimeFilter<"WebEvent"> | Date | string
   website?: Prisma.XOR<Prisma.WebsiteScalarRelationFilter, Prisma.WebsiteWhereInput>
 }
@@ -207,7 +207,7 @@ export type WebEventOrderByWithRelationInput = {
   level?: Prisma.SortOrder
   resolved?: Prisma.SortOrderInput | Prisma.SortOrder
   website_id?: Prisma.SortOrder
-  resolvedTime?: Prisma.SortOrder
+  resolvedTime?: Prisma.SortOrderInput | Prisma.SortOrder
   timeAdded?: Prisma.SortOrder
   website?: Prisma.WebsiteOrderByWithRelationInput
 }
@@ -221,7 +221,7 @@ export type WebEventWhereUniqueInput = Prisma.AtLeast<{
   level?: Prisma.EnumEventLevelFilter<"WebEvent"> | $Enums.EventLevel
   resolved?: Prisma.BoolNullableFilter<"WebEvent"> | boolean | null
   website_id?: Prisma.StringFilter<"WebEvent"> | string
-  resolvedTime?: Prisma.DateTimeFilter<"WebEvent"> | Date | string
+  resolvedTime?: Prisma.DateTimeNullableFilter<"WebEvent"> | Date | string | null
   timeAdded?: Prisma.DateTimeFilter<"WebEvent"> | Date | string
   website?: Prisma.XOR<Prisma.WebsiteScalarRelationFilter, Prisma.WebsiteWhereInput>
 }, "id">
@@ -232,7 +232,7 @@ export type WebEventOrderByWithAggregationInput = {
   level?: Prisma.SortOrder
   resolved?: Prisma.SortOrderInput | Prisma.SortOrder
   website_id?: Prisma.SortOrder
-  resolvedTime?: Prisma.SortOrder
+  resolvedTime?: Prisma.SortOrderInput | Prisma.SortOrder
   timeAdded?: Prisma.SortOrder
   _count?: Prisma.WebEventCountOrderByAggregateInput
   _max?: Prisma.WebEventMaxOrderByAggregateInput
@@ -248,7 +248,7 @@ export type WebEventScalarWhereWithAggregatesInput = {
   level?: Prisma.EnumEventLevelWithAggregatesFilter<"WebEvent"> | $Enums.EventLevel
   resolved?: Prisma.BoolNullableWithAggregatesFilter<"WebEvent"> | boolean | null
   website_id?: Prisma.StringWithAggregatesFilter<"WebEvent"> | string
-  resolvedTime?: Prisma.DateTimeWithAggregatesFilter<"WebEvent"> | Date | string
+  resolvedTime?: Prisma.DateTimeNullableWithAggregatesFilter<"WebEvent"> | Date | string | null
   timeAdded?: Prisma.DateTimeWithAggregatesFilter<"WebEvent"> | Date | string
 }
 
@@ -257,7 +257,7 @@ export type WebEventCreateInput = {
   name: string
   level: $Enums.EventLevel
   resolved?: boolean | null
-  resolvedTime: Date | string
+  resolvedTime?: Date | string | null
   timeAdded?: Date | string
   website: Prisma.WebsiteCreateNestedOneWithoutEventsInput
 }
@@ -268,7 +268,7 @@ export type WebEventUncheckedCreateInput = {
   level: $Enums.EventLevel
   resolved?: boolean | null
   website_id: string
-  resolvedTime: Date | string
+  resolvedTime?: Date | string | null
   timeAdded?: Date | string
 }
 
@@ -277,7 +277,7 @@ export type WebEventUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.EnumEventLevelFieldUpdateOperationsInput | $Enums.EventLevel
   resolved?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  resolvedTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  resolvedTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   timeAdded?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   website?: Prisma.WebsiteUpdateOneRequiredWithoutEventsNestedInput
 }
@@ -288,7 +288,7 @@ export type WebEventUncheckedUpdateInput = {
   level?: Prisma.EnumEventLevelFieldUpdateOperationsInput | $Enums.EventLevel
   resolved?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   website_id?: Prisma.StringFieldUpdateOperationsInput | string
-  resolvedTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  resolvedTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   timeAdded?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -298,7 +298,7 @@ export type WebEventCreateManyInput = {
   level: $Enums.EventLevel
   resolved?: boolean | null
   website_id: string
-  resolvedTime: Date | string
+  resolvedTime?: Date | string | null
   timeAdded?: Date | string
 }
 
@@ -307,7 +307,7 @@ export type WebEventUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.EnumEventLevelFieldUpdateOperationsInput | $Enums.EventLevel
   resolved?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  resolvedTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  resolvedTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   timeAdded?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -317,7 +317,7 @@ export type WebEventUncheckedUpdateManyInput = {
   level?: Prisma.EnumEventLevelFieldUpdateOperationsInput | $Enums.EventLevel
   resolved?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   website_id?: Prisma.StringFieldUpdateOperationsInput | string
-  resolvedTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  resolvedTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   timeAdded?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -411,12 +411,16 @@ export type NullableBoolFieldUpdateOperationsInput = {
   set?: boolean | null
 }
 
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
 export type WebEventCreateWithoutWebsiteInput = {
   id?: string
   name: string
   level: $Enums.EventLevel
   resolved?: boolean | null
-  resolvedTime: Date | string
+  resolvedTime?: Date | string | null
   timeAdded?: Date | string
 }
 
@@ -425,7 +429,7 @@ export type WebEventUncheckedCreateWithoutWebsiteInput = {
   name: string
   level: $Enums.EventLevel
   resolved?: boolean | null
-  resolvedTime: Date | string
+  resolvedTime?: Date | string | null
   timeAdded?: Date | string
 }
 
@@ -464,7 +468,7 @@ export type WebEventScalarWhereInput = {
   level?: Prisma.EnumEventLevelFilter<"WebEvent"> | $Enums.EventLevel
   resolved?: Prisma.BoolNullableFilter<"WebEvent"> | boolean | null
   website_id?: Prisma.StringFilter<"WebEvent"> | string
-  resolvedTime?: Prisma.DateTimeFilter<"WebEvent"> | Date | string
+  resolvedTime?: Prisma.DateTimeNullableFilter<"WebEvent"> | Date | string | null
   timeAdded?: Prisma.DateTimeFilter<"WebEvent"> | Date | string
 }
 
@@ -473,7 +477,7 @@ export type WebEventCreateManyWebsiteInput = {
   name: string
   level: $Enums.EventLevel
   resolved?: boolean | null
-  resolvedTime: Date | string
+  resolvedTime?: Date | string | null
   timeAdded?: Date | string
 }
 
@@ -482,7 +486,7 @@ export type WebEventUpdateWithoutWebsiteInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.EnumEventLevelFieldUpdateOperationsInput | $Enums.EventLevel
   resolved?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  resolvedTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  resolvedTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   timeAdded?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -491,7 +495,7 @@ export type WebEventUncheckedUpdateWithoutWebsiteInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.EnumEventLevelFieldUpdateOperationsInput | $Enums.EventLevel
   resolved?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  resolvedTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  resolvedTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   timeAdded?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -500,7 +504,7 @@ export type WebEventUncheckedUpdateManyWithoutWebsiteInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.EnumEventLevelFieldUpdateOperationsInput | $Enums.EventLevel
   resolved?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  resolvedTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  resolvedTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   timeAdded?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -571,7 +575,7 @@ export type $WebEventPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     level: $Enums.EventLevel
     resolved: boolean | null
     website_id: string
-    resolvedTime: Date
+    resolvedTime: Date | null
     timeAdded: Date
   }, ExtArgs["result"]["webEvent"]>
   composites: {}

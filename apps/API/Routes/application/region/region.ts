@@ -28,6 +28,8 @@ region.post("/createregion",Authorize,async (req:Request,res:Response)=>{
     return;
   }
 }); //EndPoint for Adding new Region
+
+
 region.delete("/delregion",Authorize,async (req:Request,res:Response)=>{
   const {id,region}= req.body;
   try {

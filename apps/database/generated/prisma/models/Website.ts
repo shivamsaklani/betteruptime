@@ -184,8 +184,8 @@ export type WebsiteWhereInput = {
   timeAdded?: Prisma.DateTimeFilter<"Website"> | Date | string
   ticks?: Prisma.WebsiteTickListRelationFilter
   events?: Prisma.WebEventListRelationFilter
-  channels?: Prisma.ChannelListRelationFilter
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  monitoredwebsites?: Prisma.WebsiteMonitoredListRelationFilter
 }
 
 export type WebsiteOrderByWithRelationInput = {
@@ -196,8 +196,8 @@ export type WebsiteOrderByWithRelationInput = {
   timeAdded?: Prisma.SortOrder
   ticks?: Prisma.WebsiteTickOrderByRelationAggregateInput
   events?: Prisma.WebEventOrderByRelationAggregateInput
-  channels?: Prisma.ChannelOrderByRelationAggregateInput
   user?: Prisma.UserOrderByWithRelationInput
+  monitoredwebsites?: Prisma.WebsiteMonitoredOrderByRelationAggregateInput
 }
 
 export type WebsiteWhereUniqueInput = Prisma.AtLeast<{
@@ -211,8 +211,8 @@ export type WebsiteWhereUniqueInput = Prisma.AtLeast<{
   timeAdded?: Prisma.DateTimeFilter<"Website"> | Date | string
   ticks?: Prisma.WebsiteTickListRelationFilter
   events?: Prisma.WebEventListRelationFilter
-  channels?: Prisma.ChannelListRelationFilter
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  monitoredwebsites?: Prisma.WebsiteMonitoredListRelationFilter
 }, "id">
 
 export type WebsiteOrderByWithAggregationInput = {
@@ -244,8 +244,8 @@ export type WebsiteCreateInput = {
   timeAdded?: Date | string
   ticks?: Prisma.WebsiteTickCreateNestedManyWithoutWebsiteInput
   events?: Prisma.WebEventCreateNestedManyWithoutWebsiteInput
-  channels?: Prisma.ChannelCreateNestedManyWithoutWebsiteInput
   user?: Prisma.UserCreateNestedOneWithoutWebsitesInput
+  monitoredwebsites?: Prisma.WebsiteMonitoredCreateNestedManyWithoutWebsiteInput
 }
 
 export type WebsiteUncheckedCreateInput = {
@@ -256,7 +256,7 @@ export type WebsiteUncheckedCreateInput = {
   timeAdded?: Date | string
   ticks?: Prisma.WebsiteTickUncheckedCreateNestedManyWithoutWebsiteInput
   events?: Prisma.WebEventUncheckedCreateNestedManyWithoutWebsiteInput
-  channels?: Prisma.ChannelUncheckedCreateNestedManyWithoutWebsiteInput
+  monitoredwebsites?: Prisma.WebsiteMonitoredUncheckedCreateNestedManyWithoutWebsiteInput
 }
 
 export type WebsiteUpdateInput = {
@@ -266,8 +266,8 @@ export type WebsiteUpdateInput = {
   timeAdded?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ticks?: Prisma.WebsiteTickUpdateManyWithoutWebsiteNestedInput
   events?: Prisma.WebEventUpdateManyWithoutWebsiteNestedInput
-  channels?: Prisma.ChannelUpdateManyWithoutWebsiteNestedInput
   user?: Prisma.UserUpdateOneWithoutWebsitesNestedInput
+  monitoredwebsites?: Prisma.WebsiteMonitoredUpdateManyWithoutWebsiteNestedInput
 }
 
 export type WebsiteUncheckedUpdateInput = {
@@ -278,7 +278,7 @@ export type WebsiteUncheckedUpdateInput = {
   timeAdded?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ticks?: Prisma.WebsiteTickUncheckedUpdateManyWithoutWebsiteNestedInput
   events?: Prisma.WebEventUncheckedUpdateManyWithoutWebsiteNestedInput
-  channels?: Prisma.ChannelUncheckedUpdateManyWithoutWebsiteNestedInput
+  monitoredwebsites?: Prisma.WebsiteMonitoredUncheckedUpdateManyWithoutWebsiteNestedInput
 }
 
 export type WebsiteCreateManyInput = {
@@ -417,18 +417,18 @@ export type WebsiteUpdateOneRequiredWithoutTicksNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.WebsiteUpdateToOneWithWhereWithoutTicksInput, Prisma.WebsiteUpdateWithoutTicksInput>, Prisma.WebsiteUncheckedUpdateWithoutTicksInput>
 }
 
-export type WebsiteCreateNestedOneWithoutChannelsInput = {
-  create?: Prisma.XOR<Prisma.WebsiteCreateWithoutChannelsInput, Prisma.WebsiteUncheckedCreateWithoutChannelsInput>
-  connectOrCreate?: Prisma.WebsiteCreateOrConnectWithoutChannelsInput
+export type WebsiteCreateNestedOneWithoutMonitoredwebsitesInput = {
+  create?: Prisma.XOR<Prisma.WebsiteCreateWithoutMonitoredwebsitesInput, Prisma.WebsiteUncheckedCreateWithoutMonitoredwebsitesInput>
+  connectOrCreate?: Prisma.WebsiteCreateOrConnectWithoutMonitoredwebsitesInput
   connect?: Prisma.WebsiteWhereUniqueInput
 }
 
-export type WebsiteUpdateOneRequiredWithoutChannelsNestedInput = {
-  create?: Prisma.XOR<Prisma.WebsiteCreateWithoutChannelsInput, Prisma.WebsiteUncheckedCreateWithoutChannelsInput>
-  connectOrCreate?: Prisma.WebsiteCreateOrConnectWithoutChannelsInput
-  upsert?: Prisma.WebsiteUpsertWithoutChannelsInput
+export type WebsiteUpdateOneRequiredWithoutMonitoredwebsitesNestedInput = {
+  create?: Prisma.XOR<Prisma.WebsiteCreateWithoutMonitoredwebsitesInput, Prisma.WebsiteUncheckedCreateWithoutMonitoredwebsitesInput>
+  connectOrCreate?: Prisma.WebsiteCreateOrConnectWithoutMonitoredwebsitesInput
+  upsert?: Prisma.WebsiteUpsertWithoutMonitoredwebsitesInput
   connect?: Prisma.WebsiteWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.WebsiteUpdateToOneWithWhereWithoutChannelsInput, Prisma.WebsiteUpdateWithoutChannelsInput>, Prisma.WebsiteUncheckedUpdateWithoutChannelsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.WebsiteUpdateToOneWithWhereWithoutMonitoredwebsitesInput, Prisma.WebsiteUpdateWithoutMonitoredwebsitesInput>, Prisma.WebsiteUncheckedUpdateWithoutMonitoredwebsitesInput>
 }
 
 export type WebsiteCreateWithoutUserInput = {
@@ -438,7 +438,7 @@ export type WebsiteCreateWithoutUserInput = {
   timeAdded?: Date | string
   ticks?: Prisma.WebsiteTickCreateNestedManyWithoutWebsiteInput
   events?: Prisma.WebEventCreateNestedManyWithoutWebsiteInput
-  channels?: Prisma.ChannelCreateNestedManyWithoutWebsiteInput
+  monitoredwebsites?: Prisma.WebsiteMonitoredCreateNestedManyWithoutWebsiteInput
 }
 
 export type WebsiteUncheckedCreateWithoutUserInput = {
@@ -448,7 +448,7 @@ export type WebsiteUncheckedCreateWithoutUserInput = {
   timeAdded?: Date | string
   ticks?: Prisma.WebsiteTickUncheckedCreateNestedManyWithoutWebsiteInput
   events?: Prisma.WebEventUncheckedCreateNestedManyWithoutWebsiteInput
-  channels?: Prisma.ChannelUncheckedCreateNestedManyWithoutWebsiteInput
+  monitoredwebsites?: Prisma.WebsiteMonitoredUncheckedCreateNestedManyWithoutWebsiteInput
 }
 
 export type WebsiteCreateOrConnectWithoutUserInput = {
@@ -494,8 +494,8 @@ export type WebsiteCreateWithoutEventsInput = {
   url: string
   timeAdded?: Date | string
   ticks?: Prisma.WebsiteTickCreateNestedManyWithoutWebsiteInput
-  channels?: Prisma.ChannelCreateNestedManyWithoutWebsiteInput
   user?: Prisma.UserCreateNestedOneWithoutWebsitesInput
+  monitoredwebsites?: Prisma.WebsiteMonitoredCreateNestedManyWithoutWebsiteInput
 }
 
 export type WebsiteUncheckedCreateWithoutEventsInput = {
@@ -505,7 +505,7 @@ export type WebsiteUncheckedCreateWithoutEventsInput = {
   user_id?: string | null
   timeAdded?: Date | string
   ticks?: Prisma.WebsiteTickUncheckedCreateNestedManyWithoutWebsiteInput
-  channels?: Prisma.ChannelUncheckedCreateNestedManyWithoutWebsiteInput
+  monitoredwebsites?: Prisma.WebsiteMonitoredUncheckedCreateNestedManyWithoutWebsiteInput
 }
 
 export type WebsiteCreateOrConnectWithoutEventsInput = {
@@ -530,8 +530,8 @@ export type WebsiteUpdateWithoutEventsInput = {
   url?: Prisma.StringFieldUpdateOperationsInput | string
   timeAdded?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ticks?: Prisma.WebsiteTickUpdateManyWithoutWebsiteNestedInput
-  channels?: Prisma.ChannelUpdateManyWithoutWebsiteNestedInput
   user?: Prisma.UserUpdateOneWithoutWebsitesNestedInput
+  monitoredwebsites?: Prisma.WebsiteMonitoredUpdateManyWithoutWebsiteNestedInput
 }
 
 export type WebsiteUncheckedUpdateWithoutEventsInput = {
@@ -541,7 +541,7 @@ export type WebsiteUncheckedUpdateWithoutEventsInput = {
   user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   timeAdded?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ticks?: Prisma.WebsiteTickUncheckedUpdateManyWithoutWebsiteNestedInput
-  channels?: Prisma.ChannelUncheckedUpdateManyWithoutWebsiteNestedInput
+  monitoredwebsites?: Prisma.WebsiteMonitoredUncheckedUpdateManyWithoutWebsiteNestedInput
 }
 
 export type WebsiteCreateWithoutTicksInput = {
@@ -550,8 +550,8 @@ export type WebsiteCreateWithoutTicksInput = {
   url: string
   timeAdded?: Date | string
   events?: Prisma.WebEventCreateNestedManyWithoutWebsiteInput
-  channels?: Prisma.ChannelCreateNestedManyWithoutWebsiteInput
   user?: Prisma.UserCreateNestedOneWithoutWebsitesInput
+  monitoredwebsites?: Prisma.WebsiteMonitoredCreateNestedManyWithoutWebsiteInput
 }
 
 export type WebsiteUncheckedCreateWithoutTicksInput = {
@@ -561,7 +561,7 @@ export type WebsiteUncheckedCreateWithoutTicksInput = {
   user_id?: string | null
   timeAdded?: Date | string
   events?: Prisma.WebEventUncheckedCreateNestedManyWithoutWebsiteInput
-  channels?: Prisma.ChannelUncheckedCreateNestedManyWithoutWebsiteInput
+  monitoredwebsites?: Prisma.WebsiteMonitoredUncheckedCreateNestedManyWithoutWebsiteInput
 }
 
 export type WebsiteCreateOrConnectWithoutTicksInput = {
@@ -586,8 +586,8 @@ export type WebsiteUpdateWithoutTicksInput = {
   url?: Prisma.StringFieldUpdateOperationsInput | string
   timeAdded?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   events?: Prisma.WebEventUpdateManyWithoutWebsiteNestedInput
-  channels?: Prisma.ChannelUpdateManyWithoutWebsiteNestedInput
   user?: Prisma.UserUpdateOneWithoutWebsitesNestedInput
+  monitoredwebsites?: Prisma.WebsiteMonitoredUpdateManyWithoutWebsiteNestedInput
 }
 
 export type WebsiteUncheckedUpdateWithoutTicksInput = {
@@ -597,10 +597,10 @@ export type WebsiteUncheckedUpdateWithoutTicksInput = {
   user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   timeAdded?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   events?: Prisma.WebEventUncheckedUpdateManyWithoutWebsiteNestedInput
-  channels?: Prisma.ChannelUncheckedUpdateManyWithoutWebsiteNestedInput
+  monitoredwebsites?: Prisma.WebsiteMonitoredUncheckedUpdateManyWithoutWebsiteNestedInput
 }
 
-export type WebsiteCreateWithoutChannelsInput = {
+export type WebsiteCreateWithoutMonitoredwebsitesInput = {
   id?: string
   name: string
   url: string
@@ -610,7 +610,7 @@ export type WebsiteCreateWithoutChannelsInput = {
   user?: Prisma.UserCreateNestedOneWithoutWebsitesInput
 }
 
-export type WebsiteUncheckedCreateWithoutChannelsInput = {
+export type WebsiteUncheckedCreateWithoutMonitoredwebsitesInput = {
   id?: string
   name: string
   url: string
@@ -620,23 +620,23 @@ export type WebsiteUncheckedCreateWithoutChannelsInput = {
   events?: Prisma.WebEventUncheckedCreateNestedManyWithoutWebsiteInput
 }
 
-export type WebsiteCreateOrConnectWithoutChannelsInput = {
+export type WebsiteCreateOrConnectWithoutMonitoredwebsitesInput = {
   where: Prisma.WebsiteWhereUniqueInput
-  create: Prisma.XOR<Prisma.WebsiteCreateWithoutChannelsInput, Prisma.WebsiteUncheckedCreateWithoutChannelsInput>
+  create: Prisma.XOR<Prisma.WebsiteCreateWithoutMonitoredwebsitesInput, Prisma.WebsiteUncheckedCreateWithoutMonitoredwebsitesInput>
 }
 
-export type WebsiteUpsertWithoutChannelsInput = {
-  update: Prisma.XOR<Prisma.WebsiteUpdateWithoutChannelsInput, Prisma.WebsiteUncheckedUpdateWithoutChannelsInput>
-  create: Prisma.XOR<Prisma.WebsiteCreateWithoutChannelsInput, Prisma.WebsiteUncheckedCreateWithoutChannelsInput>
+export type WebsiteUpsertWithoutMonitoredwebsitesInput = {
+  update: Prisma.XOR<Prisma.WebsiteUpdateWithoutMonitoredwebsitesInput, Prisma.WebsiteUncheckedUpdateWithoutMonitoredwebsitesInput>
+  create: Prisma.XOR<Prisma.WebsiteCreateWithoutMonitoredwebsitesInput, Prisma.WebsiteUncheckedCreateWithoutMonitoredwebsitesInput>
   where?: Prisma.WebsiteWhereInput
 }
 
-export type WebsiteUpdateToOneWithWhereWithoutChannelsInput = {
+export type WebsiteUpdateToOneWithWhereWithoutMonitoredwebsitesInput = {
   where?: Prisma.WebsiteWhereInput
-  data: Prisma.XOR<Prisma.WebsiteUpdateWithoutChannelsInput, Prisma.WebsiteUncheckedUpdateWithoutChannelsInput>
+  data: Prisma.XOR<Prisma.WebsiteUpdateWithoutMonitoredwebsitesInput, Prisma.WebsiteUncheckedUpdateWithoutMonitoredwebsitesInput>
 }
 
-export type WebsiteUpdateWithoutChannelsInput = {
+export type WebsiteUpdateWithoutMonitoredwebsitesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
@@ -646,7 +646,7 @@ export type WebsiteUpdateWithoutChannelsInput = {
   user?: Prisma.UserUpdateOneWithoutWebsitesNestedInput
 }
 
-export type WebsiteUncheckedUpdateWithoutChannelsInput = {
+export type WebsiteUncheckedUpdateWithoutMonitoredwebsitesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
@@ -670,7 +670,7 @@ export type WebsiteUpdateWithoutUserInput = {
   timeAdded?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ticks?: Prisma.WebsiteTickUpdateManyWithoutWebsiteNestedInput
   events?: Prisma.WebEventUpdateManyWithoutWebsiteNestedInput
-  channels?: Prisma.ChannelUpdateManyWithoutWebsiteNestedInput
+  monitoredwebsites?: Prisma.WebsiteMonitoredUpdateManyWithoutWebsiteNestedInput
 }
 
 export type WebsiteUncheckedUpdateWithoutUserInput = {
@@ -680,7 +680,7 @@ export type WebsiteUncheckedUpdateWithoutUserInput = {
   timeAdded?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ticks?: Prisma.WebsiteTickUncheckedUpdateManyWithoutWebsiteNestedInput
   events?: Prisma.WebEventUncheckedUpdateManyWithoutWebsiteNestedInput
-  channels?: Prisma.ChannelUncheckedUpdateManyWithoutWebsiteNestedInput
+  monitoredwebsites?: Prisma.WebsiteMonitoredUncheckedUpdateManyWithoutWebsiteNestedInput
 }
 
 export type WebsiteUncheckedUpdateManyWithoutUserInput = {
@@ -698,13 +698,13 @@ export type WebsiteUncheckedUpdateManyWithoutUserInput = {
 export type WebsiteCountOutputType = {
   ticks: number
   events: number
-  channels: number
+  monitoredwebsites: number
 }
 
 export type WebsiteCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   ticks?: boolean | WebsiteCountOutputTypeCountTicksArgs
   events?: boolean | WebsiteCountOutputTypeCountEventsArgs
-  channels?: boolean | WebsiteCountOutputTypeCountChannelsArgs
+  monitoredwebsites?: boolean | WebsiteCountOutputTypeCountMonitoredwebsitesArgs
 }
 
 /**
@@ -734,8 +734,8 @@ export type WebsiteCountOutputTypeCountEventsArgs<ExtArgs extends runtime.Types.
 /**
  * WebsiteCountOutputType without action
  */
-export type WebsiteCountOutputTypeCountChannelsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ChannelWhereInput
+export type WebsiteCountOutputTypeCountMonitoredwebsitesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.WebsiteMonitoredWhereInput
 }
 
 
@@ -747,8 +747,8 @@ export type WebsiteSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   timeAdded?: boolean
   ticks?: boolean | Prisma.Website$ticksArgs<ExtArgs>
   events?: boolean | Prisma.Website$eventsArgs<ExtArgs>
-  channels?: boolean | Prisma.Website$channelsArgs<ExtArgs>
   user?: boolean | Prisma.Website$userArgs<ExtArgs>
+  monitoredwebsites?: boolean | Prisma.Website$monitoredwebsitesArgs<ExtArgs>
   _count?: boolean | Prisma.WebsiteCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["website"]>
 
@@ -782,8 +782,8 @@ export type WebsiteOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 export type WebsiteInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   ticks?: boolean | Prisma.Website$ticksArgs<ExtArgs>
   events?: boolean | Prisma.Website$eventsArgs<ExtArgs>
-  channels?: boolean | Prisma.Website$channelsArgs<ExtArgs>
   user?: boolean | Prisma.Website$userArgs<ExtArgs>
+  monitoredwebsites?: boolean | Prisma.Website$monitoredwebsitesArgs<ExtArgs>
   _count?: boolean | Prisma.WebsiteCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type WebsiteIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -798,8 +798,8 @@ export type $WebsitePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   objects: {
     ticks: Prisma.$WebsiteTickPayload<ExtArgs>[]
     events: Prisma.$WebEventPayload<ExtArgs>[]
-    channels: Prisma.$ChannelPayload<ExtArgs>[]
     user: Prisma.$UserPayload<ExtArgs> | null
+    monitoredwebsites: Prisma.$WebsiteMonitoredPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1203,8 +1203,8 @@ export interface Prisma__WebsiteClient<T, Null = never, ExtArgs extends runtime.
   readonly [Symbol.toStringTag]: "PrismaPromise"
   ticks<T extends Prisma.Website$ticksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Website$ticksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WebsiteTickPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   events<T extends Prisma.Website$eventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Website$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WebEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  channels<T extends Prisma.Website$channelsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Website$channelsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChannelPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   user<T extends Prisma.Website$userArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Website$userArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  monitoredwebsites<T extends Prisma.Website$monitoredwebsitesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Website$monitoredwebsitesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WebsiteMonitoredPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1683,30 +1683,6 @@ export type Website$eventsArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
- * Website.channels
- */
-export type Website$channelsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Channel
-   */
-  select?: Prisma.ChannelSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Channel
-   */
-  omit?: Prisma.ChannelOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ChannelInclude<ExtArgs> | null
-  where?: Prisma.ChannelWhereInput
-  orderBy?: Prisma.ChannelOrderByWithRelationInput | Prisma.ChannelOrderByWithRelationInput[]
-  cursor?: Prisma.ChannelWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ChannelScalarFieldEnum | Prisma.ChannelScalarFieldEnum[]
-}
-
-/**
  * Website.user
  */
 export type Website$userArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1723,6 +1699,30 @@ export type Website$userArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    */
   include?: Prisma.UserInclude<ExtArgs> | null
   where?: Prisma.UserWhereInput
+}
+
+/**
+ * Website.monitoredwebsites
+ */
+export type Website$monitoredwebsitesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the WebsiteMonitored
+   */
+  select?: Prisma.WebsiteMonitoredSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the WebsiteMonitored
+   */
+  omit?: Prisma.WebsiteMonitoredOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WebsiteMonitoredInclude<ExtArgs> | null
+  where?: Prisma.WebsiteMonitoredWhereInput
+  orderBy?: Prisma.WebsiteMonitoredOrderByWithRelationInput | Prisma.WebsiteMonitoredOrderByWithRelationInput[]
+  cursor?: Prisma.WebsiteMonitoredWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.WebsiteMonitoredScalarFieldEnum | Prisma.WebsiteMonitoredScalarFieldEnum[]
 }
 
 /**
