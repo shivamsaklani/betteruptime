@@ -15,7 +15,7 @@ rules.post("/create",async (req:Request,res:Response)=>{
  
    } catch (error) {
       console.log(error);
-      return res.status(500).send("New Error");
+      return res.status(500).send("Error Occured"+error);
    }
 
 });
@@ -45,6 +45,7 @@ rules.post("/update",async (req: Request, res: Response) => {
   }
 
 });
+
 rules.get("/getrules",async (req: Request, res: Response) => {
   const userId = req.userid?.id;
   if (!userId) {
@@ -60,6 +61,7 @@ rules.get("/getrules",async (req: Request, res: Response) => {
   }
 
 });
+
 rules.post("/delete",async(req:Request,res:Response)=>{
    const userId = req.userid?.id;
   const { ruleId } = req.body;
@@ -75,7 +77,7 @@ rules.post("/delete",async(req:Request,res:Response)=>{
   } catch (error) {
     res.status(500).send("Error occured");
   }
-})
+});
 
 
 export default rules;

@@ -52,7 +52,7 @@ charts.get("/uptime/:id", async (req: Request, res: Response) => {
 // ------------------------------
 // Convert UTC → IST safely
 // ------------------------------
-function toIST(date: Date): Date {
+export function toIST(date: Date): Date {
   const parts = new Intl.DateTimeFormat("en-US", {
     timeZone: "Asia/Kolkata",
     year: "numeric",
