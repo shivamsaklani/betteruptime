@@ -15,13 +15,6 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// const transporter = nodemailer.createTransport({
-//   host: process.env.MAIL_TRAP_HOST,
-//   auth: {
-//     user: process.env.MAIL_TRAP_USER,
-//     pass: process.env.MAIL_TRAP_TOKEN
-//   }
-// });
 export async function sendEmail({ subject, website_id, Heading, message, time }: {
   subject: string,
   website_id: string,

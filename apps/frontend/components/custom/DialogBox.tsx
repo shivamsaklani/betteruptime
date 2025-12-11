@@ -16,32 +16,25 @@ export function DialogBox({ isCreateDialogOpen, setIsCreateDialogOpen }: {
   const [websiteName, setWebsiteName] = useState("")
   const dispatch = useAppDispatch();
   const [websiteUrl, setWebsiteUrl] = useState("")
-  const setpolling= useRef(false);
+  const setpolling = useRef(false);
 
 
-   const pollingData = async (websiteId:string,interval=600):Promise<Website>=>{
-    while (true) {
-      
-      if (setpolling.current) {
-        throw new Error("Polling stopped");
+  const pollingData = async (websiteId: string) => {
+    try {
+
+      const res: AxiosResponse<Website> = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKENDURL}/website/selectwebsite/${websiteId}`,
+        { withCredentials: true }
+      );
+
+      const data = res.data;
+
+      if (res.status === 200 && data) {
+        return data;
       }
-
-      try {
-
-        const res: AxiosResponse<Website> = await axios.get(
-          `${process.env.NEXT_PUBLIC_BACKENDURL}/website/selectwebsite/${websiteId}`,
-          { withCredentials: true }
-        );
-
-        if (res.status === 200 && res.data?.status) {
-          return res.data;
-        }
-      } catch (err) {
-         console.log("Please Try Again. Facing Some Issues");
-      }
-        await new Promise((resolve) => setTimeout(resolve, interval));
+    } catch (err) {
+      console.log("Please Try Again. Facing Some Issues");
     }
- 
   }
 
   const handleCreateWebsite = async (e: React.FormEvent) => {
@@ -53,43 +46,43 @@ export function DialogBox({ isCreateDialogOpen, setIsCreateDialogOpen }: {
     }
 
     try {
-        const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKENDURL}/website/createwebsite`, {
-          url: normalized,
-          name: name
-        }, {
-          withCredentials: true
-        });
-        setpolling.current=false;
-        dispatch(fetchWebsitesStart);
-        const checkrecenttick = await pollingData(response.data);
-        if (checkrecenttick) {
-        
-          dispatch(
-            addWebsite({
-              id: response.data,
-              name,
-              url: normalized,
-              status: checkrecenttick.status,
-              responseTime:checkrecenttick.responseTime, // optional
-              lastChecked: checkrecenttick.lastChecked,
-              location:checkrecenttick.location,
-              uptime:checkrecenttick.uptime,
-              checkInterval:checkrecenttick.checkInterval,
-              recentIncidents:checkrecenttick.recentIncidents
-            })
-          );
-          setIsCreateDialogOpen(false);
-          setWebsiteName("");
-          setWebsiteUrl("");
-        }
-       
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKENDURL}/website/createwebsite`, {
+        url: normalized,
+        name: name
+      }, {
+        withCredentials: true
+      });
+      setpolling.current = false;
+      dispatch(fetchWebsitesStart);
+      const checkrecenttick = await pollingData(response.data);
+      if (checkrecenttick) {
+
+        dispatch(
+          addWebsite({
+            id: response.data,
+            name,
+            url: normalized,
+            status: checkrecenttick.status,
+            responseTime: checkrecenttick.responseTime, // optional
+            lastChecked: checkrecenttick.lastChecked,
+            location: checkrecenttick.location,
+            uptime: checkrecenttick.uptime,
+            checkInterval: checkrecenttick.checkInterval,
+            recentIncidents: checkrecenttick.recentIncidents
+          })
+        );
+        setIsCreateDialogOpen(false);
+        setWebsiteName("");
+        setWebsiteUrl("");
+      }
+
     } catch (err) {
       console.error(err);
       alert("Website is down or unreachable. Please check the URL.");
     }
   };
 
- 
+
 
   const normalizeUrl = (input: string): string | null => {
     try {

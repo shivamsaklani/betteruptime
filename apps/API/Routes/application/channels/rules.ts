@@ -51,8 +51,27 @@ rules.get("/getrules",async (req: Request, res: Response) => {
   if (!userId) {
     return res.status(401).send("No User found");
   }
+const select = {
+  id:true,
+  level:true,
+  website: {
+    select: {
+      name: true,
+      url: true
+    }
+  },
+  channel: {
+    select: {
+      channelName: true,
+      channelDetails: true
+    }
+  }
+};
+
   try {
-    const channels = await axios.get(`${process.env.DATABASE_SERVER}/websiteMonitored`);
+    const channels = await axios.get(`${process.env.DATABASE_SERVER}/websiteMonitored`,{
+      params:{select:JSON.stringify(select)}
+    });
     res.status(200).json(channels.data);
     return;
   } catch (error) {

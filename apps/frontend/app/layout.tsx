@@ -7,25 +7,36 @@ import { ReduxProvider } from "@/components/redux-provider"
 import { Suspense } from "react"
 import { Toaster } from "@/components/ui/toaster"
 import "./globals.css"
+
 export const metadata: Metadata = {
   title: "BetterUptime",
   description: "Professional website monitoring and uptime tracking",
-  generator: "BetterUptime",
 }
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode
-}>) {
+}) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${GeistSans.variable} ${GeistMono.variable}`}
+    >
+      <body className="font-sans">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem={false}
+          disableTransitionOnChange
+        >
           <Suspense fallback={null}>
-            <ReduxProvider>{children}</ReduxProvider>
+            <ReduxProvider>
+              {children}
+              </ReduxProvider>
           </Suspense>
-          <Toaster/>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

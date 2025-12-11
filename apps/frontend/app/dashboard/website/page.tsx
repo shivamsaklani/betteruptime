@@ -24,28 +24,63 @@ export default function WebsitesPage() {
       dispatch(fetchWebsitesStart());
 
       try {
-        const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKENDURL}/website/getwebsites`, {
-          withCredentials: true
-        });
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_BACKENDURL}/website/getwebsites`,
+          { withCredentials: true }
+        );
 
-        // Merge and remove duplicates based on id
-        const mergedWebsites = [...websites, ...res.data];
-        const uniqueWebsitesMap = new Map();
-        mergedWebsites.forEach(site => {
-          uniqueWebsitesMap.set(site.id, site); // latest entry for same id will overwrite
-        });
-
-        const uniqueWebsites = Array.from(uniqueWebsitesMap.values());
-
-        // Dispatch
-        dispatch(fetchWebsitesSuccess(uniqueWebsites));
+        dispatch(fetchWebsitesSuccess(res.data));
       } catch (err) {
         dispatch(fetchWebsitesFailure(err as string));
       }
     };
 
+    // Initial fetch on component mount
     fetchWebsites();
   }, [dispatch]);
+
+  // Poll for websites with response time of 0
+  useEffect(() => {
+    const pollForResponseTimes = async () => {
+      // Check if any website has responseTime of 0
+      const hasZeroResponseTime = websites.some(
+        (w) => !w.responseTime || w.responseTime === 0
+      );
+      console.log(hasZeroResponseTime);
+      // If all websites have valid response times, stop polling
+      if (!hasZeroResponseTime) {
+        return;
+      }
+
+      // Fetch websites again
+      try {
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_BACKENDURL}/website/getwebsites`,
+          { withCredentials: true }
+        );
+        console.log(res.data);
+
+        dispatch(fetchWebsitesSuccess(res.data));
+      } catch (err) {
+        console.error("Error polling for response times:", err);
+      }
+    };
+
+    // Set up interval to poll every 3 seconds
+    const intervalId = setInterval(() => {
+      const hasZeroResponseTime = websites.some(
+        (w) => !w.responseTime || w.responseTime === 0
+      );
+
+      if (hasZeroResponseTime) {
+        pollForResponseTimes();
+      }
+    }, 3000); // Poll every 3 seconds
+
+    // Cleanup interval on unmount
+    return () => clearInterval(intervalId);
+  }, [websites, dispatch]);
+
 
 
   // Filter websites based on search term and status
@@ -65,7 +100,7 @@ export default function WebsitesPage() {
     <div className="max-w-7xl mx-auto space-y-6 sm:space-y-8">
       {/* Header Section */}
       <PageHeader title="Websites" subtitle="Manage and monitor all your websites in one place.">
-            <Button onClick={handleAddWebsite} className="self-start sm:self-center">
+        <Button onClick={handleAddWebsite} className="self-start sm:self-center">
           <Plus className="h-4 w-4 mr-2" />
           Add Website
         </Button>

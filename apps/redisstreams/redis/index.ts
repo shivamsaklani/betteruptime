@@ -5,7 +5,6 @@ import { connectRedis, redisclient } from "./main";
 await connectRedis();
 
 const Stream_Name = "uptime:website";
-
 /* -----------------------------------------------------------
    PUSH WEBSITE INTO STREAM (SAFE + MAXLEN)
 ------------------------------------------------------------ */
@@ -17,7 +16,7 @@ export async function PushWebsite({ url, id }: websiteType) {
         url, id
       });
     } catch (error) {
-      console.log("Connection Error", error);
+      console.error("Connection Error", error);
     }
   } catch (error) {
     console.error("PushWebsite Error:", error);
@@ -49,7 +48,6 @@ export async function CreateRegion(region: string) {
       await redisclient.xGroupCreate(Stream_Name, region, "$", {
         MKSTREAM: true,
       });
-      console.log(`Created consumer group '${region}' for stream '${Stream_Name}'`);
     }
   } catch (error) {
     console.error("CreateRegion Error:", error);
@@ -80,7 +78,6 @@ export async function mesAck(messageId: string, groupName: string) {
 }
 
 export async function mesAckGroup(groupName: string, ids: string[]) {
-  console.log(ids)
   try {
     if (!ids.length) return;
     await Promise.all(ids.map((id) => mesAck(id, groupName)));
@@ -96,12 +93,10 @@ export async function ReadGroup(
   groupName: string,
   workerId: string
 ): Promise<ResponseType[]> {
-  console.log(groupName, workerId);
   if (!groupName) return [];
 
 
   try {
-    console.log("Read Group");
     const result = await redisclient.xReadGroup(
       groupName,
       workerId,
@@ -116,7 +111,6 @@ export async function ReadGroup(
     if (!result || result.length === 0) {
       const claimed: ResponseType = await reclaimStuck(groupName, workerId);
       if (!claimed || claimed.messages.length > 0) {
-        console.log(claimed.messages);
         return [];
       }
     };
@@ -125,8 +119,6 @@ export async function ReadGroup(
     const msg = error?.message;
 
     if (msg?.includes("NOGROUP")) {
-      // await CreateRegion(groupName);
-      console.log("no Message");
       return [];
     }
 
@@ -156,12 +148,9 @@ export async function Alerts(Event: Events) {
           timeAdded: new Date(),
           resolvedTime: new Date(),
         });
-        await axios.post(`${process.env.DATABASE_SERVER}/channel/sendEmail`,{
-          subject : "Error Occured",
-          Heading: Event.level,
-          message: Event.Reason,
-          website_id:Event.websiteId
-        })
+        await axios.post(`${process.env.API_SERVER}/notify/methods`,{
+          ...Event,subject:"Error Occured",time:new Date()
+        });
         await redisclient.set(key, "active", { EX: 3600 });
       }
       return;
@@ -170,7 +159,7 @@ export async function Alerts(Event: Events) {
     /* --------------------------
        EVENT RESOLVED
     --------------------------- */
-    if (Event.isResolved) {
+    if (Event.isResolved && isActive) {
       await axios.put(
         `${process.env.DATABASE_SERVER}/WebEvent`,
         {
@@ -186,11 +175,14 @@ export async function Alerts(Event: Events) {
           },
         }
       );
-
+      await axios.post(`${process.env.API_SERVER}/notify/methods`,{
+          ...Event,subject:"Issue Resolved",time:new Date()
+        });
       await redisclient.del(key);
     }
   } catch (error) {
-    console.error("Alerts Error:", error);
+    console.error("Alerts Error");
+    return;
   }
 }
 
@@ -199,15 +191,12 @@ export async function Alerts(Event: Events) {
 ------------------------------------------------------------ */
 
 async function reclaimStuck(groupName: string, workerId: string): Promise<any> {
-  console.log("Xclaim");
   let claimed;
   try {
-    console.log("inside try");
     claimed = await redisclient.XAUTOCLAIM(Stream_Name, groupName, workerId, 5000, "0-0");
-    console.log(claimed);
     return claimed;
   } catch (error) {
-    console.log("Error :");
+    console.error("Error :"+error);
   }
   return claimed;
 }

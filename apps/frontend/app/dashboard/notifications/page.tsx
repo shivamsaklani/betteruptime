@@ -51,7 +51,7 @@ export default function NotificationSettingsPage() {
   const [newChannel, setNewChannel] = useState<NewChannelForm>({
     channelName: "email",
     channelDetails: "",
-  })
+  });
 
   // FETCH CHANNELS FROM BACKEND
   useEffect(() => {(async () => {
@@ -224,11 +224,11 @@ export default function NotificationSettingsPage() {
         </CardHeader>
 
         <CardContent>
-          <div className="space-y-4">
+          <div className="space-y-4 max-h-[400px] overflow-y-auto p-3">
 
             {channels.map((ch, idx) => (
               <div key={ch.id}>
-                <div className="flex items-center justify-between p-4 border rounded-lg">
+                <div className="flex items-center  justify-between p-4 border rounded-lg">
                   <div className="flex items-center gap-3">
                     {getChannelIcon(ch.channelName)}
                     <Switch
@@ -260,10 +260,6 @@ export default function NotificationSettingsPage() {
                     </Button>
                   </div>
                 </div>
-
-                {idx < channels.length - 1 && (
-                  <Separator className="my-2" />
-                )}
               </div>
             ))}
 

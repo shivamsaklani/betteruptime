@@ -7,8 +7,6 @@ import { OverviewStats } from "@/components/dashboard/overview-stats"
 import { WebsiteList } from "@/components/dashboard/website-list"
 import { AlertsPanel } from "@/components/dashboard/alerts-panel"
 import axios from "axios"
-import UptimeChart from "@/components/charts/UptimeChart"
-import ResponseChart from "@/components/charts/ResponseChart"
 import PageHeader from "@/components/custom/pageheader"
 export default function DashboardPage() {
   const dispatch = useAppDispatch()

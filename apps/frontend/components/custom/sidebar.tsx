@@ -14,10 +14,9 @@ interface SidebarProps {
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: Home },
   { name: "Websites", href: "/dashboard/website", icon: Activity },
-  { name: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
   { name: "Status", href: "/dashboard/status", icon: HistoryIcon },
   { name: "Notifications", href: "/dashboard/notifications", icon: Shield },
-  { name: "Alert", href: "/dashboard/alertsconfig", icon: Bell },
+  { name: "Alert", href: "/dashboard/rules", icon: Bell },
   { name: "Profile", href: "/dashboard/profile", icon: UserCog },
 ]
 

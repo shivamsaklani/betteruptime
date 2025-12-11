@@ -48,6 +48,7 @@ export default function ProfileSettings() {
     email: user?.email ?? "",
     image: user?.profile ?? "",
   });
+
   const getdetails = async () => {
     try {
       const detail = await axios.get(`${process.env.NEXT_PUBLIC_BACKENDURL}/profile/getdetails`, {
@@ -74,7 +75,7 @@ export default function ProfileSettings() {
         image: user.profile ?? "",
       });
     }
-  }, [dispatch]);
+  }, [dispatch,setFormData]);
 
   // Check if profile has changes
   const hasProfileChanges =
@@ -142,7 +143,7 @@ export default function ProfileSettings() {
 
       const newImageUrl = response.data.fileLoc;
       dispatch(updateuser({ profile: newImageUrl }));
-
+      setFormData((prev) => ({ ...prev, image: newImageUrl }));
       toast({
         title: "Success",
         description: "Profile picture updated successfully.",
@@ -152,6 +153,7 @@ export default function ProfileSettings() {
       setPreviewUrl(null);
       setSelectedFile(null);
       if (fileInputRef.current) fileInputRef.current.value = "";
+       window.location.reload();
     } catch (error: any) {
       console.error("Image upload failed:", error);
       toast({

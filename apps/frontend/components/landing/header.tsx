@@ -43,7 +43,9 @@ export function Header() {
             <Button size="sm" asChild>
               <Link href="/signup">Get Started</Link>
             </Button>
+            <div>
               <ThemeToggle />
+            </div>
           </div>
          
         </div>
@@ -51,6 +53,7 @@ export function Header() {
 
       {mobileMenuOpen && (
         <div className="md:hidden border-t  border-border bg-background/95 backdrop-blur">
+
           <div className="container py-4 px-3 space-y-4">
             <nav className="flex flex-col space-y-3">
               <Link
@@ -85,7 +88,9 @@ export function Header() {
                   <Link href="/signup">Get Started</Link>
                 </Button>
               </div>
+              <div>
               <ThemeToggle />
+            </div>
             </div>
           </div>
         </div>

@@ -41,7 +41,7 @@ export default function AlertPage() {
   const { data, error, loading } = useFetchEvents();
   const total = data.length;
   const resolved = data.filter((a) => a.resolved).length
-  const critical = data.filter((a) => a.level === "threat").length
+  const unresolved = total - resolved;
   const stats = [
     {
       label: "Total Alerts",
@@ -56,8 +56,8 @@ export default function AlertPage() {
       bg: "bg-green-500/10",
     },
     {
-      label: "Critical",
-      value: critical,
+      label: "Unresolved",
+      value: unresolved,
       icon: <AlertTriangle className="h-6 w-6 text-red-500" />,
       bg: "bg-red-500/10",
     },

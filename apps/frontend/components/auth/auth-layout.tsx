@@ -3,8 +3,10 @@
 import type React from "react"
 
 import Link from "next/link"
-import { Activity, BarChart3, Shield, Zap } from "lucide-react"
+import { Activity, ArrowLeft, BarChart3, Shield, Zap } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { Button } from "../ui/button"
+import { useRouter } from "next/navigation"
 
 interface AuthLayoutProps {
   children: React.ReactNode
@@ -31,12 +33,16 @@ export function AuthLayout({ children, title, subtitle, linkText, linkHref }: Au
       title: "Lightning Fast",
       description: "Get notified within 30 seconds when your website goes down.",
     },
-  ]
+  ];
+  const router = useRouter();
 
   return (
     <div className="min-h-screen grid lg:grid-cols-2">
       {/* Left side - Form */}
       <div className="flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-20 xl:px-24">
+          <Button variant="ghost" onClick={() => router.replace("/")} size="icon" asChild>
+            <ArrowLeft className="h-6 w-6" />
+          </Button>
         <div className="mx-auto w-full max-w-sm lg:w-96">
           <div className="flex items-center justify-between mb-8">
             <Link href="/" className="flex items-center space-x-2">

@@ -24,7 +24,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const { user } = useAppSelector((state) => state.auth);
+  const { user , isAuthenticated } = useAppSelector((state) => state.auth);
   useEffect(()=>{
     getdetails();
   },[dispatch]);
@@ -56,7 +56,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       console.log("Logout Error"+error);
     }
   }
-
+  if(!isAuthenticated){
+   router.push("/signin");
+   return;
+  }
   return (
    <>
    <div className="min-h-screen bg-background">
